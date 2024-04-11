@@ -1,0 +1,37 @@
+.card {
+  width: 400px;
+  height: 600px;
+  display: grid;
+  grid-template-rows: 530px 50px;
+  gap: 20px;
+  cursor: pointer;
+  margin: 100px;
+  transition: transform 0.3s ease-in;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card-image-sec img {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.card-details-sec {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.card-details-sec p {
+  margin: 0;
+  color: #222;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px; /* 100% */
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
