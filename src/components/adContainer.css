@@ -50,7 +50,7 @@
   width: 230px;
   height: 120px;
   cursor: pointer;
-  /* transform: scale(1.15); */
+  transform: scale(1.15);
   transition: transform 0.3s ease-in;
 }
 
