@@ -38,8 +38,7 @@ const Card = () => {
 
 
   return (
-    <div className="grid-container">
-      <div className="card-grid">
+    <>
         {cardsData.map((card, index) => (
           <div className="card" key={index}>
             <div className="card-image-sec">
@@ -51,8 +50,7 @@ const Card = () => {
             </div>
           </div>
         ))}
-      </div>
-    </div>
+    </>   
   );
 };
 
