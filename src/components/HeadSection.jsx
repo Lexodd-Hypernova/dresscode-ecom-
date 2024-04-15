@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import '../index.css';
+import sharedContext from "../context/SharedContext";
 
 const HeadSection = () => {
-    const [selectedCategory, setSelectedCategory] = useState('All Uniforms');
+    const {selectedCategory, setSelectedCategory} = useContext(sharedContext);
 
     const hangleChange = (e) => {
         setSelectedCategory(e.target.value)
