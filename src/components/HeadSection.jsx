@@ -1,12 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import '../index.css';
 import sharedContext from "../context/SharedContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const HeadSection = () => {
     const {selectedCategory, setSelectedCategory} = useContext(sharedContext);
+    const navigate = useNavigate(); // Initialize useHistory
+    const location = useLocation();   
 
     const hangleChange = (e) => {
-        setSelectedCategory(e.target.value)
+        const selectedValue = e.target.value;
+        setSelectedCategory(selectedValue);
+
+        // Redirect to ApronsPage if "Aprons" is selected
+        if (selectedValue === "Aprons") {
+            navigate("/aprons");
+        } else if (selectedValue === "Corporate") {
+            navigate("/corporate");
+        } else if (selectedValue === "Skirts") {
+            navigate("/skirts");
+        } else if (selectedValue === "Pants") {
+            navigate("/pants");
+        } else if (selectedValue === "Trousers") {
+            navigate("/trousers");
+        } else if (selectedValue === "Accessories") {
+            navigate("/accessories");
+        }
     }
 
   return (
@@ -16,7 +35,7 @@ const HeadSection = () => {
         </div>
         <div className="head-body">
             <div className="category-btn">
-                <select id="" onChange={hangleChange} value={selectedCategory}>
+                <select id="category" onChange={hangleChange} value={selectedCategory}>
                     <option value="All Uniforms">All Uniforms</option>
                     <option value="Aprons">Aprons</option>
                     <option value="Corporate">Corporate</option>
