@@ -6,6 +6,7 @@ import OurProducts from "../components/OurProducts"
 import NavBar from "../components/NavBar"
 import { useContext, useEffect } from "react"
 import sharedContext from "../context/SharedContext"
+import ProductDetails from "../components/ProductDetails"
 
 function HomePage() {
     const {setSelectedCategory} = useContext(sharedContext);
@@ -19,6 +20,7 @@ function HomePage() {
     <>
       <NavBar />
       <HeadSection />
+      <ProductDetails />
       <CardGrid />
       <OurProducts />
       <AdContainer />
