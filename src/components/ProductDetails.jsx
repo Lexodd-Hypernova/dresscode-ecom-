@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./productDetails.css";
 import Dress from "../assets/dress.png";
+import Faq from "./Faq";
 
 const ProductDetails = () => {
     const [selectedSize, setSelectedSize] = useState('');
@@ -71,6 +72,7 @@ const ProductDetails = () => {
                         </div>
                     </div>
                 </div>
+                <Faq />
             </div>
         </div>
     </div>
