@@ -8,13 +8,6 @@ const NavBar = () => {
   return (
     <div className="nav">
         <div className="nav-sec">
-            <div className="nav-menu">
-                <a href="#">ALL UNIFORMS</a>
-                <a href="#">SHIRTS</a>
-                <a href="#">PANTS</a>
-                <a href="#">TIES</a>
-                <a href="#">APRONS</a>
-            </div>
             <div className="logo">
                 <img src={Logo} alt="DressCode logo" />
             </div>
