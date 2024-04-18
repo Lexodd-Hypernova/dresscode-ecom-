@@ -22,8 +22,12 @@ const HeadSection = () => {
         setSelectedCategory(selectedValue);
         localStorage.setItem("selectedCategory", selectedValue); // Save selected category to localStorage
 
-        // Redirect to the selected page
-        navigate(`/${selectedValue.toLowerCase()}`);
+        // Redirect to the selected page, or home page if "All Uniforms" is selected
+        if (selectedValue.toLowerCase() === "all uniforms") {
+            navigate("/");
+        } else {
+            navigate(`/${selectedValue.toLowerCase()}`);
+        }
     }
 
   return (
