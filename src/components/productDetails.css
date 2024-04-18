@@ -125,7 +125,6 @@
 
 .faq-sec {
   border-top: 2px solid #000;
-  /* border-bottom: 1px solid #000; */
   margin: 0;
 }
 
@@ -133,8 +132,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
+  padding: 15px 0;
   border-bottom: 2px solid #000;
+}
+
+.ques p {
+  color: #222;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .ques img {
