@@ -15,7 +15,7 @@ const HeadSection = () => {
             console.log(storedCategory);
             setSelectedCategory(storedCategory);
         }
-    }, [setSelectedCategory]);
+    }, [selectedCategory]);
 
     const handleChange = (e) => {
         const selectedValue = e.target.value;
