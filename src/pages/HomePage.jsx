@@ -9,12 +9,12 @@ import sharedContext from "../context/SharedContext"
 import ProductDetails from "../components/ProductDetails"
 
 function HomePage() {
-    const {setSelectedCategory} = useContext(sharedContext);
+    const {selectedCategory, setSelectedCategory} = useContext(sharedContext);
 
     useEffect(() => {
         // Reset selectedCategory to default when HomePage mounts
         setSelectedCategory("All Uniforms");
-    }, [setSelectedCategory])
+    }, [selectedCategory])
 
   return (
     <>
