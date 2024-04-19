@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./productDetails.css";
 import Dress from "../assets/dress.png";
 import Faq from "./Faq";
+import sharedContext from "../context/SharedContext";
 
 const ProductDetails = () => {
+    const {selectedCard} = useContext(sharedContext);
     const [selectedSize, setSelectedSize] = useState('');
 
     const handleSizeClick = (size) => {
@@ -14,11 +16,11 @@ const ProductDetails = () => {
     <div>
         <div className="prod-sec">
             <div className="prod-img">
-                <img src={Dress} alt="Product Image" />
+                <img src={Dress}  alt="Product Image" />
             </div>
             <div className="prod-det">
                 <div className="prod-name">
-                    <h3>Lorem ipsum</h3>
+                    <h3>{selectedCard.title}</h3>
                 </div>
                 <div className="prod-desc">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -59,7 +61,7 @@ const ProductDetails = () => {
                 </div>
                 <div className="prod-add-sec">
                     <div className="prod-price">
-                        <p>RS 399.00</p>
+                        <p>RS {selectedCard.price}</p>
                     </div>
                     <div className="prod-add">
                         <div className="prod-quant">

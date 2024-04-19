@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import './card.css';
 import CardImage from '../assets/card.jpg';
 import sharedContext from "../context/SharedContext";
+import { useNavigate } from "react-router-dom";
 
 const Card = () => {
-  const {selectedCategory} = useContext(sharedContext);
+  const {selectedCategory, setSelectedCard} = useContext(sharedContext);
   const [cardsData, setCardsData] = useState([]);
+  const navigate = useNavigate();
 
   // Assuming fetchData function fetches data from an API
   const fetchData = async () => {
@@ -16,15 +18,15 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 2, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 3, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 4, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 5, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 6, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 7, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 8, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
-        { id: 9, imageUrl: CardImage, title: 'SURGEON SUIT', price: '$49.99' },
+        { id: 1, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 2, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 3, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 4, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 5, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 6, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 7, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 8, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
+        { id: 9, imageUrl: CardImage, title: 'SURGEON SUIT', price: '49.99' },
         // Add more data as needed
       ];
 
@@ -42,12 +44,12 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'APRONS', price: '$29.99' },
-        { id: 2, imageUrl: CardImage, title: 'APRONS', price: '$29.99' },
-        { id: 3, imageUrl: CardImage, title: 'APRONS', price: '$29.99' },
-        { id: 4, imageUrl: CardImage, title: 'APRONS', price: '$29.99' },
-        { id: 5, imageUrl: CardImage, title: 'APRONS', price: '$29.99' },
-        { id: 6, imageUrl: CardImage, title: 'APRONS', price: '$29.99' },
+        { id: 1, imageUrl: CardImage, title: 'APRONS', price: '29.99' },
+        { id: 2, imageUrl: CardImage, title: 'APRONS', price: '29.99' },
+        { id: 3, imageUrl: CardImage, title: 'APRONS', price: '29.99' },
+        { id: 4, imageUrl: CardImage, title: 'APRONS', price: '29.99' },
+        { id: 5, imageUrl: CardImage, title: 'APRONS', price: '29.99' },
+        { id: 6, imageUrl: CardImage, title: 'APRONS', price: '29.99' },
         // Add more data as needed
       ];
 
@@ -64,12 +66,12 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'CORPORATE', price: '$29.99' },
-        { id: 2, imageUrl: CardImage, title: 'CORPORATE', price: '$29.99' },
-        { id: 3, imageUrl: CardImage, title: 'CORPORATE', price: '$29.99' },
-        { id: 4, imageUrl: CardImage, title: 'CORPORATE', price: '$29.99' },
-        { id: 5, imageUrl: CardImage, title: 'CORPORATE', price: '$29.99' },
-        { id: 6, imageUrl: CardImage, title: 'CORPORATE', price: '$29.99' },
+        { id: 1, imageUrl: CardImage, title: 'CORPORATE', price: '29.99' },
+        { id: 2, imageUrl: CardImage, title: 'CORPORATE', price: '29.99' },
+        { id: 3, imageUrl: CardImage, title: 'CORPORATE', price: '29.99' },
+        { id: 4, imageUrl: CardImage, title: 'CORPORATE', price: '29.99' },
+        { id: 5, imageUrl: CardImage, title: 'CORPORATE', price: '29.99' },
+        { id: 6, imageUrl: CardImage, title: 'CORPORATE', price: '29.99' },
         // Add more data as needed
       ];
 
@@ -87,10 +89,10 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'SKIRTS', price: '$49.99' },
-        { id: 2, imageUrl: CardImage, title: 'SKIRTS', price: '$49.99' },
-        { id: 3, imageUrl: CardImage, title: 'SKIRTS', price: '$49.99' },
-        { id: 4, imageUrl: CardImage, title: 'SKIRTS', price: '$49.99' },
+        { id: 1, imageUrl: CardImage, title: 'SKIRTS', price: '49.99' },
+        { id: 2, imageUrl: CardImage, title: 'SKIRTS', price: '49.99' },
+        { id: 3, imageUrl: CardImage, title: 'SKIRTS', price: '49.99' },
+        { id: 4, imageUrl: CardImage, title: 'SKIRTS', price: '49.99' },
         // Add more data as needed
       ];
 
@@ -108,10 +110,10 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'PANTS', price: '$49.99' },
-        { id: 2, imageUrl: CardImage, title: 'PANTS', price: '$49.99' },
-        { id: 3, imageUrl: CardImage, title: 'PANTS', price: '$49.99' },
-        { id: 4, imageUrl: CardImage, title: 'PANTS', price: '$49.99' },
+        { id: 1, imageUrl: CardImage, title: 'PANTS', price: '49.99' },
+        { id: 2, imageUrl: CardImage, title: 'PANTS', price: '49.99' },
+        { id: 3, imageUrl: CardImage, title: 'PANTS', price: '49.99' },
+        { id: 4, imageUrl: CardImage, title: 'PANTS', price: '49.99' },
         // Add more data as needed
       ];
 
@@ -129,10 +131,10 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'TROUSERS', price: '$49.99' },
-        { id: 2, imageUrl: CardImage, title: 'TROUSERS', price: '$49.99' },
-        { id: 3, imageUrl: CardImage, title: 'TROUSERS', price: '$49.99' },
-        { id: 4, imageUrl: CardImage, title: 'TROUSERS', price: '$49.99' },
+        { id: 1, imageUrl: CardImage, title: 'TROUSERS', price: '49.99' },
+        { id: 2, imageUrl: CardImage, title: 'TROUSERS', price: '49.99' },
+        { id: 3, imageUrl: CardImage, title: 'TROUSERS', price: '49.99' },
+        { id: 4, imageUrl: CardImage, title: 'TROUSERS', price: '49.99' },
         // Add more data as needed
       ];
 
@@ -150,10 +152,10 @@ const Card = () => {
       
       // Sample data for demonstration
       const data = [
-        { id: 1, imageUrl: CardImage, title: 'ACCESSORIES', price: '$49.99' },
-        { id: 2, imageUrl: CardImage, title: 'ACCESSORIES', price: '$49.99' },
-        { id: 3, imageUrl: CardImage, title: 'ACCESSORIES', price: '$49.99' },
-        { id: 4, imageUrl: CardImage, title: 'ACCESSORIES', price: '$49.99' },
+        { id: 1, imageUrl: CardImage, title: 'ACCESSORIES', price: '49.99' },
+        { id: 2, imageUrl: CardImage, title: 'ACCESSORIES', price: '49.99' },
+        { id: 3, imageUrl: CardImage, title: 'ACCESSORIES', price: '49.99' },
+        { id: 4, imageUrl: CardImage, title: 'ACCESSORIES', price: '49.99' },
         // Add more data as needed
       ];
 
@@ -183,10 +185,21 @@ const Card = () => {
     // Add more conditions for other categories if needed
   }, [selectedCategory]); // Fetch data when selectedCategory changes
 
+  const handleCardClick = (productId, productName, productImage, productPrice) => {
+    setSelectedCard({
+      id: productId,
+      title: productName,
+      imageUrl: productImage,
+      price: productPrice
+    });
+    // Navigate to ProductDetailsPage with the selected product ID
+    navigate(`/productPage/${productId}/${productName}`);
+  };
+
   return (
     <>
         {cardsData.map((card, index) => (
-          <div className="card" key={index}>
+          <div className="card" key={index} onClick={() => handleCardClick(card.id, card.title, card.imageUrl, card.price)}>
             <div className="card-image-sec">
               <img src={card.imageUrl} alt="Product Image" />
             </div>
