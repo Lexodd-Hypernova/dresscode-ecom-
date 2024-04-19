@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import '../index.css';
 import Logo from '../assets/logo.svg';
 import Cart from '../assets/cart.svg';
 import Menu from '../assets/menu.svg';
+import sharedContext from "../context/SharedContext";
 
 const NavBar = () => {
+    const { cartItems } = useContext(sharedContext);
+
   return (
     <div className="nav">
         <div className="nav-sec">
@@ -16,7 +19,7 @@ const NavBar = () => {
                     <div>
                         <img src={Cart} alt="Cart" />
                     </div>
-                    <div className="cart-braces"><span>(0)</span></div>
+                    <div className="cart-braces"><span>({cartItems.length})</span></div>
                 </div>
                 <div className="ham-menu">
                     <img src={Menu} alt="Hamburger menu" />
