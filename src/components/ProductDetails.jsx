@@ -7,6 +7,7 @@ import sharedContext from "../context/SharedContext";
 const ProductDetails = () => {
     const {selectedCard, addToCart} = useContext(sharedContext);
     const [selectedSize, setSelectedSize] = useState('');
+    const [quantity, setQuantity] = useState(1);
 
     const handleSizeClick = (size) => {
         setSelectedSize(size);
@@ -16,6 +17,17 @@ const ProductDetails = () => {
         if (selectedCard) {
             // Update cart with selected item
             addToCart(selectedCard);
+            setQuantity(1);
+        }
+    };
+
+    const increaseQuantity = () => {
+        setQuantity(quantity + 1);
+    };
+
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
         }
     };
 
@@ -72,9 +84,9 @@ const ProductDetails = () => {
                     </div>
                     <div className="prod-add">
                         <div className="prod-quant">
-                            <p className="quant-action">-</p>
-                            <p>1</p>
-                            <p className="quant-action">+</p>
+                            <p className="quant-action" onClick={decreaseQuantity}>-</p>
+                            <p>{quantity}</p>
+                            <p className="quant-action" onClick={increaseQuantity}>+</p>
                         </div>
                         <div className="add-to-cart">
                             <button onClick={handleAddToCart}>ADD TO CART</button>
