@@ -148,3 +148,45 @@
 .ques img {
   cursor: pointer;
 }
+
+/* RELATED CATEGORIES */
+
+.rel-cat {
+  margin: 50px 0;
+  padding: 0 40px;
+}
+
+.rel-head p {
+  color: #222;
+  /* font-family: Satoshi; */
+  font-size: 60px;
+  font-weight: 500;
+  text-transform: capitalize;
+  line-height: 60px;
+  margin: 0;
+}
+
+.sat-cus {
+  margin: 50px 0;
+  padding: 0 40px;
+}
+
+.sat-head p {
+  color: #222;
+  /* font-family: Satoshi; */
+  font-size: 80px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  line-height: 80px;
+  margin: 0;
+}
+
+.sat-img {
+  margin: 100px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.sat-img img {
+  height: 600px;
+}
