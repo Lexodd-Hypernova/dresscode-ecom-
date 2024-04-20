@@ -224,19 +224,35 @@ body {
   flex-direction: column;
 }
 
-.heading {
-  display: flex;
-  justify-content: center;
-}
-
-.heading h1 {
+.heading-container h1 {
   color: #1c1f77;
   font-size: 130px;
   font-weight: 700;
   line-height: 180px;
   letter-spacing: 0.2px;
   text-transform: uppercase;
-  margin: 0;
+  white-space: nowrap;
+}
+
+.heading-container {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.heading-container::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
+}
+
+.category-item {
+  margin-right: 200px; /* Gap between each repetition */
+  white-space: nowrap; /* Prevent line breaks */
+}
+
+.category-item:last-child {
+  margin-right: 0; /* Remove margin for the last element */
 }
 
 .head-body {

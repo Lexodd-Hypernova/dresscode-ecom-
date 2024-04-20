@@ -30,10 +30,21 @@ const HeadSection = () => {
         }
     }
 
+     // Function to generate repeated category elements
+  const generateRepeatedCategories = () => {
+    const numRepetitions = 10; // Number of repetitions for infinite effect
+    const categories = Array.from({ length: numRepetitions }, (_, index) => (
+      <h1 key={index} className="category-item">
+        {selectedCategory}
+      </h1>
+    ));
+    return categories;
+  };
+
   return (
     <div className="head-sec">
-        <div className="heading">
-            <h1>{selectedCategory}</h1>
+        <div className="heading-container">
+        {generateRepeatedCategories()}
         </div>
         <div className="head-body">
             <div className="category-btn">
