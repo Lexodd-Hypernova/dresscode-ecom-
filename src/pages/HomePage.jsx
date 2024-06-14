@@ -3,17 +3,17 @@ import CardGrid from "../components/CardGrid"
 import Footer from "../components/Footer"
 import HeadSection from "../components/HeadSection"
 import OurProducts from "../components/OurProducts"
-import NavBar from "../components/NavBar"
+import NavBar from "../components/Header/NavBar"
 import { useContext, useEffect } from "react"
 import sharedContext from "../context/SharedContext"
 
 function HomePage() {
-    const {selectedCategory, setSelectedCategory} = useContext(sharedContext);
+  const { selectedCategory, setSelectedCategory } = useContext(sharedContext);
 
-    useEffect(() => {
-        // Reset selectedCategory to default when HomePage mounts
-        setSelectedCategory("All Uniforms");
-    }, [selectedCategory])
+  useEffect(() => {
+    // Reset selectedCategory to default when HomePage mounts
+    setSelectedCategory("All Uniforms");
+  }, [selectedCategory])
 
   return (
     <>

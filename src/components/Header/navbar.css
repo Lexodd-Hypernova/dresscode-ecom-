@@ -1,0 +1,63 @@
+.navbar {
+    box-shadow: 0px 4.07px 4.07px 0px #00000040;
+    background-color: #fff !important;
+}
+
+.nav-sec {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 70px;
+    width: 100%;
+}
+
+.nv__Right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav__Cart {
+    display: flex;
+    align-items: center;
+}
+
+.cart-menu {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.logo {
+    width: 260px;
+    height: 60px;
+}
+
+.logo img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.nav__Ht i {
+    font-size: 20px;
+    color: #000;
+}
+
+.nav__Cart i {
+    font-size: 20px;
+    color: #000;
+}
+
+.cart-braces span {
+    font-size: 20px;
+    color: #000;
+}
+
+.ham-menu i {
+    font-size: 20px;
+    color: #000;
+}
+
+.ham-menu {
+    cursor: pointer;
+}

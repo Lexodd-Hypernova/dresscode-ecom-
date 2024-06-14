@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/Header/NavBar";
 import HeadSection from "../components/HeadSection";
 import CardGrid from "../components/CardGrid";
 import AdContainer from "../components/AdContainer";
