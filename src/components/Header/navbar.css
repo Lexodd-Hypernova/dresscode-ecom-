@@ -61,3 +61,8 @@
 .ham-menu {
     cursor: pointer;
 }
+
+.nv_Search i {
+    font-size: 20px;
+    color: #000;
+}
