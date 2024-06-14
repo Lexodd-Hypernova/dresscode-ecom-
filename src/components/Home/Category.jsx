@@ -1,5 +1,6 @@
 import React from 'react';
 import "./category.css";
+import CategorySlider from './CategorySlider';
 
 
 const Category = () => {
@@ -19,6 +20,7 @@ const Category = () => {
                     </p>
                 </div>
             </section>
+            <CategorySlider></CategorySlider>
         </>
     )
 }
