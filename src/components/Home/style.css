@@ -1,0 +1,76 @@
+.hm_ext-p {
+    display: flex;
+    justify-content: end;
+}
+
+.hm_ext-p p {
+    font-family: 'Inter';
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 58px;
+    margin: 0;
+    color: #0076D6;
+    text-transform: uppercase;
+    width: 56%;
+}
+
+.or_pr {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.pr_icn {
+    width: 60px;
+}
+
+.or_pr h2 {
+    font-family: Inter;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 108px;
+    letter-spacing: 2.8px;
+    color: #0076D6;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.pr_list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.pr_list li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    width: 45%;
+    justify-content: space-between;
+}
+
+.pr_list li h4 {
+    font-family: Inter;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 58px;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: #0076D6;
+    margin: 0;
+}
+
+.pr_list li img {
+    width: 54px;
+}
+
+.hm_ext-cnt {
+    padding-left: 70px;
+}
+
+.hm__Ext {
+    margin-top: 90px;
+}
