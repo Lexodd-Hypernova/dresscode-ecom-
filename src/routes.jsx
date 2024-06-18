@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import Home from "./components/Home/Home";
+import SelectSchool from "./components/SelectSchool/SelectSchool";
 
 const router = createBrowserRouter([
     {
@@ -11,6 +12,7 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <Home /> },
+            { path: "/selectSchool", element: <SelectSchool /> },
             { path: "/:category", element: <ProductPage /> },
             { path: "/productPage/:productId/:productName", element: <ProductDetailsPage /> },
         ]
