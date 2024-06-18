@@ -1,0 +1,25 @@
+.gen_Nav {
+    display: flex;
+    justify-content: center;
+    margin: 100px 0;
+}
+
+.gen-tab {
+    font-family: Inter;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 1.8px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #A9A9A9;
+}
+
+.gen_nav-tab {
+    display: flex;
+    gap: 70px;
+}
+
+.select__Gender {
+    padding: 0 130px;
+}
