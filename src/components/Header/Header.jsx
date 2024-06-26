@@ -1,22 +1,9 @@
 import React, { useContext, useState } from "react";
 import './navbar.css';
 import Logo from '../../assets/logo.svg';
-import Cart from '../../assets/cart.svg';
-import Menu from '../../assets/menu.svg';
-import sharedContext from "../../context/SharedContext";
-import CartModal from "../CartModal";
 
-const NavBar = () => {
-    const { cartItems } = useContext(sharedContext);
-    const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
-    const toggleCartModal = () => {
-        setIsCartModalOpen(true); // Toggle the state
-    };
-
-    const closeCartModal = () => {
-        setIsCartModalOpen(false);
-    }
+const Header = () => {
 
     return (
         <>
@@ -41,9 +28,9 @@ const NavBar = () => {
                             <div className="nav__Ht">
                                 <i className="fa-regular fa-heart"></i>
                             </div>
-                            <div className="nav__Cart" onClick={toggleCartModal}>
+                            <div className="nav__Cart">
                                 <i className="fa-solid fa-bag-shopping"></i>
-                                <div className="cart-braces"><span>({cartItems.length})</span></div>
+                                <div className="cart-braces"><span></span></div>
                             </div>
                             <div className="ham-menu">
                                 <i className="fa-solid fa-bars"></i>
@@ -52,9 +39,9 @@ const NavBar = () => {
                     </div>
                 </div>
             </nav>
-            {isCartModalOpen && <CartModal onClose={closeCartModal} />}
+
         </>
     );
 };
 
-export default NavBar;
+export default Header;

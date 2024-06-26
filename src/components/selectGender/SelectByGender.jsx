@@ -1,6 +1,6 @@
 import React from 'react';
 import "./style.css";
-import NavBar from '../Header/NavBar';
+import NavBar from '../Header/Header';
 import Footer from '../Footer/Footer';
 
 const SelectByGender = () => {

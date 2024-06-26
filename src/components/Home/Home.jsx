@@ -1,14 +1,12 @@
 import React from 'react'
 import Category from './Category'
-import NavBar from '../Header/NavBar'
 import TextMove from '../InfiniteTextMove/TextMove'
 import SortBy from './SortBy';
 import "./style.css";
-import Footer from '../Footer/Footer';
+
 const Home = () => {
     return (
         <>
-            <NavBar />
             <TextMove />
             <Category />
             <SortBy />
@@ -48,7 +46,7 @@ const Home = () => {
                     </ul>
                 </div>
             </section>
-            <Footer />
+
         </>
     )
 }
