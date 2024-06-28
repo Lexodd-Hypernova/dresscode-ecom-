@@ -1,0 +1,33 @@
+/* slider */
+
+.category__Slider {
+    padding: 0 140px;
+    padding-bottom: 70px;
+    margin-top: 40px;
+}
+
+.category__Slider .carousel-indicators [data-bs-target] {
+    width: 13px !important;
+    height: 13px !important;
+    border-radius: 100%;
+    margin-right: 8px !important;
+    margin-left: 8px !important;
+    background-color: #000 !important;
+}
+
+.category__Slider .carousel-indicators {
+    bottom: -80px;
+}
+
+.category__Slider .carousel-inner {
+    border-radius: 14px;
+}
+
+.cat__Lbl {
+    font-family: "Nanum Gothic", sans-serif;
+    font-size: 98px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}

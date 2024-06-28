@@ -5,9 +5,11 @@ import App from "../App";
 // import HomePage from "../pages/HomePage";
 // import ProductPage from "../pages/ProductPage";
 // import ProductDetailsPage from "../pages/ProductDetailsPage";
-import Home from "../components/Home/Home";
+// import Home from "../components/Home/Home";
 // import SelectSchool from "../components/SelectSchool/SelectSchool";
 // import SelectByGender from "../components/selectGender/SelectByGender";
+
+import Home from "../pages/Home";
 
 const router = createBrowserRouter([
     {
