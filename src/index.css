@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* FOOTER SECTION */
 
 .container {
@@ -338,6 +343,28 @@
 .srt__Ttl {
   margin-bottom: 60px;
   margin-top: 150px;
+}
+
+.sortBy__con {
+  padding: 0 130px;
+}
+
+.srt__Name {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #222222;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.srt__Ttl {
+  margin-bottom: 40px;
+  margin-top: 80px;
 }
 
 

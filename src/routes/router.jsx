@@ -11,6 +11,7 @@ import App from "../App";
 
 import Home from "../pages/Home";
 import Categories from "../pages/Categories";
+import SubCategories from "../pages/SubCategories";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: "category/:groupName",
                 element: <Categories />
+            },
+            {
+                path: "subcategory/:groupName/:category",
+                element: <SubCategories />
             },
         ]
     }

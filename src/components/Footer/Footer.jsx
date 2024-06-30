@@ -8,19 +8,19 @@ const Footer = () => {
                 <div className='ft_icn-sec'>
                     <div className='ft-cs'>
                         <div className='ft-icn'>
-                            <img src="images/ft-cs.png" alt="" className="d-block w-100" />
+                            <img src="/images/ft-cs.png" alt="" className="d-block w-100" />
                         </div>
                         <h5>Customer Support</h5>
                     </div>
                     <div className='ft-cs'>
                         <div className='ft-icn'>
-                            <img src="images/ft-hp.png" alt="" className="d-block w-100" />
+                            <img src="/images/ft-hp.png" alt="" className="d-block w-100" />
                         </div>
                         <h5>100% Handpicked</h5>
                     </div>
                     <div className='ft-cs'>
                         <div className='ft-icn'>
-                            <img src="images/ft-aq.png" alt="" className="d-block w-100" />
+                            <img src="/images/ft-aq.png" alt="" className="d-block w-100" />
                         </div>
                         <h5>Assured Quality</h5>
                     </div>

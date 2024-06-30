@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import TextMove from '../components/InfiniteTextMove/TextMove';
 import s1 from "../../public/images/s1.png";
-// import DisplayCategory from '../components/DisplayCategory';
 import { Link } from 'react-router-dom';
 
 const Categories = () => {
@@ -19,17 +18,17 @@ const Categories = () => {
             myHeaders.append("Content-Type", "application/json");
 
             const requestOptions = {
-                method: "GET", // Use GET method as we are using query parameters
+                method: "GET",
                 headers: myHeaders,
                 redirect: "follow"
             };
 
             try {
-                const response = await fetch(`https://dresscode-test.onrender.com/e-com/getCategories?groupName=${groupName}`, requestOptions);
+                const response = await fetch(DressCodeApi.getCategories.url + `?groupName=${groupName}`, requestOptions);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const result = await response.json(); // Assuming response is JSON
+                const result = await response.json();
                 setCategoryData(result);
                 setLoading(false);
                 console.log(result);
@@ -48,10 +47,8 @@ const Categories = () => {
             <section className="mid__Ttl-con">
                 <div className="hm_ct-ttl">
                     <Link className='back_link' to="/">
-
                         <img src="/images/back.png" alt="" />
                         <span>Back</span>
-
                     </Link>
                 </div>
                 <div className="hm__Ttl-para">
@@ -93,10 +90,10 @@ const Categories = () => {
                         <div className="container-fluid text-center">
                             <div className="row row-gap-5">
                                 {categoryData.map((item, index) => (
-                                    <div className="col-lg-4" key={index}>
+                                    <Link to={`/subcategory/${groupName}/${item.category}`} className="col-lg-4" key={index}>
                                         <img src={s1} alt="" className="w-100" />
                                         <h5 className='srt__Name'>{item.category}</h5>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
