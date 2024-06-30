@@ -1,12 +1,12 @@
 /* slider */
 
-.category__Slider {
+.group__Slider {
     padding: 0 140px;
     padding-bottom: 70px;
     margin-top: 40px;
 }
 
-.category__Slider .carousel-indicators [data-bs-target] {
+.group__Slider .carousel-indicators [data-bs-target] {
     width: 13px !important;
     height: 13px !important;
     border-radius: 100%;
@@ -15,11 +15,11 @@
     background-color: #000 !important;
 }
 
-.category__Slider .carousel-indicators {
+.group__Slider .carousel-indicators {
     bottom: -80px;
 }
 
-.category__Slider .carousel-inner {
+.group__Slider .carousel-inner {
     border-radius: 14px;
 }
 

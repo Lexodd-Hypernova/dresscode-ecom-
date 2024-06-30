@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DressCodeApi from '../common';
 import "./bannerGroup.css";
+import { Link } from 'react-router-dom';
 const BannerGroup = () => {
 
     const [groups, setGroups] = useState([]);
@@ -30,10 +31,10 @@ const BannerGroup = () => {
 
 
     return (
-        <section className='category__Slider'>
+        <section className='group__Slider'>
             {loading ? (
                 <div className="placeholder-glow w-100 vh-100 rounded-14">
-                    <span class="placeholder h-100 d-inline-block w-100"></span>
+                    <span className="placeholder h-100 d-inline-block w-100"></span>
                 </div>
             ) : (
                 <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
@@ -52,12 +53,12 @@ const BannerGroup = () => {
                     </div>
                     <div className="carousel-inner">
                         {groups.map((item, index) => (
-                            <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+                            <Link to={`/category/${item.groupName}`} key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
                                 <img src="images/c1.png" className="d-block w-100" alt={item.groupName} />
                                 <div className="carousel-caption d-none d-md-block">
                                     <h5 className='cat__Lbl'>{item.groupName}</h5>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                     <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

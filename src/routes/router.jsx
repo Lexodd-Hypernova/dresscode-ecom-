@@ -10,6 +10,7 @@ import App from "../App";
 // import SelectByGender from "../components/selectGender/SelectByGender";
 
 import Home from "../pages/Home";
+import Categories from "../pages/Categories";
 
 const router = createBrowserRouter([
     {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <Home />
+            },
+            {
+                path: "category/:groupName",
+                element: <Categories />
             },
         ]
     }

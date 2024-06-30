@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import "./textMove.css";
 
-const TextMove = () => {
+const TextMove = ({title}) => {
     const firstText = useRef(null);
     const secondText = useRef(null);
     const slider = useRef(null);
@@ -42,8 +42,8 @@ const TextMove = () => {
         <section className="text__Move-main">
             <div className="text__sliderContainer">
                 <div ref={slider} className="text__Slider">
-                    <p ref={firstText}>All Uniforms </p>
-                    <p ref={secondText}>All Uniforms </p>
+                    <p ref={firstText}>{title} </p>
+                    <p ref={secondText}>{title} </p>
                 </div>
             </div>
         </section>
