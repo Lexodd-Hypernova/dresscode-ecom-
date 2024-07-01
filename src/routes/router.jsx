@@ -12,6 +12,7 @@ import App from "../App";
 import Home from "../pages/Home";
 import Categories from "../pages/Categories";
 import SubCategories from "../pages/SubCategories";
+import ProductTypes from "../pages/ProductTypes";
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: "subcategory/:groupName/:category",
                 element: <SubCategories />
+            },
+            {
+                path: "productType/:groupName/:category/:subCategory",
+                element: <ProductTypes />
             },
         ]
     }

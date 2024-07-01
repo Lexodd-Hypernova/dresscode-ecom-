@@ -88,10 +88,10 @@ const SubCategories = () => {
                         <div className="container-fluid text-center">
                             <div className="row row-gap-5">
                                 {subcategoryData.map((item, index) => (
-                                    <div className="col-lg-4" key={index}>
+                                    <Link to={`/productType/${groupName}/${category}/${item.subCategory}`} className="col-lg-4" key={index}>
                                         <img src={s1} alt="" className="w-100" />
                                         <h5 className='srt__Name'>{item.subCategory}</h5>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
