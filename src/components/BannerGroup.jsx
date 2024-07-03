@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DressCodeApi from '../common';
 import "./bannerGroup.css";
 import { Link } from 'react-router-dom';
+import scrollTop from '../helpers/scrollTop';
 const BannerGroup = () => {
 
     const [groups, setGroups] = useState([]);
@@ -53,7 +54,7 @@ const BannerGroup = () => {
                     </div>
                     <div className="carousel-inner">
                         {groups.map((item, index) => (
-                            <Link to={`/category/${item.groupName}`} key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+                            <Link to={`/category/${item.groupName}`} key={index} className={`carousel-item ${index === 0 ? "active" : ""}`} onClick={scrollTop}>
                                 <img src="images/c1.png" className="d-block w-100" alt={item.groupName} />
                                 <div className="carousel-caption d-none d-md-block">
                                     <h5 className='cat__Lbl'>{item.groupName}</h5>

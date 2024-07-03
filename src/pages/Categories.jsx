@@ -4,6 +4,7 @@ import DressCodeApi from '../common';
 import TextMove from '../components/InfiniteTextMove/TextMove';
 import s1 from "../../public/images/s1.png";
 import { Link } from 'react-router-dom';
+import scrollTop from "../helpers/scrollTop";
 
 const Categories = () => {
 
@@ -90,7 +91,7 @@ const Categories = () => {
                         <div className="container-fluid text-center">
                             <div className="row row-gap-5">
                                 {categoryData.map((item, index) => (
-                                    <Link to={`/subcategory/${groupName}/${item.category}`} className="col-lg-4" key={index}>
+                                    <Link to={`/subcategory/${groupName}/${item.category}`} className="col-lg-4" key={index} onClick={scrollTop}>
                                         <img src={s1} alt="" className="w-100" />
                                         <h5 className='srt__Name'>{item.category}</h5>
                                     </Link>
@@ -107,4 +108,3 @@ export default Categories
 
 
 
-          
