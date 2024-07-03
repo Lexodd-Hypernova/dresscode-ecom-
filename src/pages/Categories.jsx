@@ -91,7 +91,7 @@ const Categories = () => {
                         <div className="container-fluid text-center">
                             <div className="row row-gap-5">
                                 {categoryData.map((item, index) => (
-                                    <Link to={`/subcategory/${groupName}/${item.category}`} className="col-lg-4" key={index} onClick={scrollTop}>
+                                    <Link to={`/${groupName}/${item.category}`} className="col-lg-4" key={index} onClick={scrollTop}>
                                         <img src={s1} alt="" className="w-100" />
                                         <h5 className='srt__Name'>{item.category}</h5>
                                     </Link>

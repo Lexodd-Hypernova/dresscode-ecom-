@@ -54,7 +54,7 @@ const BannerGroup = () => {
                     </div>
                     <div className="carousel-inner">
                         {groups.map((item, index) => (
-                            <Link to={`/category/${item.groupName}`} key={index} className={`carousel-item ${index === 0 ? "active" : ""}`} onClick={scrollTop}>
+                            <Link to={`/${item.groupName}`} key={index} className={`carousel-item ${index === 0 ? "active" : ""}`} onClick={scrollTop}>
                                 <img src="images/c1.png" className="d-block w-100" alt={item.groupName} />
                                 <div className="carousel-caption d-none d-md-block">
                                     <h5 className='cat__Lbl'>{item.groupName}</h5>

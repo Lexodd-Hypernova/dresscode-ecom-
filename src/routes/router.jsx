@@ -13,6 +13,8 @@ import Home from "../pages/Home";
 import Categories from "../pages/Categories";
 import SubCategories from "../pages/SubCategories";
 import ProductTypes from "../pages/ProductTypes";
+import Products from "../pages/Products";
+
 
 const router = createBrowserRouter([
     {
@@ -24,16 +26,20 @@ const router = createBrowserRouter([
                 element: <Home />
             },
             {
-                path: "category/:groupName",
+                path: "/:groupName",
                 element: <Categories />
             },
             {
-                path: "subcategory/:groupName/:category",
+                path: "/:groupName/:category",
                 element: <SubCategories />
             },
             {
-                path: "productType/:groupName/:category/:subCategory",
+                path: "/:groupName/:category/:subCategory",
                 element: <ProductTypes />
+            },
+            {
+                path: "/:groupName/:category/:subCategory/:productType/:gender",
+                element: <Products />
             },
         ]
     }

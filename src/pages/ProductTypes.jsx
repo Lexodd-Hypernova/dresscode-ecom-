@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import s1 from "../../public/images/s1.png";
 
@@ -97,10 +97,10 @@ const ProductTypes = () => {
                                 <div className="container-fluid text-center">
                                     <div className="row row-gap-5">
                                         {getProductTypesByGender(gender).map((productType, index) => (
-                                            <div className="col-lg-4" key={index}>
+                                            <Link to={`/${groupName}/${category}/${subCategory}/${productType.type}/${gender}`} className="col-lg-4" key={index}>
                                                 <img src={s1} alt={productType.type} className="w-100" />
                                                 <h5 className='srt__Name'>{productType.type}</h5>
-                                            </div>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
