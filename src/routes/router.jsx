@@ -14,6 +14,7 @@ import Categories from "../pages/Categories";
 import SubCategories from "../pages/SubCategories";
 import ProductTypes from "../pages/ProductTypes";
 import Products from "../pages/Products";
+import ProductDetails from "../pages/Products";
 
 
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
             {
                 path: "/:groupName/:category/:subCategory/:productType/:gender",
                 element: <Products />
+            },
+            {
+                path: "/:productId",
+                element: <ProductDetails />
             },
         ]
     }

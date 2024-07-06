@@ -395,13 +395,24 @@ a {
 }
 
 .filters {
-  padding: 25px 0;
+  /* padding: 25px 0; */
   margin-top: 100px;
   margin-bottom: 150px;
   background-color: #F3F3F3;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.filter__Inner {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter {
+  flex: 1;
 }
 
 

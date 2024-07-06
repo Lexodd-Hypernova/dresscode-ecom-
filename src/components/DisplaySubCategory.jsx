@@ -1,37 +1,36 @@
 import React from 'react';
-import "./displayCategory.css";
 import s1 from "../../public/images/s1.png";
-import { Link } from 'react-router-dom';
 import scrollTop from '../helpers/scrollTop';
-
-const DisplayCategory = ({ data, loading, groupName }) => {
+import { Link } from 'react-router-dom';
+const DisplaySubCategory = ({ data, loading, groupName, category }) => {
 
     const loadingList = new Array(3).fill(null);
 
-    const showCategory = (data) => {
+    const showSubCategory = (data) => {
         console.log("data", data)
         if (data) {
             return data.map((item, index) => (
-                <Link to={`/${groupName}/${item.category}`} className="col-lg-4" key={index} onClick={scrollTop}>
+                <Link to={`/${groupName}/${category}/${item.subCategory}`} className="col-lg-4" key={index} onClick={scrollTop}>
                     <img src={s1} alt="" className="w-100" />
-                    <h5 className='srt__Name'>{item.category}</h5>
+                    <h5 className='srt__Name'>{item.subCategory}</h5>
                 </Link>
             ))
         }
     }
 
     return (
-        <section className='categories'>
-            <div className='srt__Ttl'>
-                <div className="hm_ct-ttl">
-                    <h3>Select one of the collection</h3>
-                    <div className="bt_arw">
-                        <img src="/images/arrow-down.png" alt="" />
+        <>
+
+            <section className='categories'>
+                <div className='srt__Ttl'>
+                    <div className="hm_ct-ttl">
+                        <h3>Select one of the collection</h3>
+                        <div className="bt_arw">
+                            <img src="/images/arrow-down.png" alt="" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            {
-                loading ?
+                {loading ?
                     <div className='container-fluid'>
                         <div className='row row-gap-5'>{
                             loadingList.map((item, index) => {
@@ -48,18 +47,19 @@ const DisplayCategory = ({ data, loading, groupName }) => {
                             })
                         }
                         </div>
-                    </div> : (
+                    </div>
+                    : (
                         <div className="container-fluid text-center">
                             <div className="row row-gap-5">
                                 {
-                                    showCategory(data)
+                                    showSubCategory(data)
                                 }
                             </div>
                         </div>
-                    )
-            }
-        </section>
+                    )}
+            </section>
+        </>
     )
 }
 
-export default DisplayCategory
+export default DisplaySubCategory

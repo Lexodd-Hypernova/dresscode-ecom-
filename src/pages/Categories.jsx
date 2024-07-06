@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import TextMove from '../components/InfiniteTextMove/TextMove';
-import s1 from "../../public/images/s1.png";
 import { Link } from 'react-router-dom';
-import scrollTop from "../helpers/scrollTop";
+import DisplayCategory from '../components/DisplayCategory';
 
 const Categories = () => {
 
     const { groupName } = useParams();
     const [categoryData, setCategoryData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const loadingList = new Array(3).fill(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,46 +58,7 @@ const Categories = () => {
                 </div>
             </section>
 
-            <section className='categories'>
-                <div className='srt__Ttl'>
-                    <div className="hm_ct-ttl">
-                        <h3>Select one of the collection</h3>
-                        <div className="bt_arw">
-                            <img src="/images/arrow-down.png" alt="" />
-                        </div>
-                    </div>
-                </div>
-                {loading ?
-                    <div className='container-fluid'>
-                        <div className='row row-gap-5'>{
-                            loadingList.map((item, index) => {
-                                return (
-                                    <div className="col-lg-4">
-                                        <div className='placeholder-glow' style={{ height: "60vh" }}>
-                                            <span className="placeholder d-inline-block h-100 w-100"></span>
-                                        </div>
-                                        <h5 class="placeholder-glow">
-                                            <span class="placeholder d-inline-block w-100"></span>
-                                        </h5>
-                                    </div>
-                                )
-                            })
-                        }
-                        </div>
-                    </div>
-                    : (
-                        <div className="container-fluid text-center">
-                            <div className="row row-gap-5">
-                                {categoryData.map((item, index) => (
-                                    <Link to={`/${groupName}/${item.category}`} className="col-lg-4" key={index} onClick={scrollTop}>
-                                        <img src={s1} alt="" className="w-100" />
-                                        <h5 className='srt__Name'>{item.category}</h5>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-            </section>
+            <DisplayCategory data={categoryData} loading={loading} groupName={groupName} />
         </>
     )
 }
