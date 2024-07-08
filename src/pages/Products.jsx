@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import s1 from "../../public/images/s1.png";
 import FilterApi from '../components/filters/FilterApi';
@@ -10,6 +10,8 @@ const Products = () => {
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(8).fill(null);
     const [variants, setVariants] = useState([]);
+    const [productId, setProductId] = useState('');
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,6 +21,9 @@ const Products = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const result = await response.json();
+
+                const productId = result[0].productId;
+                setProductId(productId);
                 setData(result[0]);
 
                 // Shuffle variants before setting them
@@ -26,7 +31,10 @@ const Products = () => {
                 setVariants(shuffledVariants);
 
                 setLoading(false);
-                console.log("result", shuffledVariants);
+                console.log("rawProduct", result);
+                console.log("productId", productId);
+
+                console.log("shuffledVariants", shuffledVariants);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setLoading(false);
@@ -69,10 +77,10 @@ const Products = () => {
                     <div className="container-fluid text-center">
                         <div className="row row-gap-5">
                             {variants.map((item, index) => (
-                                <div className="col-lg-3" key={index}>
+                                <Link to={`/${groupName}/${productId}/${item.color}/${item.variantSizes[0].size}`} className="col-lg-3" key={index}>
                                     <img src={s1} alt="" className="w-100" />
                                     <h5 className='srt__Name'>{item.variantId}</h5>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>
