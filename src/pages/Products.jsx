@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import s1 from "../../public/images/s1.png";
 import FilterApi from '../components/filters/FilterApi';
+import scrollTop from '../helpers/scrollTop';
 
 const Products = () => {
     const { groupName, category, subCategory, productType, gender } = useParams();
@@ -77,7 +78,7 @@ const Products = () => {
                     <div className="container-fluid text-center">
                         <div className="row row-gap-5">
                             {variants.map((item, index) => (
-                                <Link to={`/${groupName}/${productId}/${item.color}/${item.variantSizes[0].size}`} className="col-lg-3" key={index}>
+                                <Link to={`/${groupName}/${productId}/${item.color}/${item.variantSizes[0].size}`} className="col-lg-3" key={index} onClick={scrollTop}>
                                     <img src={s1} alt="" className="w-100" />
                                     <h5 className='srt__Name'>{item.variantId}</h5>
                                 </Link>

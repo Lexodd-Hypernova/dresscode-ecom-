@@ -1,42 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
-import s1 from "../../public/images/s1.png";
-import ReactImageMagnify from 'react-image-magnify';
+import colorCodes from '../helpers/colorCodes';
+import formatColorName from '../helpers/formatColorName';
+import ProductSlider from '../components/ProductSlider';
 
-const productImages = [
-    "/images/s1.png", "/images/s2.png",
-    "/images/s3.png", "/images/s4.png"
-]
 
 const ProductDetails = () => {
 
     const { groupName, productId, color, size } = useParams();
     const [loading, setLoading] = useState(true);
-    const productImageListLoading = new Array(4).fill(null)
+    const loadingList = new Array(5).fill(null);
     const [data, setData] = useState({});
-    // const [productDetails, setProductDetails] = useState({})
-    // const [productImage, setProductImage] = useState([]);
-    const [activeImage, setActiveImage] = useState(productImages[0]);
-    // const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
-    //     x: 0,
-    //     y: 0
-    // })
-    // const [zoomImage, setZoomImage] = useState(false);
-    const [startIndex, setStartIndex] = useState(0);
 
-    const handleNext = () => {
-        setStartIndex((prevIndex) => (prevIndex + 1) % productImages.length);
-    };
+    const [availableColors, setAvailableColors] = useState([]);
 
-    const handlePrev = () => {
-        setStartIndex((prevIndex) => (prevIndex - 1 + productImages.length) % productImages.length);
-    };
-
-    const displayedImages = [];
-    for (let i = 0; i < 3; i++) {
-        displayedImages.push(productImages[(startIndex + i) % productImages.length]);
-    }
+    const [colorHexCodes, setColorHexCodes] = useState({});
 
 
     useEffect(() => {
@@ -47,14 +26,13 @@ const ProductDetails = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const result = await response.json();
-                // const productImages = result.productDetails.variants[0].imageUrls;
+
                 setData(result);
-                // setProductImage(productImages);
-                setActiveImage(productImages[0]);
+
                 setLoading(false);
-                // setProductImage
+
                 console.log("productAllData", result);
-                // console.log("productDetails", productDetails);
+
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -66,104 +44,120 @@ const ProductDetails = () => {
     }, [groupName, productId, color, size]);
 
 
-    const handleMouseEnterProduct = (imageURL) => {
-        setActiveImage(imageURL)
-    }
+    useEffect(() => {
+        if (data.colors && data.colors.length > 0) {
+            const hexCodes = {};
+            data.colors.forEach(color => {
+                const formattedColor = formatColorName(color.trim());
+                hexCodes[color] = colorCodes[formattedColor] || '#000000'; // default to black if color not found
+            });
+            setColorHexCodes(hexCodes);
+            console.log("hexCodes", hexCodes)
+        }
+    }, [data.colors]);
 
-    // const handleZoomImage = useCallback((e) => {
-    //     setZoomImage(true)
-    //     const { left, top, width, height } = e.target.getBoundingClientRect()
-    //     console.log("coordinate", left, top, width, height)
+    useEffect(() => {
+        if (data.colors && data.available) {
+            const { colors, available } = data;
+            const availableColors = available.map(item => formatColorName(item.color));
+            setAvailableColors(availableColors);
+            console.log("availableColors", availableColors)
+        }
+    }, [data.colors, data.available]);
 
-    //     const x = (e.clientX - left) / width
-    //     const y = (e.clientY - top) / height
-
-    //     setZoomImageCoordinate({
-    //         x,
-    //         y
-    //     })
-    // }, [zoomImageCoordinate])
-
-    // const handleLeaveImageZoom = () => {
-    //     setZoomImage(false)
-    // }
 
     return (
         <section className='product__Details'>
 
-            <div className="productImage">
+            <ProductSlider />
 
-                <div className="pr__thumbs">
-                    <div className='pr_nav pr_nav-prev'>
-                        <button onClick={handlePrev}>
-                            <i className="fa-solid fa-chevron-up"></i>
-                        </button>
-                    </div>
+            <div className='productContent mt-5'>
+                <h2 className='pr_name mt-5'>Product Name</h2>
+                <div className='pr_rating'>
+                    <button type="button" class="btn btn-success fs-5">4.5</button>
+                    <span className='ms-2 fs-5'>10 Ratings</span>
+                </div>
+                <div className='pr_price fs-3 my-2 fw-normal'>
+                    MRP ₹ 499.00
+                </div>
+                <div className='var__Color'>
+                    <span className='fs-3 mt-2 fw-normal'>Color</span>
+                    {
 
-                    <div className="pr__thumbs-inner">
-                        {displayedImages.map((imgURL, index) => (
-                            <div className="thumb_item" key={imgURL}>
-                                <img
-                                    src={imgURL}
-                                    className=""
-                                    onMouseEnter={() => handleMouseEnterProduct(imgURL)}
-                                    onClick={() => handleMouseEnterProduct(imgURL)}
-                                />
+                        loading ? (
+                            <div className="d-flex mt-2 gap-2">
+                                {
+                                    loadingList.map((item, index) => (
+                                        <div key={index} className='placeholder-glow' style={{ width: "48px", height: "48px" }}>
+                                            <span className="placeholder h-100 w-100 rounded-circle"></span>
+                                        </div>
+                                    ))
+                                }
                             </div>
-                        ))}
-                    </div>
-                    <div className='pr_nav pr_nav-nxt'>
-                        <button onClick={handleNext}>
-                            <i className="fa-solid fa-chevron-down"></i>
+                        ) : (
+                            <div className='mt-2 d-flex gap-2'>
+                                {data.colors.map((color, index) => (
+                                    <a
+                                        className={`btn rounded-circle ${availableColors.includes(color) ? '' : 'disabled'}`}
+                                        id={`color${color}`}
+                                        style={{ backgroundColor: colorHexCodes[color], width: "32px", height: "32px", }}
+                                        key={index}
+                                    />
+                                ))}
+                            </div>
+                        )
+                    }
+
+
+                </div>
+                <div className='var_sizes mt-3 '>
+                    <span className='fs-3 fw-normal'>Sizes & fits</span>
+                    {
+                        loading ? (
+                            <div className="d-flex mt-3 gap-2">
+                                {
+                                    loadingList.map((item, index) => (
+                                        <div key={index} className='placeholder-glow' style={{ width: "48px", height: "48px" }}>
+                                            <span className="placeholder h-100 w-100 rounded-circle"></span>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+
+                        ) : (
+                            <div className='sizes mt-3 d-flex gap-2'>
+                                {data.sizes.map((size, index) => (
+                                    <span
+                                        className="size_item fs-5 fw-normal"
+                                        id={`size${size}`}
+                                        key={index}
+                                    >
+                                        {size}
+                                    </span>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
+                <div className='qty'></div>
+                <div className='row row-gap-4 mt-5'>
+                    <div class="d-grid col-6">
+                        <button class="btn btn-outline-secondary fs-5 fw-normal text-capitalize" type="button">
+                            Add to bag
                         </button>
                     </div>
-
-                </div>
-
-                <div className='main_Image'>
-                    {/* <img
-                        src={activeImage}
-                        className=""
-                        onMouseMove={handleZoomImage}
-                        onMouseLeave={handleLeaveImageZoom}
-                    /> */}
-                    <ReactImageMagnify
-                        smallImage={{
-                            alt: 'Wristwatch by Ted Baker London',
-                            isFluidWidth: true,
-                            // src: `${imageBaseUrl}wristwatch_1033.jpg`,
-                            src: `${activeImage}`,
-                            // srcSet: srcSet,
-                            // sizes: '(min-width: 800px) 33.5vw, (min-width: 415px) 50vw, 100vw',
-                        }}
-                        largeImage={{
-                            alt: '',
-                            // src: `${imageBaseUrl}wristwatch_1200.jpg`,
-                            src: `${activeImage}`,
-                            width: 1200,
-                            height: 1800,
-                        }}
-                        isHintEnabled={true}
-                    />
-                </div>
-
-            </div>
-
-            {/**product zoom */}
-            {/* {zoomImage && (
-                <div className="zoom_Image">
-                    <div
-                        className="zoom_Image-inner"
-                        style={{
-                            background: `url(${activeImage})`,
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: `${zoomImageCoordinate.x * 100}% ${zoomImageCoordinate.y * 100}%`,
-                            transform: 'scale(1.5)',
-                        }}
-                    >
+                    <div class="d-grid col-6">
+                        <button class="btn btn-primary fs-5 fw-normal text-capitalize" type="button">
+                            Get a quote
+                        </button>
+                    </div>
+                    <div class="d-grid col-6">
+                        <button class="btn btn-outline-primary fs-5 fw-normal text-capitalize" type="button">
+                            Save to wishlist
+                        </button>
                     </div>
                 </div>
-            )} */}
+            </div>
 
         </section>
     )

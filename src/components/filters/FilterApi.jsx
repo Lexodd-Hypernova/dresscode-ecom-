@@ -75,49 +75,6 @@ const FilterApi = () => {
     }, [filters.colors]);
 
     return (
-        // <section className='filters'>
-        //     <div className='size__Filter'>
-        //         <div class="dropdown">
-        //             <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-        //                 Dropdown form
-        //             </button>
-        //             <form className="dropdown-menu p-4">
-        //                 <div className='row row-gap-3'>
-        //                     <div className='col-6'>
-        //                         <div className='form-check'>
-
-        //                             <input className="form-check-input" type="checkbox" id="checkboxNoLabel1" value="S" aria-label="..." />
-        //                             <label className="form-check-label" for="checkboxNoLabel1">S</label>
-        //                         </div>
-        //                     </div>
-        //                     <div className='col-6'>
-        //                         <div className='form-check'>
-
-        //                             <input className="form-check-input" type="checkbox" id="checkboxNoLabel2" value="M" aria-label="..." />
-        //                             <label className="form-check-label" for="checkboxNoLabel2">M</label>
-        //                         </div>
-        //                     </div>
-        //                     <div className='col-6'>
-        //                         <div className='form-check'>
-
-        //                             <input className="form-check-input" type="checkbox" id="checkboxNoLabel3" value="L" aria-label="..." />
-        //                             <label className="form-check-label" for="checkboxNoLabel3">L</label>
-        //                         </div>
-        //                     </div>
-        //                     <div className='col-6'>
-        //                         <div className='form-check'>
-
-        //                             <input className="form-check-input" type="checkbox" id="checkboxNoLabel4" value="XL" aria-label="..." />
-        //                             <label className="form-check-label" for="checkboxNoLabel4">XL</label>
-        //                         </div>
-        //                     </div>
-        //                 </div>
-
-        //             </form>
-        //         </div>
-        //     </div>
-        // </section>
-
 
         <section className='filters'>
 
