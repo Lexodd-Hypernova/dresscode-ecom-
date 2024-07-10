@@ -74,11 +74,12 @@ const Products = () => {
                             ))}
                         </div>
                     </div>
+                    // to={`/${groupName}/${productId}/${item.color}`}
                 ) : (
                     <div className="container-fluid text-center">
                         <div className="row row-gap-5">
                             {variants.map((item, index) => (
-                                <Link to={`/${groupName}/${productId}/${item.color}/${item.variantSizes[0].size}`} className="col-lg-3" key={index} onClick={scrollTop}>
+                                <Link to={`/${groupName}/${productId}/${item.color}/${item.variantSizes[0].size}`}  className="col-lg-3" key={index} onClick={scrollTop}>
                                     <img src={s1} alt="" className="w-100" />
                                     <h5 className='srt__Name'>{item.variantId}</h5>
                                 </Link>

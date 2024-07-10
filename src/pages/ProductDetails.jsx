@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import colorCodes from '../helpers/colorCodes';
@@ -95,16 +95,24 @@ const ProductDetails = () => {
                                 }
                             </div>
                         ) : (
-                            <div className='mt-2 d-flex gap-2'>
-                                {data.colors.map((color, index) => (
-                                    <a
-                                        className={`btn rounded-circle ${availableColors.includes(color) ? '' : 'disabled'}`}
-                                        id={`color${color}`}
-                                        style={{ backgroundColor: colorHexCodes[color], width: "32px", height: "32px", }}
-                                        key={index}
-                                    />
-                                ))}
-                            </div>
+                            <>
+                            {
+                                data.colors && data.colors.length > 0 && (
+                                    <div className='mt-2 d-flex gap-2'>
+                                        {data.colors.map((color, index) => (
+                                            <Link to={`/${groupName}/${productId}/${color}`}
+                                                className={`btn rounded-circle ${availableColors.includes(color) ? '' : 'disabled'}`}
+                                                id={`color${color}`}
+                                                style={{ backgroundColor: colorHexCodes[color], width: "32px", height: "32px", }}
+                                                key={index}
+                                            />
+                                        ))}
+                                    </div>
+                                )
+                            }
+                            </>
+                            
+
                         )
                     }
 
