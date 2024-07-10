@@ -405,14 +405,10 @@ a {
 }
 
 .filter__Inner {
-  width: 50%;
   display: flex;
+  gap: 40px;
   justify-content: center;
   align-items: center;
-}
-
-.filter {
-  flex: 1;
 }
 
 /* product details */

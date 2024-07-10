@@ -61,7 +61,7 @@ const ProductSlider = () => {
             <div className='main_Image'>
 
                 <ReactImageMagnify
-                    style={{ zIndex: "9999" }}
+                    style={{ zIndex: "9" }}
                     smallImage={{
                         alt: '',
                         isFluidWidth: true,

@@ -4,11 +4,12 @@ import DressCodeApi from '../common';
 import colorCodes from '../helpers/colorCodes';
 import formatColorName from '../helpers/formatColorName';
 import ProductSlider from '../components/ProductSlider';
+import Breadcrumb from '../components/Breadcrumb';
 
 
 const ProductDetails = () => {
 
-    const { groupName, productId, color, size } = useParams();
+    const { productId, color, productType, subCategory, category, groupName } = useParams();
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(5).fill(null);
     const [data, setData] = useState({});
@@ -21,7 +22,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(DressCodeApi.getProductDetailsWithSpecificVariant.url + `?groupName=${groupName}&productId=${productId}&color=${color}&size=${size}`);
+                const response = await fetch(DressCodeApi.getProductDetailsWithSpecificVariant.url + `?groupName=${groupName}&productId=${productId}&color=${color}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -41,7 +42,7 @@ const ProductDetails = () => {
         };
 
         fetchData();
-    }, [groupName, productId, color, size]);
+    }, [productId, color, productType, subCategory, category, groupName]);
 
 
     useEffect(() => {
@@ -72,6 +73,9 @@ const ProductDetails = () => {
             <ProductSlider />
 
             <div className='productContent mt-5'>
+                {/* <Breadcrumb
+                    groupName={groupName} category={category} subCategory={subCategory} productType={productType}
+                /> */}
                 <h2 className='pr_name mt-5'>Product Name</h2>
                 <div className='pr_rating'>
                     <button type="button" class="btn btn-success fs-5">4.5</button>
@@ -96,22 +100,22 @@ const ProductDetails = () => {
                             </div>
                         ) : (
                             <>
-                            {
-                                data.colors && data.colors.length > 0 && (
-                                    <div className='mt-2 d-flex gap-2'>
-                                        {data.colors.map((color, index) => (
-                                            <Link to={`/${groupName}/${productId}/${color}`}
-                                                className={`btn rounded-circle ${availableColors.includes(color) ? '' : 'disabled'}`}
-                                                id={`color${color}`}
-                                                style={{ backgroundColor: colorHexCodes[color], width: "32px", height: "32px", }}
-                                                key={index}
-                                            />
-                                        ))}
-                                    </div>
-                                )
-                            }
+                                {
+                                    data.colors && data.colors.length > 0 && (
+                                        <div className='mt-2 d-flex gap-2'>
+                                            {data.colors.map((color, index) => (
+                                                <Link to={`/${groupName}/${productId}/${color}`}
+                                                    className={`btn rounded-circle ${availableColors.includes(color) ? '' : 'disabled'}`}
+                                                    id={`color${color}`}
+                                                    style={{ backgroundColor: colorHexCodes[color], width: "32px", height: "32px", }}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </div>
+                                    )
+                                }
                             </>
-                            
+
 
                         )
                     }
@@ -133,21 +137,38 @@ const ProductDetails = () => {
                             </div>
 
                         ) : (
-                            <div className='sizes mt-3 d-flex gap-2'>
-                                {data.sizes.map((size, index) => (
-                                    <span
-                                        className="size_item fs-5 fw-normal"
-                                        id={`size${size}`}
-                                        key={index}
-                                    >
-                                        {size}
-                                    </span>
-                                ))}
-                            </div>
+                            <>
+                                {
+                                    data.sizes && data.sizes.length > 0 && (
+                                        <div className='sizes mt-3 d-flex gap-2'>
+                                            {data.sizes.map((size, index) => (
+                                                <span
+                                                    className="size_item fs-5 fw-normal"
+                                                    id={`size${size}`}
+                                                    key={index}
+                                                >
+                                                    {size}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )
+                                }
+                            </>
                         )
                     }
                 </div>
-                <div className='qty'></div>
+                <div className='check_scale'>
+                    <p className='fs-4 fw-normal text-primary mt-2'>Check scale size</p>
+                </div>
+                <div className='qty d-flex align-items-center gap-3'>
+                    <span className='fs-5 fw-normal'>Qty</span>
+                    <div className='update_qty d-flex align-items-center gap-3 px-2 border rounded'>
+                        <span className='fs-2 fw-normal'>-</span>
+                        <span className='fs-4 fw-normal'>100</span>
+                        <span className='fs-2 fw-normal'>+</span>
+                    </div>
+                    <span><i className="fa-regular fa-trash-can fs-4"></i></span>
+                </div>
                 <div className='row row-gap-4 mt-5'>
                     <div class="d-grid col-6">
                         <button class="btn btn-outline-secondary fs-5 fw-normal text-capitalize" type="button">
@@ -164,6 +185,17 @@ const ProductDetails = () => {
                             Save to wishlist
                         </button>
                     </div>
+                </div>
+                <div className='pr__dt'>
+                    <h3 className='fs-3 fw-normal text-primary mt-4'>Product Details</h3>
+                    <p className='fs-5 fw-normal mt-2'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate
+                        velit esse cillum dolore eu fugiat nulla pariatur.
+                    </p>
                 </div>
             </div>
 

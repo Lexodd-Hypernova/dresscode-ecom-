@@ -12,12 +12,12 @@ const Products = () => {
     const loadingList = new Array(8).fill(null);
     const [variants, setVariants] = useState([]);
     const [productId, setProductId] = useState('');
-
+    const [filters, setFilters] = useState({ groupName, category, subCategory, productType, gender });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(DressCodeApi.getProductsByFilters.url + `?groupName=${groupName}&category=${category}&subCategory=${subCategory}&productType=${productType}&gender=${gender}`);
+                const response = await fetch(DressCodeApi.getProductsByFilters.url + `?groupName=${filters.groupName}&category=${filters.category}&subCategory=${filters.subCategory}&productType=${filters.productType}&gender=${filters.gender}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -34,7 +34,6 @@ const Products = () => {
                 setLoading(false);
                 console.log("rawProduct", result);
                 console.log("productId", productId);
-
                 console.log("shuffledVariants", shuffledVariants);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -43,7 +42,7 @@ const Products = () => {
         };
 
         fetchData();
-    }, [groupName, category, subCategory, productType, gender]);
+    }, [filters]);
 
     const shuffleArray = (array) => {
         let shuffledArray = [...array];
@@ -54,9 +53,14 @@ const Products = () => {
         return shuffledArray;
     };
 
+    const handleFiltersChange = (newFilters) => {
+        setFilters(newFilters);
+        setLoading(true);  // Show loading while fetching new data
+    };
+
     return (
         <>
-            <FilterApi />
+            <FilterApi onFiltersChange={handleFiltersChange} />
 
             <section className='categories'>
                 {loading ? (
@@ -74,12 +78,11 @@ const Products = () => {
                             ))}
                         </div>
                     </div>
-                    // to={`/${groupName}/${productId}/${item.color}`}
                 ) : (
                     <div className="container-fluid text-center">
                         <div className="row row-gap-5">
                             {variants.map((item, index) => (
-                                <Link to={`/${groupName}/${productId}/${item.color}/${item.variantSizes[0].size}`}  className="col-lg-3" key={index} onClick={scrollTop}>
+                                <Link to={`/${productId}/${item.color.name}/${productType}/${subCategory}/${category}/${groupName}`} className="col-lg-3" key={index} onClick={scrollTop}>
                                     <img src={s1} alt="" className="w-100" />
                                     <h5 className='srt__Name'>{item.variantId}</h5>
                                 </Link>
