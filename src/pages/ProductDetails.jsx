@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
 import DressCodeApi from '../common';
-import colorCodes from '../helpers/colorCodes';
-import formatColorName from '../helpers/formatColorName';
 import ProductSlider from '../components/ProductSlider';
-import Breadcrumb from '../components/Breadcrumb';
+// import Breadcrumb from '../components/Breadcrumb';
 
-
+const normalizeName = (name) => {
+    if (typeof name === 'string') {
+        return name.trim().toLowerCase();
+    } else {
+        console.warn("Unexpected value for name:", name);
+        return '';
+    }
+};
 const ProductDetails = () => {
 
     const { productId, color, productType, subCategory, category, groupName } = useParams();
@@ -14,9 +20,9 @@ const ProductDetails = () => {
     const loadingList = new Array(5).fill(null);
     const [data, setData] = useState({});
 
-    const [availableColors, setAvailableColors] = useState([]);
+    const [availableColors, setAvailableColors] = useState(new Set());
+    const [availableSizes, setAvailableSizes] = useState(new Set());
 
-    const [colorHexCodes, setColorHexCodes] = useState({});
 
 
     useEffect(() => {
@@ -44,28 +50,40 @@ const ProductDetails = () => {
         fetchData();
     }, [productId, color, productType, subCategory, category, groupName]);
 
-
     useEffect(() => {
-        if (data.colors && data.colors.length > 0) {
-            const hexCodes = {};
-            data.colors.forEach(color => {
-                const formattedColor = formatColorName(color.trim());
-                hexCodes[color] = colorCodes[formattedColor] || '#000000'; // default to black if color not found
-            });
-            setColorHexCodes(hexCodes);
-            console.log("hexCodes", hexCodes)
-        }
-    }, [data.colors]);
+        if (data.available) {
+            const availableColorsSet = new Set(data.available.map(item => normalizeName(item.color.name)));
+            setAvailableColors(availableColorsSet);
+            console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
 
-    useEffect(() => {
-        if (data.colors && data.available) {
-            const { colors, available } = data;
-            const availableColors = available.map(item => formatColorName(item.color));
-            setAvailableColors(availableColors);
-            console.log("availableColors", availableColors)
-        }
-    }, [data.colors, data.available]);
+            const availableSizesSet = new Set(data.available.flatMap(item => item.sizesAndQty.map(size => size.size)));
+            setAvailableSizes(availableSizesSet);
+            console.log("availableSizes Set:", availableSizesSet);
 
+        }
+    }, [data]);
+    // const handleFilter = (fType, value) => {
+    //     // e.preventDefault();
+    //     // const value = e.target.value;
+    //     console.log("test", fType)
+    //     console.log("test", value)
+
+    // }
+
+    const handleFilter = (fType, value) => {
+        // let fValue = e.target.value;
+        // let filterUrl = "";
+
+        let filterUrl = DressCodeApi.getProductDetailsWithSpecificVariant.url + `?groupName=${groupName}&productId=${productId}&${fType}=${value}`
+
+        axios.get(filterUrl)
+            .then((res) => {
+                setData(res.data)
+                // console.log("after filter", res.data)
+                console.log("after filter variantId", res.data.productDetails.variants[0].variantId)
+
+            })
+    }
 
     return (
         <section className='product__Details'>
@@ -100,20 +118,41 @@ const ProductDetails = () => {
                             </div>
                         ) : (
                             <>
-                                {
-                                    data.colors && data.colors.length > 0 && (
-                                        <div className='mt-2 d-flex gap-2'>
-                                            {data.colors.map((color, index) => (
-                                                <Link to={`/${groupName}/${productId}/${color}`}
-                                                    className={`btn rounded-circle ${availableColors.includes(color) ? '' : 'disabled'}`}
-                                                    id={`color${color}`}
-                                                    style={{ backgroundColor: colorHexCodes[color], width: "32px", height: "32px", }}
+                                {data.allColors && data.allColors.length > 0 && (
+                                    <div className='mt-2 d-flex list-group-horizontal gap-2 list-group'>
+                                        {data.allColors.map((color, index) => {
+                                            const normalizedColorName = normalizeName(color.name);
+                                            const isAvailable = availableColors.has(normalizedColorName);
+                                            // console.log(`Checking color: "${color.name}" (normalized: "${normalizedColorName}") - Available: ${isAvailable}`);
+                                            return (
+                                                <li
+                                                    onClick={() => { handleFilter("color", color.name) }}
+                                                    className={`list-group-item rounded-circle ${isAvailable ? '' : 'disabled'}`}
+                                                    id={`color${color.name}`}
+                                                    // value={color.name}
+                                                    style={{ backgroundColor: `${color.hexcode}`, width: "32px", height: "32px", position: "relative" }}
                                                     key={index}
-                                                />
-                                            ))}
-                                        </div>
-                                    )
-                                }
+                                                >
+                                                    {!isAvailable && (
+                                                        <span
+                                                            className="cross-mark"
+                                                            style={{
+                                                                position: "absolute",
+                                                                top: "50%",
+                                                                left: "50%",
+                                                                transform: "translate(-50%, -50%)",
+                                                                color: "#0304064a",
+                                                                fontSize: "24px",
+                                                            }}
+                                                        >
+                                                            <i className="fa-solid fa-xmark"></i>
+                                                        </span>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </>
 
 
@@ -138,21 +177,39 @@ const ProductDetails = () => {
 
                         ) : (
                             <>
-                                {
-                                    data.sizes && data.sizes.length > 0 && (
-                                        <div className='sizes mt-3 d-flex gap-2'>
-                                            {data.sizes.map((size, index) => (
+                                {data.allSizes && data.allSizes.length > 0 && (
+                                    <div className='sizes mt-3 d-flex gap-2'>
+                                        {data.allSizes.map((size, index) => {
+                                            const isAvailable = availableSizes.has(size);
+                                            // console.log(`Checking size: "${size}" - Available: ${isAvailable}`);
+                                            return (
                                                 <span
-                                                    className="size_item fs-5 fw-normal"
+                                                    className={`size_item fs-5 fw-normal ${isAvailable ? '' : 'disabled'}`}
                                                     id={`size${size}`}
                                                     key={index}
+                                                    style={{ position: "relative" }}
                                                 >
                                                     {size}
+                                                    {!isAvailable && (
+                                                        <span
+                                                            className="cross-mark"
+                                                            style={{
+                                                                position: "absolute",
+                                                                top: "50%",
+                                                                left: "50%",
+                                                                transform: "translate(-50%, -50%)",
+                                                                color: "#0304064a",
+                                                                fontSize: "48px",
+                                                            }}
+                                                        >
+                                                            <i className="fa-solid fa-xmark"></i>
+                                                        </span>
+                                                    )}
                                                 </span>
-                                            ))}
-                                        </div>
-                                    )
-                                }
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </>
                         )
                     }
