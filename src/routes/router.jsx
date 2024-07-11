@@ -1,4 +1,3 @@
-import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 // import Layout from "../pages/Layout";
@@ -16,7 +15,12 @@ import ProductTypes from "../pages/ProductTypes";
 import Products from "../pages/Products";
 import ProductDetails from "../pages/ProductDetails";
 import Billing from "../pages/Billing";
-
+import Auth from "../components/auth/Auth";
+import AuthMain from "../AuthMain";
+import YourAccount from "../pages/YourAccount";
+import EditPersonalinfo from "../pages/EditPersonalinfo";
+import Orders from "../pages/Orders";
+import YourAddress from "../pages/YourAddress";
 
 const router = createBrowserRouter([
     {
@@ -51,6 +55,32 @@ const router = createBrowserRouter([
                 path: "/billing",
                 element: <Billing />
             },
+            {
+                path: "/account-info",
+                element: <YourAccount />
+            },
+            {
+                path: "/get-user-info/:id",
+                element: <EditPersonalinfo />
+            },
+            {
+                path: "/your-orders",
+                element: <Orders />
+            },
+            {
+                path: "/your-address",
+                element: <YourAddress />
+            }
+        ]
+    },
+    {
+        path: "/auth",
+        element: <AuthMain />,
+        children: [
+            {
+                path: "/auth",
+                element: <Auth />
+            }
         ]
     }
 ])

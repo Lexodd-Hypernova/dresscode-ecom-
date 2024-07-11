@@ -26,6 +26,20 @@ const DressCodeApi = {
         url: `${baseUrl}/image/generateImgUrl`,
     },
 }
-
-
 export default DressCodeApi;
+export const authUrls = {
+    login: `${baseUrl}/user/login`,
+    signup: `${baseUrl}/user/createUser`
+}
+export const accountInfoApis = {
+    getAccountInfo: (userId) => `${baseUrl}/user/${userId}/getUserDetails`,
+    updateAccountInfo: (userId) => `${baseUrl}/user/${userId}/updateUserDetails`,
+    getOrders: (userId) => `${baseUrl}/user/${userId}/getOrders`,
+    updateAddress: (userId, addressId) => `${baseUrl}/user/${userId}/address/${addressId}/updateAddress`,
+    addAddress: (userId) => `${baseUrl}/user/${userId}/addAddress`,
+    getAddress:(userId)=>`${baseUrl}/user/${userId}/addresses/active`,
+    deleteAddress:(userId, addressId)=>`${baseUrl}/user/${userId}/address/${addressId}/removeAddress`,
+    setAsDefaultAddress:(userId, addressId)=>`${baseUrl}/user/${userId}/address/${addressId}/setToDefault`,
+}
+
+
