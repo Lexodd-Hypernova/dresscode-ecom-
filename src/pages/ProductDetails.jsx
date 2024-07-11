@@ -51,28 +51,23 @@ const ProductDetails = () => {
     }, [productId, color, productType, subCategory, category, groupName]);
 
     useEffect(() => {
-        if (data.available) {
+        if (data.available && data.productDetails.variants) {
             const availableColorsSet = new Set(data.available.map(item => normalizeName(item.color.name)));
             setAvailableColors(availableColorsSet);
             console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
 
-            const availableSizesSet = new Set(data.available.flatMap(item => item.sizesAndQty.map(size => size.size)));
-            setAvailableSizes(availableSizesSet);
-            console.log("availableSizes Set:", availableSizesSet);
+            // const availableSizesSet = new Set(data.available.flatMap(item => item.sizesAndQty.map(size => size.size)));
+            // setAvailableSizes(availableSizesSet);
+            // console.log("availableSizes Set:", availableSizesSet);
+
+            const availableSizeSet = new Set(data.productDetails.variants.flatMap(item => item.variantSizes.map(size => size.size)))
+            setAvailableSizes(availableSizeSet);
+            console.log("availableSizes Set:", availableSizeSet);
 
         }
     }, [data]);
-    // const handleFilter = (fType, value) => {
-    //     // e.preventDefault();
-    //     // const value = e.target.value;
-    //     console.log("test", fType)
-    //     console.log("test", value)
-
-    // }
 
     const handleFilter = (fType, value) => {
-        // let fValue = e.target.value;
-        // let filterUrl = "";
 
         let filterUrl = DressCodeApi.getProductDetailsWithSpecificVariant.url + `?groupName=${groupName}&productId=${productId}&${fType}=${value}`
 
