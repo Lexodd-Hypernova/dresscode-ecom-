@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import DressCodeApi from '../common';
 
 const LogoUploader = () => {
 
     const [imageUrl, setImageUrl] = useState('');
     const [uploading, setUploading] = useState(false);
     const [logoPlacement, setLogoPlacement] = useState('');
+    // const [areaLabel, setAreaLabel] = useState("");
+    const navigate = useNavigate();
 
     const handleDrop = (event) => {
         event.preventDefault();
@@ -20,7 +24,7 @@ const LogoUploader = () => {
             redirect: "follow"
         };
 
-        fetch("https://dresscode-test.onrender.com/image/generateImgUrl", requestOptions)
+        fetch(DressCodeApi.generateImageURL.url, requestOptions)
             .then((response) => response.json())
             .then((result) => {
 
@@ -49,8 +53,13 @@ const LogoUploader = () => {
         sessionStorage.setItem('logoPosition', logoPosition)
     };
 
-    const handleSave = (e) => {
-        e.preventDefault();
+    const handleSave = () => {
+        // e.preventDefault();
+        if (imageUrl) {
+            // setAreaLabel("Close")
+            navigate("/billing");
+        }
+
     }
 
     return (
@@ -104,7 +113,7 @@ const LogoUploader = () => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Skip</button>
-                            <button type="button" className="btn btn-primary" onClick={handleSave}>Save</button>
+                            <button type="button" className="btn btn-primary" data-bs-dismiss={`${imageUrl ? "modal" : ""}`} onClick={handleSave}>Save</button>
                         </div>
                     </div>
                 </div>

@@ -22,6 +22,9 @@ const DressCodeApi = {
     getProductDetailsWithSpecificVariant: {
         url: `${baseUrl}/e-com/getProductDetailsWithSpecificVariant`,
     },
+    generateImageURL: {
+        url: `${baseUrl}/image/generateImgUrl`,
+    },
 }
 
 
