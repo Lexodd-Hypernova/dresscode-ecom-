@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import s1 from "../../public/images/s1.png";
+import scrollTop from '../helpers/scrollTop';
 
 const ProductTypes = () => {
 
@@ -97,7 +98,7 @@ const ProductTypes = () => {
                                 <div className="container-fluid text-center">
                                     <div className="row row-gap-5">
                                         {getProductTypesByGender(gender).map((productType, index) => (
-                                            <Link to={`/${groupName}/${category}/${subCategory}/${productType.type}/${gender}`} className="col-lg-4" key={index}>
+                                            <Link to={`/${groupName}/${category}/${subCategory}/${productType.type}/${gender}`} className="col-lg-4" key={index} onClick={scrollTop}>
                                                 <img src={s1} alt={productType.type} className="w-100" />
                                                 <h5 className='srt__Name'>{productType.type}</h5>
                                             </Link>
