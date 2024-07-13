@@ -21,6 +21,8 @@ import YourAccount from "../pages/YourAccount";
 import EditPersonalinfo from "../pages/EditPersonalinfo";
 import Orders from "../pages/Orders";
 import YourAddress from "../pages/YourAddress";
+import Cart from "../pages/Cart";
+import WishList from "../pages/WishList";
 
 const router = createBrowserRouter([
     {
@@ -70,6 +72,14 @@ const router = createBrowserRouter([
             {
                 path: "/your-address",
                 element: <YourAddress />
+            },
+            {
+                path:"/cart",
+                element:<Cart/>
+            },
+            {
+                path: "/wishlist",
+                element: <WishList />
             }
         ]
     },

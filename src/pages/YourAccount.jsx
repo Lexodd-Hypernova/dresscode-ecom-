@@ -48,7 +48,7 @@ const goToOrders=()=>{
   return (
     <div className="container">
       <span className="your-account">Your Account</span>
-      <div className="row">
+      <div className="row" style={{display:'flex',alignContent:'center',justifyContent:'space-between'}}>
         <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
           <div className=" info-card" onClick={goToUserInfo}>
             <div>

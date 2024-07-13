@@ -75,14 +75,14 @@ const Orders = () => {
           Raised Quotes
         </div>
       </div>
-      <div className="content" style={{ display: "flex" }}>
+      <div className="content" style={{ display: "flex", flexDirection: "column",justifyContent: "center", alignItems: "center" }}>
         <p style={{ alignSelf: "start" }}>Your Orders</p>
 
         {selected === "orders" ? (
           data ? (
             data.map((val) => (
               <div
-                key={val.orderId} // Remember to add a unique key for each item in the list
+                key={val.orderId} 
                 style={{
                   border: "1px solid black",
                   width: "80%",

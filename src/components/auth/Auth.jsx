@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Logo from "../../assets/logo.svg";
 import "../Header/navbar.css";
@@ -7,6 +7,9 @@ import {authUrls} from '../../common';
 import router from '../../routes/router';
 const Auth = () => {
   const [formType, setFormType] = useState('one');
+  const[hideBanner, setHideBanner] = useState(false);
+  const [width,setWidth]=useState(window.innerWidth)
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -62,14 +65,32 @@ const Auth = () => {
       }
     }
   };
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+      if (window.innerWidth < 950) {
+        setHideBanner(true);
+      } else {
+        setHideBanner(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
   const renderForms = () => {
     switch (formType) {
       case 'one':
         return (
           <div style={{
-            width: "50%",
-            height: "100%",
+            width: `${hideBanner ? "70%" : "50%"}`,
+            height: "100vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -197,7 +218,7 @@ const Auth = () => {
 
   return (
     <div style={{
-      display: "flex",
+      display: `${hideBanner ? "block" : "flex"}`,
       justifyContent: "space-between",
       alignItems: "center",
       height: "100vh",
@@ -206,10 +227,11 @@ const Auth = () => {
       {renderForms()}
       <div></div>
       <div style={{
-        width: "30%",
+        width: `${hideBanner ? "100%" : "30%"}`,
         background: "#FFEDE1",
         position: "relative",
         height: "100%",
+        display: `${hideBanner ? "none" : "block"}`,
       }}>
         <img src="/images/auth/home-page-men.png" alt="" style={{
           width: "70%",

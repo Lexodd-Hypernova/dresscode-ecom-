@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons"; // Add necessary icons
+import { faPlus } from "@fortawesome/free-solid-svg-icons"; // Add necessary icons
 import axios from "axios";
 import { accountInfoApis } from "../common";
 import './pages-styles/yourAddress.styles.css'
@@ -76,8 +76,8 @@ const YourAddress = () => {
   };
 
   const getAddressData = async () => {
-    const token = localStorage.getItem("token"); // Replace with your actual token key
-    const id = localStorage.getItem("id"); // Replace with your actual user ID retrieval logic
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("id");
 
     const requestOptions = {
       method: "GET",
@@ -96,14 +96,14 @@ const YourAddress = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const result = await response.json();
-      setAddressData(result.data); // Assuming `setAddressData` is a state setter function
+      setAddressData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const addAddress = async () => {
-    const token = localStorage.getItem("token"); // Replace with your actual token key
+    const token = localStorage.getItem("token"); 
 
     const config = {
       headers: {
@@ -118,7 +118,6 @@ const YourAddress = () => {
         config
       );
       console.log(response.data);
-      // Update the address list after adding a new address
       setAddressData([...addressData, response.data]);
       handleCloseModal();
     } catch (err) {
@@ -127,8 +126,6 @@ const YourAddress = () => {
   };
 
   const editAddress = async (id) => {
-    // Implement edit functionality here
-    // Populate formData with existing address details based on ID
     const addressToEdit = addressData.find(address => address._id === id);
     if (addressToEdit) {
       setFormData({
@@ -171,7 +168,6 @@ const YourAddress = () => {
   };
   
   const setAsDefaultAddress = async (id) => {
-    // Implement set as default functionality here
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
@@ -224,7 +220,6 @@ const YourAddress = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData._id) {
-      // If _id exists in formData, it's an update/edit
       updateAddress(formData._id);
 
     } else {
