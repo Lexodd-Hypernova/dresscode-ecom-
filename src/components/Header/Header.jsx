@@ -1,9 +1,17 @@
 import React, { useContext, useState } from "react";
 import './navbar.css';
 import Logo from '../../assets/logo.svg';
+import { useNavigate } from "react-router-dom";
 
 
 const Header = () => {
+    const nav=useNavigate()
+    const goToWishlist = () => {
+        nav('/wishlist')
+    }
+    const goToCart=()=>{
+        nav('/cart')
+    }
 
     return (
         <>
@@ -26,10 +34,10 @@ const Header = () => {
                                 </form>
                             </div>
                             <div className="nav__Ht">
-                                <i className="fa-regular fa-heart"></i>
+                                <i className="fa-regular fa-heart" onClick={goToWishlist}></i>
                             </div>
                             <div className="nav__Cart">
-                                <i className="fa-solid fa-bag-shopping"></i>
+                                <i className="fa-solid fa-bag-shopping" onClick={goToCart}></i>
                                 <div className="cart-braces"><span></span></div>
                             </div>
                             <div className="ham-menu">

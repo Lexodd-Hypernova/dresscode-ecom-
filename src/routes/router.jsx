@@ -1,4 +1,3 @@
-import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 // import Layout from "../pages/Layout";
@@ -16,7 +15,6 @@ import ProductTypes from "../pages/ProductTypes";
 import Products from "../pages/Products";
 import ProductDetails from "../pages/ProductDetails";
 import Billing from "../pages/Billing";
-import PaymentSuccess from "../pages/PaymentSuccess";
 
 
 const router = createBrowserRouter([
@@ -51,10 +49,6 @@ const router = createBrowserRouter([
             {
                 path: "/billing",
                 element: <Billing />
-            },
-            {
-                path: "/success",
-                element: <PaymentSuccess />
             },
         ]
     }

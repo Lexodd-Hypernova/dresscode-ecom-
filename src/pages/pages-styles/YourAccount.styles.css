@@ -1,0 +1,25 @@
+.info-card {
+    border-radius: 22.388px;
+    border: 0.509px solid #817979;
+    width: 408.285px;
+    height: 209.632px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0px;
+    cursor: pointer;
+}
+.container{
+    background-color: white;
+}
+.your-account{
+    color: #000;
+font-family: Satoshi;
+font-size: 32.564px;
+font-style: normal;
+font-weight: lighter;
+line-height: normal;
+text-transform: capitalize;
+}
