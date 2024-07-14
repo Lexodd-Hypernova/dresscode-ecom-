@@ -133,7 +133,7 @@ const ProductDetails = () => {
                         <span className='ms-2 fs-5'>10 Ratings</span>
                     </div>
                     <div className='pr_price fs-3 my-2 fw-normal'>
-                        MRP ₹ 499.00
+                        MRP ₹ 195.00
                     </div>
                     <div className='var__Color'>
                         <span className='fs-3 mt-2 fw-normal'>Color</span>

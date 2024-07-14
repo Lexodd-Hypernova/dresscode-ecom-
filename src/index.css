@@ -477,16 +477,6 @@ a {
   width: 45%;
 }
 
-/* .colors {
-  display: flex;
-  gap: 5px;
-}
-
-.color_item {
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-} */
 
 .pr_name {
   font-family: 'Inter';
@@ -503,6 +493,13 @@ a {
   align-items: center;
   border: 1px solid #000;
   border-radius: 100%;
+}
+
+
+/* -----------Billing Page------------- */
+
+.order__bill {
+  width: 470px;
 }
 
 
