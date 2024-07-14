@@ -2,12 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import "./pages-styles/Orders.styles.css";
 import axios from "axios";
 import { accountInfoApis } from "../common";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
-  const [raised,setRaised]=useState([])
+  const [raised, setRaised] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
+const nav=useNavigate()
+  const goToReview=(group,productId)=>{
+      nav(`/group-review/${group}/${productId}`)
+  }
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -19,7 +24,6 @@ const Orders = () => {
   const handleIconClick = () => {
     fileInputRef.current.click();
   };
-
 
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -46,7 +50,7 @@ const Orders = () => {
 
       if (data.message) {
         setData(data.orders);
-        setRaised(data.orders)
+        setRaised(data.orders);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -60,7 +64,7 @@ const Orders = () => {
   }, [data]);
 
   return (
-    <div className="orders-container" >
+    <div className="orders-container">
       <div className="navbar">
         <div
           className={`nav-item ${selected === "orders" ? "selected" : ""}`}
@@ -75,20 +79,28 @@ const Orders = () => {
           Raised Quotes
         </div>
       </div>
-      <div className="content" style={{ display: "flex", flexDirection: "column",justifyContent: "center", alignItems: "center" }}>
+      <div
+        className="content"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <p style={{ alignSelf: "start" }}>Your Orders</p>
 
         {selected === "orders" ? (
           data ? (
             data.map((val) => (
               <div
-                key={val.orderId} 
+                key={val.orderId}
                 style={{
                   border: "1px solid black",
                   width: "80%",
                   height: "400px",
                   marginTop: "80px",
-                  background: "#EFF4FD" 
+                  background: "#EFF4FD",
                 }}
                 className="rounded"
               >
@@ -101,7 +113,7 @@ const Orders = () => {
                     fontWeight: "lighter",
                     fontSize: "14px",
                     alignItems: "center",
-                    background:'white',
+                    background: "white",
                     overflow: "hidden",
                   }}
                   className="rounded"
@@ -112,7 +124,7 @@ const Orders = () => {
                   <div>Order Id # {val.orderId}</div>
                 </div>
                 <hr style={{ marginTop: "0px" }} />
-                <div >
+                <div>
                   <div>
                     <h5>
                       date of delivery{" "}
@@ -175,7 +187,7 @@ const Orders = () => {
                         }}
                       >
                         <button>Track Package</button>
-                        <button>Write A Product Review</button>
+                        <button onClick={()=>goToReview(val.group,val.productId)}>Write A Product Review</button>
                       </div>
                     </div>
                   </div>
@@ -187,138 +199,166 @@ const Orders = () => {
           )
         ) : (
           <div>
-{
-  raised ?  (
-    data.map((val) => (
-      <div
-        key={val.orderId} // Remember to add a unique key for each item in the list
-        style={{
-          border: "1px solid black",
-          width: "78vw",
-          height: "400px",
-          marginTop: "80px",
-          background: "#EFF4FD" 
-        }}
-        className="rounded"
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: "20px 15px",
-            fontWeight: "lighter",
-            fontSize: "14px",
-            alignItems: "center",
-            background:'white',
-            overflow: "hidden",
-          }}
-          className="rounded"
-        >
-          <div>
-            Order placed <br /> {val.dateOfOrder}
-          </div>
-          <div>Order Id # {val.orderId}</div>
-        </div>
-        <hr style={{ marginTop: "0px" }} />
-        <div >
-          <div>
-            <h5>
-              date of delivery{" "}
-              {val.dateOfDelivery ? val.dateOfDelivery : "N/A"}
-            </h5>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                padding: "20px 15px",
-                fontWeight: "lighter",
-                fontSize: "14px",
-                alignItems: "center",
-                gap: "20px",
-                justifyContent: "space-between",
-              }}
-            >
-              {/* div1 */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
+            {raised ? (
+              data.map((val) => (
                 <div
+                  key={val.orderId} // Remember to add a unique key for each item in the list
                   style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "20px",
+                    border: "1px solid black",
+                    width: "78vw",
+                    height: "400px",
+                    marginTop: "80px",
+                    background: "#EFF4FD",
                   }}
+                  className="rounded"
                 >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      padding: "20px 15px",
+                      fontWeight: "lighter",
+                      fontSize: "14px",
+                      alignItems: "center",
+                      background: "white",
+                      overflow: "hidden",
+                    }}
+                    className="rounded"
+                  >
+                    <div>
+                      Order placed <br /> {val.dateOfOrder}
+                    </div>
+                    <div>Order Id # {val.orderId}</div>
+                  </div>
+                  <hr style={{ marginTop: "0px" }} />
                   <div>
-                    <img
-                      src={
-                        "https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-                      }
-                      alt=""
-                      style={{ width: 200, height: 200 }}
-                    />
-                  </div>{" "}
-                  <div style={{ marginTop: "20px" }}>
-                    <p>
-                      {val.color.name} {val.productDetails.neckline}
-                    </p>
-                    <p>MRP : &#8377; {val.price}</p>
-                    <p>Size '{val.size}'</p>
-                    <p>Color: {val.color.name}</p>
+                    <div>
+                      <h5>
+                        date of delivery{" "}
+                        {val.dateOfDelivery ? val.dateOfDelivery : "N/A"}
+                      </h5>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          padding: "20px 15px",
+                          fontWeight: "lighter",
+                          fontSize: "14px",
+                          alignItems: "center",
+                          gap: "20px",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {/* div1 */}
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              gap: "20px",
+                            }}
+                          >
+                            <div>
+                              <img
+                                src={
+                                  "https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+                                }
+                                alt=""
+                                style={{ width: 200, height: 200 }}
+                              />
+                            </div>{" "}
+                            <div style={{ marginTop: "20px" }}>
+                              <p>
+                                {val.color.name} {val.productDetails.neckline}
+                              </p>
+                              <p>MRP : &#8377; {val.price}</p>
+                              <p>Size '{val.size}'</p>
+                              <p>Color: {val.color.name}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* div 2 */}
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span>Logo Position:Font</span>
+                          <div>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <div>
+                                <span
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <label
+                                    htmlFor="icon-button-file"
+                                    style={{ marginRight: "10px" }}
+                                  >
+                                    Logo
+                                  </label>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    ref={fileInputRef}
+                                    style={{ display: "none" }}
+                                  />
+                                  <button
+                                    onClick={handleIconClick}
+                                    style={{
+                                      background: "none",
+                                      border: "none",
+                                      cursor: "pointer",
+                                      marginRight: "10px",
+                                    }}
+                                  >
+                                    <i
+                                      className="fas fa-upload"
+                                      style={{ fontSize: "24px" }}
+                                    ></i>
+                                  </button>
+                                  {selectedImage && (
+                                    <div>
+                                      <img
+                                        src={selectedImage}
+                                        alt="Selected"
+                                        style={{
+                                          width: "50px",
+                                          height: "50px",
+                                          objectFit: "cover",
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* div 2 */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  alignItems: "center",
-                }}
-              >
-                <span>Logo Position:Font</span>
-                <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div>
-      <span style={{ display: 'flex', alignItems: 'center' }}>
-        <label htmlFor="icon-button-file" style={{ marginRight: '10px' }}>Logo</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-          />
-          <button onClick={handleIconClick} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>
-            <i className="fas fa-upload" style={{ fontSize: '24px' }}></i>
-          </button>
-          {selectedImage && (
-            <div>
-              <img src={selectedImage} alt="Selected" style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-            </div>
-          )}
-      </span>
-    </div>
-        </div>
-      </div>
-    </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    ))
-  ) : 
-    <div>Loading</div>
-   
-}
-
+              ))
+            ) : (
+              <div>Loading</div>
+            )}
           </div>
         )}
       </div>

@@ -52,5 +52,9 @@ export const shoppingInfoApis = {
   getWhishList: (userId) => `${baseUrl}/user/${userId}/getWishlist`,
   removeFromWishList: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeWishlistItem/${productId}`,
+  addReview: (group, productId) =>`${baseUrl}/user/${group}/${productId}/writeReview`,
+  getReviews: (group, productId) => `${baseUrl}/user/${group}/${productId}/getProductReviews`,};
+export const S3imageApis = {
+  uploadImage: `${baseUrl}/image/generateImgUrl`,
 };
 
