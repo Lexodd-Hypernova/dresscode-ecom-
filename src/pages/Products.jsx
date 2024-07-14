@@ -12,12 +12,12 @@ const Products = () => {
     const loadingList = new Array(8).fill(null);
     const [variants, setVariants] = useState([]);
     const [productId, setProductId] = useState('');
-    const [filters, setFilters] = useState({ groupName, category, subCategory, productType, gender });
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(DressCodeApi.getProductsByFilters.url + `?groupName=${filters.groupName}&category=${filters.category}&subCategory=${filters.subCategory}&productType=${filters.productType}&gender=${filters.gender}`);
+                const response = await fetch(DressCodeApi.getProductsByFilters.url + `?groupName=${groupName}&category=${category}&subCategory=${subCategory}&productType=${productType}&gender=${gender}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -42,7 +42,7 @@ const Products = () => {
         };
 
         fetchData();
-    }, [filters]);
+    }, [groupName, category, subCategory, productType, gender]);
 
     const shuffleArray = (array) => {
         let shuffledArray = [...array];
@@ -53,14 +53,13 @@ const Products = () => {
         return shuffledArray;
     };
 
-    const handleFiltersChange = (newFilters) => {
-        setFilters(newFilters);
-        setLoading(true);  // Show loading while fetching new data
-    };
+    const setDataPerFilter = (data) => {
+        setVariants(data);
+    }
 
     return (
         <>
-            <FilterApi onFiltersChange={handleFiltersChange} />
+            <FilterApi variantsPerColor={(data) => { setDataPerFilter(data); }} />
 
             <section className='categories'>
                 {loading ? (
