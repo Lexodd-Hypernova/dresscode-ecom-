@@ -3,54 +3,55 @@ import "./pages-styles/YourAccount.styles.css";
 import EditPersonalinfo from "./EditPersonalinfo";
 import axios from "axios";
 import { accountInfoApis } from "../common";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const YourAccount = () => {
-    const [showModal, setShowModal] = useState(false);
-    const [userData, setUserData] = useState(null); // State to hold user data
+  // const [showModal, setShowModal] = useState(false);
+  const [userData, setUserData] = useState(null); // State to hold user data
 
-  
-const getUserData = async () => {
+
+  const getUserData = async () => {
     const userId = localStorage.getItem("id");
     const token = localStorage.getItem("token"); // Replace with your actual token key
-  
+
     const config = {
       headers: {
         Authorization: `Bearer ${token}`
       }
     };
-  
+
     try {
       const response = await axios.get(accountInfoApis.getAccountInfo(userId), config);
       console.log(response.data);
       setUserData(response.data.userDetails
       );
-      return response.data; 
+      return response.data;
 
     } catch (error) {
       console.error('Error fetching account info:', error);
       throw error; // Handle errors or propagate them as needed
     }
   };
-    const goToUserInfo=()=>{
-        // router.navigate(`/get-user-info/${localStorage.getItem("id")}`);
-        setShowModal(true);
-        getUserData()
+  const goToUserInfo = () => {
+    // router.navigate(`/get-user-info/${localStorage.getItem("id")}`);
+    // setShowModal(true);
+    getUserData()
 
-    }
-    const history = useNavigate();
-    const goToAddress=()=>{
-        console.log('clicked')
-        history("/your-address")
-}
-const goToOrders=()=>{
+  }
+  const history = useNavigate();
+  const goToAddress = () => {
+    console.log('clicked')
+    history("/your-address")
+  }
+  const goToOrders = () => {
     history("/your-orders")
-}
+  }
   return (
     <div className="container">
       <span className="your-account">Your Account</span>
-      <div className="row" style={{display:'flex',alignContent:'center',justifyContent:'space-between'}}>
+      <div className="row" style={{ display: 'flex', alignContent: 'center', justifyContent: 'space-between' }}>
         <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
-          <div className=" info-card" onClick={goToUserInfo}>
+          <div className=" info-card" onClick={goToUserInfo} data-bs-toggle="modal"
+            data-bs-target="#infoModal">
             <div>
               <img src="/images/accountInfo/boy-icon 1.png" alt="" />
             </div>
@@ -94,8 +95,9 @@ const goToOrders=()=>{
           </div>
         </div>
       </div>
-      <EditPersonalinfo showModal={showModal} setShowModal={setShowModal} userData={userData}// Set user data in state
-/>
+      {/* showModal={showModal} setShowModal={setShowModal} */}
+      <EditPersonalinfo userData={userData}// Set user data in state
+      />
 
     </div>
   );

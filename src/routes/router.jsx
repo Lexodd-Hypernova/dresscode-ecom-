@@ -25,6 +25,8 @@ import Cart from "../pages/Cart";
 import WishList from "../pages/WishList";
 import GroupReview from "../pages/GroupReview";
 import CustomerReviews from "../pages/CustomerReviews";
+import PaymentSuccess from "../pages/PaymentSuccess";
+import GetQuote from "../pages/GetQuote";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +60,14 @@ const router = createBrowserRouter([
       {
         path: "/billing",
         element: <Billing />,
+      },
+      {
+        path: "/success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "/getquote",
+        element: <GetQuote />,
       },
       {
         path: "/account-info",

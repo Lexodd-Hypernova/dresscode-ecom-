@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import './navbar.css';
 import Logo from '../../assets/logo.svg';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 const Header = () => {
-    const nav=useNavigate()
+    const nav = useNavigate()
     const goToWishlist = () => {
         nav('/wishlist')
     }
-    const goToCart=()=>{
+    const goToCart = () => {
         nav('/cart')
     }
 
@@ -19,9 +19,9 @@ const Header = () => {
                 <div className="container-fluid">
                     <div className="nav-sec">
                         <div className="nv__Left">
-                            <div className="logo">
+                            <Link to="/" className="logo">
                                 <img src={Logo} alt="DressCode logo" />
-                            </div>
+                            </Link>
                         </div>
 
                         <div className="nv__Right">

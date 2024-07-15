@@ -19,7 +19,7 @@ const Billing = () => {
     const [discountPercentage, setDiscountPercentage] = useState(10);
     const [TotalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(108);
 
-    const [address, setAddress] = useState({});
+    const [addresses, setAddresses] = useState([]);
 
     const navigate = useNavigate();
 
@@ -158,7 +158,7 @@ const Billing = () => {
     };
 
 
-    useEffect(() => {
+    const fetchAddress = async () => {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTk5OTAxNDYsImV4cCI6MTc1MTU0Nzc0NiwiYXVkIjoiNjY4NGVmZWI5NzViZmYwMDg4NzFmMDYxOkpvaG4iLCJpc3MiOiJEcmVzc0NvZGVBcHBsaWNhdGlvbiJ9.euKYW-LRW_0NJk7t3nPYnXhvsQrrvQ9j2V5bk7SNWF4");
 
@@ -167,35 +167,20 @@ const Billing = () => {
             headers: myHeaders,
             redirect: "follow"
         };
+        const response = await fetch("https://dresscode-test.onrender.com/user/6684efeb975bff008871f061/addresses/active", requestOptions);
 
-        fetch("https://dresscode-test.onrender.com/user/6684efeb975bff008871f061/addresses/active", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                console.log(result.data);
-                setAddress(result.data)
-            })
-            .catch((error) => console.error(error));
-    }, [])
-
-    const displayAddress = (data) => {
-        if (data) {
-            console.log("display", data)
-            
-            // return data.map((item) => {
-            //     return (
-            //         <div key={item._id}>
-            //             <div className='fs-4 fw-medium'>{item.name}</div>
-            //             <div className='fs-4' style={{ color: "#A56528" }}>
-            //                 {
-            //                     item.markAsDefault ? "Default" : ""
-            //                 }
-            //             </div>
-            //         </div>
-            //     )
-            // })
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+
+        const result = await response.json();
+        setAddresses(result.data);
+        console.log(result.data)
     }
 
+    useEffect(() => {
+        fetchAddress();
+    }, [])
 
 
 
@@ -205,12 +190,49 @@ const Billing = () => {
                 <div className='row'>
                     <div className='col-lg-6'>
                         <div>
-                            <h5>Delivery Address</h5>
-                            <p>We will deliver your order to this address</p>
+                            <h5 className='fs-3 fw-medium'>Delivery Address</h5>
+                            <p className='fs-4 fw-medium lh-1 mb-3'>We will deliver your order to this address</p>
                         </div>
                         {
-                            displayAddress(address)
+
+                            addresses.map((address) => {
+                                return (
+                                    <div key={address._id} className='mb-4 d-flex align-items-center gap-5'>
+                                        <div style={{ width: "40%" }}>
+                                            <div className='fs-4 fw-medium'>{address.name}</div>
+                                            <div className='fs-4' style={{ color: "#A56528" }}>
+                                                {
+                                                    address.markAsDefault === false ? "" : "Default"
+                                                }
+                                            </div>
+                                            <div className='fs-4'>
+                                                {address.flatNumber}, {address.landmark}, {address.locality}
+                                                {address.districtCity}, {address.state} , {address.pinCode}
+                                            </div>
+                                            <div className='fs-4'>
+                                                Phone: <span className='fw-medium'>{address.mobile}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className='form-check'>
+                                                <input class="form-check-input fs-4" type="radio" name="flexRadioDefault" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                )
+
+
+                            })
+
                         }
+
+                        <div className='mt-5'>
+                            <button type='button' className='fs-4 fw-medium text-capitalize border-0 text-primary' style={{ background: "none" }}>Add new Address</button>
+                        </div>
+
+                        <hr className='w-100 mt-4' />
+
                     </div>
                     <div className='col-lg-6'>
                         <div className="order__bill">
@@ -242,6 +264,21 @@ const Billing = () => {
                         </div>
                     </div>
                 </div>
+                <div className='row mt-5'>
+                    <h5 className='fs-3 fw-medium'>Expected Delivery</h5>
+                    <p className='fs-4 fw-medium'>Estimated delivery dates for your order</p>
+                    <div className='d-flex mt-4 align-items-center gap-4'>
+                        <div style={{width:"122px"}}>
+                            <img src="images/s1.png" className='w-100' alt="" />
+                        </div>
+                        <div>
+                            <div className='fs-4 fw-medium'>22 May</div>
+                            <div className='fs-4 fw-normal'>Brand</div>
+                            <div className='fs-4 fw-normal'>#1234 slip fit shits</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div className=''>
 

@@ -278,20 +278,33 @@ const ProductDetails = () => {
                     </div>
                     <div className='row row-gap-4 mt-5'>
                         <div class="d-grid col-6">
-                            <button className="btn btn-outline-secondary fs-5 fw-normal text-capitalize" type="button">
+                            <button className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100" type="button">
                                 Add to bag
                             </button>
                         </div>
                         <div class="d-grid col-6">
-                            <button class="btn btn-primary fs-5 fw-normal text-capitalize" type="button"
+
+                            {
+                                count < 100 ? (
+                                    <button className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#logoModal"
+                                    >Buy Now</button>
+                                ) : (
+                                    <Link to="/getquote" className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
+                                    >Get a Quote</Link>
+                                )
+                            }
+
+                            {/* <button className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
                                 data-bs-toggle="modal"
                                 data-bs-target="#logoModal"
                             >
                                 {count < 100 ? 'Buy Now' : 'Get a Quote'}
-                            </button>
+                            </button> */}
                         </div>
                         <div class="d-grid col-6">
-                            <button class="btn btn-outline-primary fs-5 fw-normal text-capitalize" type="button">
+                            <button className="btn btn-outline-primary fs-5 fw-normal text-capitalize w-100" type="button">
                                 Save to wishlist
                             </button>
                         </div>
