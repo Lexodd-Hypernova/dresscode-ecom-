@@ -1,13 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-// import Layout from "../pages/Layout";
-// import HomePage from "../pages/HomePage";
-// import ProductPage from "../pages/ProductPage";
-// import ProductDetailsPage from "../pages/ProductDetailsPage";
-// import Home from "../components/Home/Home";
-// import SelectSchool from "../components/SelectSchool/SelectSchool";
-// import SelectByGender from "../components/selectGender/SelectByGender";
-
 import Home from "../pages/Home";
 import Categories from "../pages/Categories";
 import SubCategories from "../pages/SubCategories";
@@ -27,6 +19,7 @@ import GroupReview from "../pages/GroupReview";
 import CustomerReviews from "../pages/CustomerReviews";
 import PaymentSuccess from "../pages/PaymentSuccess";
 import GetQuote from "../pages/GetQuote";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -59,7 +52,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/billing",
-        element: <Billing />,
+        element: (
+          <ProtectedRoute>
+            <Billing />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "/getquote",
+        element: <GetQuote />,
       },
       {
         path: "/success",
@@ -71,35 +76,67 @@ const router = createBrowserRouter([
       },
       {
         path: "/account-info",
-        element: <YourAccount />,
+        element: (
+          <ProtectedRoute>
+            <YourAccount />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/get-user-info/:id",
-        element: <EditPersonalinfo />,
+        element: (
+          <ProtectedRoute>
+            <EditPersonalinfo />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/your-orders",
-        element: <Orders />,
+        element: (
+          <ProtectedRoute>
+            <Orders />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/your-address",
-        element: <YourAddress />,
+        element: (
+          <ProtectedRoute>
+            <YourAddress />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/wishlist",
-        element: <WishList />,
+        element: (
+          <ProtectedRoute>
+            <WishList />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/group-review/:group/:productId",
-        element: <GroupReview />,
+        element: (
+          <ProtectedRoute>
+            <GroupReview />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/customer-review/:group/:productId",
-        element: <CustomerReviews />,
+        element: (
+          <ProtectedRoute>
+            <CustomerReviews />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

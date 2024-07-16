@@ -186,8 +186,8 @@ const nav=useNavigate()
                           alignItems: "center",
                         }}
                       >
-                        <button>Track Package</button>
-                        <button onClick={()=>goToReview(val.group,val.productId)}>Write A Product Review</button>
+                        <button className="order-button">Track Package</button>
+                        <button className="order-button" onClick={()=>goToReview(val.group,val.productId)}>Write A Product Review</button>
                       </div>
                     </div>
                   </div>

@@ -298,7 +298,7 @@ const YourAddress = () => {
               <div className="col-lg-4 col-md-6 mb-4" key={val._id}>
                 <div className="address-card rounded">
                   <p>{val.markAsDefault ? "Default" : ""}</p>
-                  <hr style={{width:'120%',borderTop:'1px solid black'}} />
+                  <hr style={{width:'100%',borderTop:'1px solid black'}} />
                   <h5>{val.name}</h5>
                   <p>
                     {val.landmark} {val.flatNumber}
