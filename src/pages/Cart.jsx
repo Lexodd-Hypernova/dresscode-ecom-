@@ -116,34 +116,34 @@ const Cart = () => {
                     />
                   </div>
                   <div>
-                    {item.color.name ? item.color.name : ""} {item.group ? item.group : ""}
+                    {item.color.name} {item.group}
                   </div>
                 </div>
-                <div>{item.productDetails ? item.productDetails.price : ""}</div>
-                {/* <div>{item.quantityRequired}</div> */}
+
+
                 {/* middle */}
-                {/* <div style={{ width: "300px !important" }}>
-                        <Counter
-                          initialCount={item.quantityRequired}
-                          cartItemId={item._id}
-                          price={item.productDetails.price}
-                          onUpdateQuantity={updateItemQuantity}
-                        />
-                        <div style={{ display: "flex", justifyContent: "space-between", color: '#20248A', cursor: 'pointer' }}>
-                          <span onClick={() => deleteItem(item._id)}>Delete</span> <span><i className="fa-regular fa-heart"></i>Move to wishlist</span>
+                <div style={{ width: "300px !important" }}>
+                  <Counter
+                    initialCount={item.quantityRequired}
+                    cartItemId={item._id}
+                    price={item.productDetails.price}
+                    onUpdateQuantity={updateItemQuantity}
+                  />
+                  <div style={{ display: "flex", justifyContent: "space-between", color: '#20248A', cursor: 'pointer' }}>
+                    <span onClick={() => deleteItem(item._id)}>Delete</span> <span><i className="fa-regular fa-heart"></i>Move to wishlist</span>
 
-                        </div>
-                      </div> */}
+                  </div>
+                </div>
                 {/* last */}
-                {/* <div>
-                        Order details
-                        <div>
-                          Total:{item.quantityRequired * item.productDetails.price}
+                <div>
+                  Order details
+                  <div>
+                    Total:{item.quantityRequired * item.productDetails.price}
 
-                        </div>
-                        <div>bag total: ${calculateTotalOrder()}</div>
-                        <div ><button style={{ background: "#20248A", color: "white" }}>PROCEED TO SHIPPING</button></div>
-                      </div> */}
+                  </div>
+                  <div>bag total: ${calculateTotalOrder()}</div>
+                  <div ><button style={{ background: "#20248A", color: "white" }}>PROCEED TO SHIPPING</button></div>
+                </div>
               </div>
             ))}
           </div>

@@ -36,12 +36,12 @@ const DisplayCategory = ({ data, loading, groupName }) => {
                         <div className='row row-gap-5'>{
                             loadingList.map((item, index) => {
                                 return (
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-4" key={index}>
                                         <div className='placeholder-glow' style={{ height: "60vh" }}>
                                             <span className="placeholder d-inline-block h-100 w-100"></span>
                                         </div>
-                                        <h5 class="placeholder-glow">
-                                            <span class="placeholder d-inline-block w-100"></span>
+                                        <h5 className="placeholder-glow">
+                                            <span className="placeholder d-inline-block w-100"></span>
                                         </h5>
                                     </div>
                                 )

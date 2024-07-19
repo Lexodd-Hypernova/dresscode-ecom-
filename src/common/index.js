@@ -45,7 +45,7 @@ export const accountInfoApis = {
 };
 export const shoppingInfoApis = {
   getCartData: (userId) => `${baseUrl}/user/${userId}/getCart`,
-  addCartData: (userId) => `${baseUrl}/user/${userId}/addToCart`,
+  addCartData: (userId) => `${baseUrl}/user/${userId}/addProductToCart`,
   handleItemsCount: (userId, productId) =>
     `${baseUrl}/user/${userId}/updateCartItemQuantity/${productId}`,
   deleteCartItem: (userId, productId) =>
