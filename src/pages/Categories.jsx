@@ -42,7 +42,7 @@ const Categories = () => {
 
     return (
         <>
-            <TextMove title={groupName} />
+            {/* <TextMove title={groupName} /> */}
             <section className="mid__Ttl-con">
                 <div className="hm_ct-ttl">
                     <Link className='back_link' to="/">

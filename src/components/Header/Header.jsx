@@ -3,15 +3,21 @@ import './navbar.css';
 import Logo from '../../assets/logo.svg';
 import { useNavigate, Link } from "react-router-dom";
 
+import { useCart } from "../../context/CartContext";
+
 
 const Header = () => {
-    const nav = useNavigate()
-    const goToWishlist = () => {
-        nav('/wishlist')
-    }
-    const goToCart = () => {
-        nav('/cart')
-    }
+
+    const { cart } = useCart();
+    const itemCount = cart.length;
+
+    // const nav = useNavigate()
+    // const goToWishlist = () => {
+    //     nav('/wishlist')
+    // }
+    // const goToCart = () => {
+    //     nav('/cart')
+    // }
 
     return (
         <>
@@ -33,13 +39,15 @@ const Header = () => {
                                     </button>
                                 </form>
                             </div>
+                            {/* onClick={goToWishlist} */}
                             <div className="nav__Ht">
-                                <i className="fa-regular fa-heart" onClick={goToWishlist}></i>
+                                <i className="fa-regular fa-heart" ></i>
                             </div>
-                            <div className="nav__Cart">
-                                <i className="fa-solid fa-bag-shopping" onClick={goToCart}></i>
-                                <div className="cart-braces"><span></span></div>
-                            </div>
+                            {/* onClick={goToCart} */}
+                            <Link className="nav__Cart" to="/cart">
+                                <i className="fa-solid fa-bag-shopping" ></i>
+                                <div className="cart-braces"><span>({itemCount})</span></div>
+                            </Link>
                             <div className="ham-menu">
                                 <i className="fa-solid fa-bars"></i>
                             </div>

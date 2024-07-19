@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
 
-      <TextMove title="All Uniforms"/>
+      {/* <TextMove title="All Uniforms"/> */}
       <BannerGroup />
     </>
   )

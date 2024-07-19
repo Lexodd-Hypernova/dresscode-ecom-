@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import DressCodeApi from '../common';
 import ProductSlider from '../components/ProductSlider';
 // import Breadcrumb from '../components/Breadcrumb';
-import LogoUploader from "../components/LogoUploader"
-
-const token = localStorage.getItem("token");
+import LogoUploader from "../components/LogoUploader";
+import { useCart } from '../context/CartContext';
 
 
 
@@ -28,44 +27,32 @@ const ProductDetails = () => {
     const [availableColors, setAvailableColors] = useState(new Set());
     const [availableSizes, setAvailableSizes] = useState(new Set());
 
-
-
+    const [activeColor, setActiveColor] = useState('');
+    const [activeSize, setActiveSize] = useState('');
+    const [price, setPrice] = useState('');
     const [count, setCount] = useState(1); // Initial value set to 1
 
-<<<<<<< Updated upstream
-=======
     const { addToCart } = useCart();
-
-    const nav = useNavigate()
 
     const handleAddToCart = () => {
         // Prepare the data to send to addToCart function
+        const itemToAdd = {
+            group: groupName,
+            productId: productId,
+            color: activeColor,
+            size: activeSize,
+            price: price,
+            quantityRequired: count, // Example: default quantity is 1, adjust as needed
+            logoUrl: null,
+            logoPosition: null,
+        };
 
-        if (token) {
-            const itemToAdd = {
-                group: groupName,
-                productId: productId,
-                color: activeColor,
-                size: activeSize,
-                price: price,
-                quantityRequired: count, // Example: default quantity is 1, adjust as needed
-                logoUrl: null,
-                logoPosition: null,
-            };
-
-            // Call addToCart function from context
-            addToCart(itemToAdd);
-        }
-        else {
-            nav('/auth')
-        }
-
-
+        // Call addToCart function from context
+        addToCart(itemToAdd);
     };
 
 
 
->>>>>>> Stashed changes
     const increment = () => {
         setCount(prevCount => prevCount + 1);
     };
@@ -105,6 +92,7 @@ const ProductDetails = () => {
 
 
     useEffect(() => {
+        console.log("productId", productId)
         const fetchData = async () => {
             try {
                 const response = await fetch(DressCodeApi.getProductDetailsWithSpecificVariant.url + `?groupName=${groupName}&productId=${productId}&color=${color}`);
@@ -114,7 +102,9 @@ const ProductDetails = () => {
                 const result = await response.json();
 
                 setData(result);
-
+                setActiveColor(color);
+                setPrice(result.productDetails.price)
+                // setActiveSize(result.productDetails.variants[0].variantSizes[0].size)
                 setLoading(false);
 
                 console.log("productAllData", result);
@@ -146,10 +136,21 @@ const ProductDetails = () => {
         let filterUrl = DressCodeApi.getProductDetailsWithSpecificVariant.url + `?groupName=${groupName}&productId=${productId}&${fType}=${value}`
         axios.get(filterUrl)
             .then((res) => {
-                setData(res.data)
+                setData(res.data);
+                setActiveColor(value);
+                setActiveSize('');
                 console.log("after filter variantId", res.data.productDetails.variants[0].variantId)
             })
     }
+
+    const handleSize = (size) => {
+        console.log(size);
+        setActiveSize(size);
+
+    }
+
+
+
 
     return (
 
@@ -165,7 +166,7 @@ const ProductDetails = () => {
                 /> */}
                     <h2 className='pr_name mt-5'>Product Name</h2>
                     <div className='pr_rating'>
-                        <button type="button" class="btn btn-success fs-5">4.5</button>
+                        <button type="button" className="btn btn-success fs-5">4.5</button>
                         <span className='ms-2 fs-5'>10 Ratings</span>
                     </div>
                     <div className='pr_price fs-3 my-2 fw-normal'>
@@ -196,7 +197,7 @@ const ProductDetails = () => {
                                                 return (
                                                     <li
                                                         onClick={() => { handleFilter("color", color.name) }}
-                                                        className={`list-group-item rounded-circle ${isAvailable ? '' : 'disabled'}`}
+                                                        className={`list-group-item rounded-circle ${isAvailable ? '' : 'disabled'} ${activeColor === color.name ? 'border-primary shadow-lg border-2' : ''}`}
                                                         id={`color${color.name}`}
                                                         // value={color.name}
                                                         style={{ backgroundColor: `${color.hexcode}`, width: "32px", height: "32px", position: "relative" }}
@@ -247,16 +248,17 @@ const ProductDetails = () => {
                             ) : (
                                 <>
                                     {data.allSizes && data.allSizes.length > 0 && (
-                                        <div className='sizes mt-3 d-flex gap-2'>
+                                        <div className='sizes mt-3 d-flex gap-2 list-group list-group-horizontal'>
                                             {data.allSizes.map((size, index) => {
                                                 const isAvailable = availableSizes.has(size);
                                                 // console.log(`Checking size: "${size}" - Available: ${isAvailable}`);
                                                 return (
-                                                    <span
-                                                        className={`size_item fs-5 fw-normal ${isAvailable ? '' : 'disabled'}`}
+                                                    <li
+                                                        className={`size_item list-group-item rounded-circle fs-5 fw-normal ${isAvailable ? '' : 'disabled'} ${activeSize === size ? 'bg-primary shadow-lg' : ''}`}
                                                         id={`size${size}`}
                                                         key={index}
                                                         style={{ position: "relative" }}
+                                                        onClick={() => handleSize(size)}
                                                     >
                                                         {size}
                                                         {!isAvailable && (
@@ -274,7 +276,7 @@ const ProductDetails = () => {
                                                                 <i className="fa-solid fa-xmark"></i>
                                                             </span>
                                                         )}
-                                                    </span>
+                                                    </li>
                                                 );
                                             })}
                                         </div>
@@ -313,12 +315,12 @@ const ProductDetails = () => {
                         <button onClick={reset} style={{ background: "none", border: "none" }}><i className="fa-regular fa-trash-can fs-4"></i></button>
                     </div>
                     <div className='row row-gap-4 mt-5'>
-                        <div class="d-grid col-6">
-                            <button className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100" type="button">
+                        <div className="d-grid col-6">
+                            <button onClick={handleAddToCart} className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100" type="button">
                                 Add to bag
                             </button>
                         </div>
-                        <div class="d-grid col-6">
+                        <div className="d-grid col-6">
 
                             {
                                 count < 100 ? (
@@ -339,7 +341,7 @@ const ProductDetails = () => {
                                 {count < 100 ? 'Buy Now' : 'Get a Quote'}
                             </button> */}
                         </div>
-                        <div class="d-grid col-6">
+                        <div className="d-grid col-6">
                             <button className="btn btn-outline-primary fs-5 fw-normal text-capitalize w-100" type="button">
                                 Save to wishlist
                             </button>
@@ -359,7 +361,7 @@ const ProductDetails = () => {
                 </div>
 
             </section>
-            <LogoUploader></LogoUploader>
+            <LogoUploader quantity={count}></LogoUploader>
 
             {/* <!-- Modal --> */}
 
