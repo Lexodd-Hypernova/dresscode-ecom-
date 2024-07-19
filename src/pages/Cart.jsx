@@ -5,10 +5,24 @@ import { shoppingInfoApis } from "../common";
 import { useEffect, useState } from "react";
 import Counter from "../common/components/Counter";
 
+<<<<<<< Updated upstream
 const Cart = () => {
   const token = localStorage.getItem("token");
   const [cartData, setCartData] = useState([]);
   const [cartCount,setCardCount]=useState(0)
+=======
+// import { useCart } from "../context/CartContext";
+
+// import { useCart } from "../context/CartContext";
+
+
+const Cart = () => {
+  const token = localStorage.getItem("token");
+  const [cartData, setCartData] = useState([]);
+  const [cartCount, setCardCount] = useState(0);
+
+  // const { cart, loading } = useCart();
+>>>>>>> Stashed changes
 
   const config = {
     headers: {
@@ -46,6 +60,10 @@ const Cart = () => {
 
   useEffect(() => {
     getCartData();
+<<<<<<< Updated upstream
+=======
+    // console.log(cart)
+>>>>>>> Stashed changes
   }, []);
 
   const calculateTotalOrder = () => {
@@ -83,6 +101,13 @@ const Cart = () => {
   return (
     <div>
       <h2>Bag</h2>
+<<<<<<< Updated upstream
+=======
+
+
+
+
+>>>>>>> Stashed changes
       <div className="">
         {cartData.map((item) => (
           <div
@@ -103,6 +128,11 @@ const Cart = () => {
                 {item.color.name} {item.group}
               </div>
             </div>
+<<<<<<< Updated upstream
+=======
+            <div>{item.productDetails ? item.productDetails.price : ""}</div>
+
+>>>>>>> Stashed changes
             {/* middle */}
             <div style={{ width: "300px !important" }}>
               <Counter
@@ -111,8 +141,13 @@ const Cart = () => {
                 price={item.productDetails.price}
                 onUpdateQuantity={updateItemQuantity}
               />
+<<<<<<< Updated upstream
               <div style={{ display: "flex", justifyContent: "space-between",color:'#20248A',cursor:'pointer' }}>
               <span onClick={() => deleteItem(item._id)}>Delete</span> <span><i className="fa-regular fa-heart"></i>Move to wishlist</span>
+=======
+              <div style={{ display: "flex", justifyContent: "space-between", color: '#20248A', cursor: 'pointer' }}>
+                <span onClick={() => deleteItem(item._id)}>Delete</span> <span><i className="fa-regular fa-heart"></i>Move to wishlist</span>
+>>>>>>> Stashed changes
 
               </div>
             </div>
@@ -121,15 +156,34 @@ const Cart = () => {
               Order details
               <div>
                 Total:{item.quantityRequired * item.productDetails.price}
+<<<<<<< Updated upstream
                 
               </div>
               <div>bag total: ${calculateTotalOrder()}</div>
               <div ><button style={{background:"#20248A",color:"white"}}>PROCEED TO SHIPPING</button></div>
+=======
+
+              </div>
+              <div>bag total: ${calculateTotalOrder()}</div>
+              <div ><button style={{ background: "#20248A", color: "white" }}>PROCEED TO SHIPPING</button></div>
+>>>>>>> Stashed changes
             </div>
           </div>
         ))}
       </div>
+<<<<<<< Updated upstream
     </div>
+=======
+
+
+
+
+
+
+
+    </div >
+
+>>>>>>> Stashed changes
   );
 };
 

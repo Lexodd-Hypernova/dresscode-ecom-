@@ -45,6 +45,10 @@ export const accountInfoApis = {
 };
 export const shoppingInfoApis = {
   getCartData: (userId) => `${baseUrl}/user/${userId}/getCart`,
+<<<<<<< Updated upstream
+=======
+  addCartData: (userId) => `${baseUrl}/user/${userId}/addProductToCart`,
+>>>>>>> Stashed changes
   handleItemsCount: (userId, productId) =>
     `${baseUrl}/user/${userId}/updateCartItemQuantity/${productId}`,
   deleteCartItem: (userId, productId) =>

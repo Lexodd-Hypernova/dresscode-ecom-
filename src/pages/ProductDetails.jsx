@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DressCodeApi from '../common';
 import ProductSlider from '../components/ProductSlider';
 // import Breadcrumb from '../components/Breadcrumb';
 import LogoUploader from "../components/LogoUploader"
+
+const token = localStorage.getItem("token");
 
 
 
@@ -30,6 +32,40 @@ const ProductDetails = () => {
 
     const [count, setCount] = useState(1); // Initial value set to 1
 
+<<<<<<< Updated upstream
+=======
+    const { addToCart } = useCart();
+
+    const nav = useNavigate()
+
+    const handleAddToCart = () => {
+        // Prepare the data to send to addToCart function
+
+        if (token) {
+            const itemToAdd = {
+                group: groupName,
+                productId: productId,
+                color: activeColor,
+                size: activeSize,
+                price: price,
+                quantityRequired: count, // Example: default quantity is 1, adjust as needed
+                logoUrl: null,
+                logoPosition: null,
+            };
+
+            // Call addToCart function from context
+            addToCart(itemToAdd);
+        }
+        else {
+            nav('/auth')
+        }
+
+
+    };
+
+
+
+>>>>>>> Stashed changes
     const increment = () => {
         setCount(prevCount => prevCount + 1);
     };
