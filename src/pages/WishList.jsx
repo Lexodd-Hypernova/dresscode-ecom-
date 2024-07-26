@@ -1,27 +1,26 @@
 import axios from "axios";
 import { shoppingInfoApis } from "../common";
 import { useEffect, useState } from "react";
-import { colors } from "@material-ui/core";
+import { useWhishList } from "../context/WishListContext";
 
 const WishList = () => {
     const [data,setData]=useState([])
     const userId = localStorage.getItem("id");
-    const token = localStorage.getItem("token");
-    const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-    
+    const {wishListCount,setWishListCount,config}=useWhishList()
     const getwhishListdata=async()=>{
         try{
             const response=await axios.get(shoppingInfoApis.getWhishList(userId),config)
             console.log(response.data)
             setData(response.data.Wishlist)
+            setWishListCount(response.data.Wishlist.length); 
+
         }
         catch(error){
             console.log(error)
         }
+    }
+    if(wishListCount<=0){
+        getwhishListdata()
     }
     const deleteWishList=async(id)=>{
         try{

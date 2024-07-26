@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./pages-styles/Orders.styles.css";
-import axios from "axios";
 import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
+import LoadingComponent from "../common/components/LoadingComponent";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
@@ -91,7 +91,7 @@ const nav=useNavigate()
         <p style={{ alignSelf: "start" }}>Your Orders</p>
 
         {selected === "orders" ? (
-          data ? (
+          data && data.length>0 ? (
             data.map((val) => (
               <div
                 key={val.orderId}
@@ -195,14 +195,14 @@ const nav=useNavigate()
               </div>
             ))
           ) : (
-            <div>Loading</div>
+            <LoadingComponent/>
           )
         ) : (
           <div>
-            {raised ? (
+            {raised && raised.length > 0 ? (
               data.map((val) => (
                 <div
-                  key={val.orderId} // Remember to add a unique key for each item in the list
+                  key={val.orderId}
                   style={{
                     border: "1px solid black",
                     width: "78vw",
@@ -357,7 +357,7 @@ const nav=useNavigate()
                 </div>
               ))
             ) : (
-              <div>Loading</div>
+              <div><LoadingComponent/></div>
             )}
           </div>
         )}

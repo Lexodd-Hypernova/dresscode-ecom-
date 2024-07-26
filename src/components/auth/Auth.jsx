@@ -5,11 +5,12 @@ import "../Header/navbar.css";
 import "./auth.styles.css";
 import {authUrls} from '../../common';
 import router from '../../routes/router';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 const Auth = () => {
   const [formType, setFormType] = useState('one');
   const[hideBanner, setHideBanner] = useState(false);
   const [width,setWidth]=useState(window.innerWidth)
-  
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -30,6 +31,7 @@ const Auth = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (formType === 'one') {
       // Login
       try {
@@ -42,9 +44,23 @@ const Auth = () => {
             localStorage.setItem("token", response.data.data.accessToken)
             localStorage.setItem("id", response.data.data.userId)
             localStorage.setItem("userName", response.data.data.firstName)
+            Swal.fire({
+              title: 'Success!',
+              text: 'Logged in successfully',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500           
+            })
             router.navigate("/account-info")
         }
       } catch (error) {
+        Swal.fire({
+          title: 'Login Failed!',
+          text: 'Please check your email and password or something went wrong',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 1500           
+        })
         console.error('Error logging in:', error.response.data);
       }
     } else {
@@ -125,7 +141,9 @@ const Auth = () => {
                       width: "152px",
                       height: "45px",
                     }}>
-                      Submit
+    {loading ?<div className="spinner-border " style={{color:'oragne'}} role="status">
+  <span className="sr-only"></span>
+</div> : "Submit"}
                     </button>
                   </div>
                   <div className="under-label">
