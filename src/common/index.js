@@ -24,6 +24,12 @@ const DressCodeApi = {
   generateImageURL: {
     url: `${baseUrl}/image/generateImgUrl`,
   },
+  checkout: {
+    url: `${baseUrl}/payment/checkout`,
+  },
+  verifyPayment: {
+    url: `${baseUrl}/payment/verifyPayment`,
+  }
 };
 export default DressCodeApi;
 export const authUrls = {
@@ -51,6 +57,7 @@ export const shoppingInfoApis = {
   deleteCartItem: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeCartItem/${productId}`,
   getWhishList: (userId) => `${baseUrl}/user/${userId}/getWishlist`,
+  addWhishList: (userId) => `${baseUrl}/user/${userId}/addToWishlist`,
   removeFromWishList: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeWishlistItem/${productId}`,
   addReview: (group, productId) => `${baseUrl}/user/${group}/${productId}/writeReview`,

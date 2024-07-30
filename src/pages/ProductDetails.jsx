@@ -6,7 +6,7 @@ import ProductSlider from '../components/ProductSlider';
 // import Breadcrumb from '../components/Breadcrumb';
 import LogoUploader from "../components/LogoUploader";
 import { useCart } from '../context/CartContext';
-
+import { useWhishList } from '../context/WishListContext';
 
 
 const normalizeName = (name) => {
@@ -33,6 +33,21 @@ const ProductDetails = () => {
     const [count, setCount] = useState(1); // Initial value set to 1
 
     const { addToCart } = useCart();
+
+    const { addToWishList } = useWhishList();
+
+
+    const handleAddToWishList = () => {
+        const item = {
+            group: groupName,
+            productId: productId,
+            color: activeColor,
+            size: activeSize,
+            logoUrl: null,
+            logoPosition: null,
+        }
+        addToWishList(item)
+    }
 
     const handleAddToCart = () => {
         // Prepare the data to send to addToCart function
@@ -342,7 +357,7 @@ const ProductDetails = () => {
                             </button> */}
                         </div>
                         <div className="d-grid col-6">
-                            <button className="btn btn-outline-primary fs-5 fw-normal text-capitalize w-100" type="button">
+                            <button onClick={handleAddToWishList} className="btn btn-outline-primary fs-5 fw-normal text-capitalize w-100" type="button">
                                 Save to wishlist
                             </button>
                         </div>
