@@ -9,8 +9,10 @@ import { Tag } from "primereact/tag";
 
 const Header = () => {
   const { cart } = useCart();
+  const { wishList } = useWhishList();
   const itemCount = cart.length;
-  const { wishListCount } = useWhishList();
+  const wishListCount = wishList.length;
+  // const { wishListCount } = useWhishList();
 
   const nav = useNavigate();
   const goToWishlist = () => {

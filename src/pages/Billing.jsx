@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import DressCodeApi from '../common';
+
+
 
 const BASE_URL = 'https://dresscode-test.onrender.com';
 
@@ -42,7 +45,8 @@ const Billing = () => {
 
             // Step 1: Create a payment order on your server
             const { data: orderData } = await axios.post(
-                `${BASE_URL}/payment/checkout`,
+                // `${BASE_URL}/payment/checkout`,
+                DressCodeApi.checkout,
                 { amount: amountInPaise }, // Amount in paise
                 { headers }
             );
@@ -78,7 +82,9 @@ const Billing = () => {
                         body: JSON.stringify(verifyPayload),
                     };
 
-                    const responseData = await fetch(`${BASE_URL}/payment/verifyPayment`, requestOptions);
+                    // const responseData = await fetch(`${BASE_URL}/payment/verifyPayment`, requestOptions);
+                    const responseData = await fetch(DressCodeApi.verifyPayment, requestOptions);
+
                     const verifyData = await responseData.json();
 
 
@@ -268,7 +274,7 @@ const Billing = () => {
                     <h5 className='fs-3 fw-medium'>Expected Delivery</h5>
                     <p className='fs-4 fw-medium'>Estimated delivery dates for your order</p>
                     <div className='d-flex mt-4 align-items-center gap-4'>
-                        <div style={{width:"122px"}}>
+                        <div style={{ width: "122px" }}>
                             <img src="images/s1.png" className='w-100' alt="" />
                         </div>
                         <div>
