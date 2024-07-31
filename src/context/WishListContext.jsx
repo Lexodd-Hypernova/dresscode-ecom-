@@ -40,7 +40,6 @@ export const WishListProvider = ({ children }) => {
     const addToWishList = async (item) => {
         try {
 
-            // const data = JSON.stringify(item)
             const res = await axios.post(shoppingInfoApis.addWhishList(userId), JSON.stringify(item), {
                 headers: {
                     'Content-Type': 'application/json',

@@ -5,8 +5,6 @@ import { shoppingInfoApis } from "../common";
 import { useEffect, useState } from "react";
 import Counter from "../common/components/Counter";
 
-// import { useCart } from "../context/CartContext";
-
 import { useCart } from "../context/CartContext";
 
 
@@ -15,7 +13,7 @@ const Cart = () => {
   const [cartData, setCartData] = useState([]);
   const [cartCount, setCardCount] = useState(0);
 
-  const { cart, loading } = useCart();
+  const { cart, removeFromCart, setCart, loading } = useCart();
 
   const config = {
     headers: {
@@ -25,40 +23,11 @@ const Cart = () => {
 
   const userId = localStorage.getItem("id");
 
-  // const getCartData = async () => {
-  //   try {
-  //     const { data } = await axios.get(
-  //       shoppingInfoApis.getCartData(userId),
-  //       config
-  //     );
-  //     setCartData(data.cartItems);
-  //     console.log(data.cartItems); // Log the data directly
-  //     setCardCount(data.cartItems.quantityRequired)
-  //   } catch (error) {
-  //     console.error("Error fetching cart data:", error);
-  //   }
-  // };
-  const deleteItem = async (cartItemId) => {
-    try {
-      const response = await axios.delete(
-        shoppingInfoApis.deleteCartItem(userId, cartItemId),
-        config
-      );
-      console.log(response.data);
-      getCartData();
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  };
 
-  // useEffect(() => {
-  //   // getCartData();
-  //   console.log(cart)
-  // }, []);
 
   const calculateTotalOrder = () => {
     let total = 0;
-    cartData.forEach((item) => {
+    cart.forEach((item) => {
       if (item.productDetails.price !== undefined) {
         total += item.quantityRequired * item.productDetails.price; // Assuming item.count is the quantity
         console.log(item)
@@ -76,11 +45,11 @@ const Cart = () => {
       //     config
       //   );
       //   console.log(response.data);
-      const updatedCart = cartData.map((item) =>
+      const updatedCart = cart.map((item) =>
         item._id === cartItemId ? { ...item, count: newQuantity } : item
       );
       console.log(updatedCart, "updated cart");
-      setCartData(updatedCart);
+      setCart(updatedCart);
     } catch (error) {
       console.error("Error updating item quantity:", error);
     }
@@ -130,7 +99,7 @@ const Cart = () => {
                     onUpdateQuantity={updateItemQuantity}
                   />
                   <div style={{ display: "flex", justifyContent: "space-between", color: '#20248A', cursor: 'pointer' }}>
-                    <span onClick={() => deleteItem(item._id)}>Delete</span> <span><i className="fa-regular fa-heart"></i>Move to wishlist</span>
+                    <span onClick={() => removeFromCart(item._id)}>Delete</span> <span><i className="fa-regular fa-heart"></i>Move to wishlist</span>
 
                   </div>
                 </div>

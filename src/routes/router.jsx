@@ -53,9 +53,9 @@ const router = createBrowserRouter([
       {
         path: "/billing",
         element: (
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <Billing />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         ),
       },
       {

@@ -1,0 +1,168 @@
+import React from 'react';
+import {
+    Modal,
+    Card,
+    TextField,
+    Button,
+    IconButton,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Checkbox,
+    FormLabel,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons"; // Add necessary icons
+
+
+
+const useStyles = makeStyles((theme) => ({
+    modal: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        overflow: 'scroll'
+    },
+    card: {
+        width: 500,
+        padding: theme.spacing(2),
+        outline: "none",
+        borderRadius: 10,
+        border: "1px dotted #888",
+        height: "auto",
+    },
+    addButton: {
+        position: "fixed",
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+    },
+}));
+
+
+
+const AddressModal = () => {
+    const classes = useStyles();
+
+    return (
+        <>
+
+            <Modal
+                className={classes.modal}
+                open={modalOpen}
+                onClose={handleCloseModal}
+                aria-labelledby="add-address-modal-title"
+                aria-describedby="add-address-modal-description"
+            >
+                <Card className={classes.card}>
+                    <h2 id="add-address-modal-title">{formData._id ? "Edit Address" : "Add New Address"}</h2>
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Name"
+                            name="name"
+                            fullWidth
+                            margin="normal"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Mobile"
+                            name="mobile"
+                            fullWidth
+                            margin="normal"
+                            value={formData.mobile}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Flat Number / Building Name"
+                            name="flatNumber"
+                            fullWidth
+                            margin="normal"
+                            value={formData.flatNumber}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Locality / Area / Street"
+                            name="locality"
+                            fullWidth
+                            margin="normal"
+                            value={formData.locality}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Pincode"
+                            name="pinCode"
+                            fullWidth
+                            margin="normal"
+                            value={formData.pinCode}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="District / City"
+                            name="districtCity"
+                            fullWidth
+                            margin="normal"
+                            value={formData.districtCity}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="State"
+                            name="state"
+                            fullWidth
+                            margin="normal"
+                            value={formData.state}
+                            onChange={handleChange}
+                        />
+                        <FormLabel component="legend">Address Type</FormLabel>
+                        <RadioGroup
+                            aria-label="addressType"
+                            name="addressType"
+                            value={formData.addressType}
+                            onChange={handleChange}
+                            row
+                        >
+                            <FormControlLabel
+                                value="Home"
+                                control={<Radio />}
+                                label="Home"
+                            />
+                            <FormControlLabel
+                                value="Work"
+                                control={<Radio />}
+                                label="Work"
+                            />
+                            <FormControlLabel
+                                value="Others"
+                                control={<Radio />}
+                                label="Others"
+                            />
+                        </RadioGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={formData.markAsDefault}
+                                    onChange={handleCheckboxChange}
+                                    name="markAsDefault"
+                                    color="primary"
+                                />
+                            }
+                            label="Mark as default"
+                        />
+                        <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
+                            <Button type="submit" variant="contained" color="primary" style={{ marginRight: "8px" }}>
+                                {formData._id ? "Update" : "Save"}
+                            </Button>
+                            <Button variant="outlined" onClick={handleCloseModal}>
+                                Cancel
+                            </Button>
+                        </div>
+                    </form>
+                </Card>
+            </Modal>
+
+        </>
+    )
+}
+
+export default AddressModal

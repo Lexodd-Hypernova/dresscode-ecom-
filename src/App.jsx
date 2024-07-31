@@ -32,33 +32,37 @@ import { WishListProvider } from "./context/WishListContext";
 import 'sweetalert2/src/sweetalert2.scss';
 import LoadingComponent from "./common/components/LoadingComponent";
 
+import { UserContextProvider } from "./context/UserContext";
+
 function App() {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-   if(navigation.state === "loading"){
-    setIsLoading(true)
-   }else{
-    setIsLoading(true)
+    if (navigation.state === "loading") {
+      setIsLoading(true)
+    } else {
+      setIsLoading(true)
 
-   setTimeout(() => {
-    setIsLoading(false)
-   }, 1000);
-   }
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000);
+    }
   }, [navigation.state]);
 
   return (
     <>
-      <WishListProvider>
-        <CartProvider>
-          <Header />
-          <main>
-            {isLoading ? <LoadingComponent /> : <Outlet />}
-          </main>
-          <Footer />
-        </CartProvider>
-      </WishListProvider>
+      <UserContextProvider>
+        <WishListProvider>
+          <CartProvider>
+            <Header />
+            <main>
+              {isLoading ? <LoadingComponent /> : <Outlet />}
+            </main>
+            <Footer />
+          </CartProvider>
+        </WishListProvider>
+      </UserContextProvider>
     </>
   );
 }
