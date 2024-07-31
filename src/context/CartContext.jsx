@@ -25,23 +25,24 @@ export const CartProvider = ({ children }) => {
 
     const userId = localStorage.getItem("id");
 
-    useEffect(() => {
-        const fetchCart = async () => {
-            setLoading(true);
-            try {
-                const { data } = await axios.get(
-                    shoppingInfoApis.getCartData(userId),
-                    config
-                );
-                setCart(data.cartItems);
-                console.log(data.cartItems)
-            } catch (error) {
-                console.error('Error fetching the cart:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchCart = async () => {
+        setLoading(true);
+        try {
+            const { data } = await axios.get(
+                shoppingInfoApis.getCartData(userId),
+                config
+            );
+            setCart(data.cartItems);
+            console.log(data.cartItems)
+        } catch (error) {
+            console.error('Error fetching the cart:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+
+    useEffect(() => {
         fetchCart();
     }, []); // Add dependencies to useEffect
 
@@ -78,24 +79,24 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    // const removeFromCart = async (itemId) => {
-    //     setLoading(true);
-    //     try {
-    //         await fetch(`https://dresscode-test.onrender.com/removefromcart/${itemId}`, {
-    //             method: 'DELETE',
-    //         });
-    //         setCart((prevCart) => prevCart.filter(item => item.id !== itemId));
-    //     } catch (error) {
-    //         console.error('Error removing item from cart:', error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
-    // removeFromCart,
+
+    const removeFromCart = async (productId) => {
+        console.log("userId", userId);
+        console.log("productId", productId);
+
+        try {
+            const res = await axios.delete(shoppingInfoApis.deleteCartItem(userId, productId), config)
+            console.log(res.data);
+            fetchCart();
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, loading }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, loading }}>
             {children}
         </CartContext.Provider>
     );

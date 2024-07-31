@@ -3,6 +3,10 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import DressCodeApi from '../common';
 
+import { accountInfoApis } from '../common';
+
+import { useUserContext } from "../context/UserContext";
+
 
 
 const BASE_URL = 'https://dresscode-test.onrender.com';
@@ -26,6 +30,16 @@ const Billing = () => {
 
     const navigate = useNavigate();
 
+    const { token, id, addressData, modalOpen, setModalOpen } = useUserContext();
+
+
+    // const token = localStorage.getItem("token");
+
+
+    // const userId = localStorage.getItem("id");
+
+
+
     const handlePayment = async () => {
         try {
             const amountInPaise = 108; // Example amount in paise (i.e., 1000 paise = 10 INR)
@@ -38,7 +52,7 @@ const Billing = () => {
             // Define the headers including the Authorization token
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTk5OTAxNDYsImV4cCI6MTc1MTU0Nzc0NiwiYXVkIjoiNjY4NGVmZWI5NzViZmYwMDg4NzFmMDYxOkpvaG4iLCJpc3MiOiJEcmVzc0NvZGVBcHBsaWNhdGlvbiJ9.euKYW-LRW_0NJk7t3nPYnXhvsQrrvQ9j2V5bk7SNWF4'
+                'Authorization': `Bearer ${token}`
             };
 
             console.log("Creating payment order with amount:", amountInPaise);
@@ -46,7 +60,7 @@ const Billing = () => {
             // Step 1: Create a payment order on your server
             const { data: orderData } = await axios.post(
                 // `${BASE_URL}/payment/checkout`,
-                DressCodeApi.checkout,
+                DressCodeApi.checkout.url,
                 { amount: amountInPaise }, // Amount in paise
                 { headers }
             );
@@ -77,13 +91,14 @@ const Billing = () => {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTk5OTAxNDYsImV4cCI6MTc1MTU0Nzc0NiwiYXVkIjoiNjY4NGVmZWI5NzViZmYwMDg4NzFmMDYxOkpvaG4iLCJpc3MiOiJEcmVzc0NvZGVBcHBsaWNhdGlvbiJ9.euKYW-LRW_0NJk7t3nPYnXhvsQrrvQ9j2V5bk7SNWF4',
+                            'Authorization': `Bearer ${token}`
+
                         },
                         body: JSON.stringify(verifyPayload),
                     };
 
                     // const responseData = await fetch(`${BASE_URL}/payment/verifyPayment`, requestOptions);
-                    const responseData = await fetch(DressCodeApi.verifyPayment, requestOptions);
+                    const responseData = await fetch(DressCodeApi.verifyPayment.url, requestOptions);
 
                     const verifyData = await responseData.json();
 
@@ -94,7 +109,7 @@ const Billing = () => {
                         // Step 4: Create the order on your server
                         const myHeaders = {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTk5OTAxNDYsImV4cCI6MTc1MTU0Nzc0NiwiYXVkIjoiNjY4NGVmZWI5NzViZmYwMDg4NzFmMDYxOkpvaG4iLCJpc3MiOiJEcmVzc0NvZGVBcHBsaWNhdGlvbiJ9.euKYW-LRW_0NJk7t3nPYnXhvsQrrvQ9j2V5bk7SNWF4'
+                            'Authorization': `Bearer ${token}`
                         };
 
                         const raw = JSON.stringify({
@@ -164,29 +179,30 @@ const Billing = () => {
     };
 
 
-    const fetchAddress = async () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTk5OTAxNDYsImV4cCI6MTc1MTU0Nzc0NiwiYXVkIjoiNjY4NGVmZWI5NzViZmYwMDg4NzFmMDYxOkpvaG4iLCJpc3MiOiJEcmVzc0NvZGVBcHBsaWNhdGlvbiJ9.euKYW-LRW_0NJk7t3nPYnXhvsQrrvQ9j2V5bk7SNWF4");
+    // const fetchAddress = async () => {
+    //     const myHeaders = new Headers();
+    //     myHeaders.append("Authorization", `Bearer ${token}`);
 
-        const requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow"
-        };
-        const response = await fetch("https://dresscode-test.onrender.com/user/6684efeb975bff008871f061/addresses/active", requestOptions);
+    //     const requestOptions = {
+    //         method: "GET",
+    //         headers: myHeaders,
+    //         redirect: "follow"
+    //     };
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+    //     const response = await fetch(accountInfoApis.getAddress(id), requestOptions)
 
-        const result = await response.json();
-        setAddresses(result.data);
-        console.log(result.data)
-    }
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //     }
 
-    useEffect(() => {
-        fetchAddress();
-    }, [])
+    //     const result = await response.json();
+    //     setAddresses(result.data);
+    //     console.log(result.data)
+    // }
+
+    // useEffect(() => {
+    //     fetchAddress();
+    // }, [])
 
 
 
@@ -201,7 +217,7 @@ const Billing = () => {
                         </div>
                         {
 
-                            addresses.map((address) => {
+                            addressData.map((address) => {
                                 return (
                                     <div key={address._id} className='mb-4 d-flex align-items-center gap-5'>
                                         <div style={{ width: "40%" }}>
@@ -234,7 +250,7 @@ const Billing = () => {
                         }
 
                         <div className='mt-5'>
-                            <button type='button' className='fs-4 fw-medium text-capitalize border-0 text-primary' style={{ background: "none" }}>Add new Address</button>
+                            <button type='button' onClick={() => setModalOpen(true)} className='fs-4 fw-medium text-capitalize border-0 text-primary' style={{ background: "none" }}>Add new Address</button>
                         </div>
 
                         <hr className='w-100 mt-4' />

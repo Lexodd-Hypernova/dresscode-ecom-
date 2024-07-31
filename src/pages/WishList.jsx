@@ -4,37 +4,9 @@ import { useEffect, useState } from "react";
 import { useWhishList } from "../context/WishListContext";
 
 const WishList = () => {
-    // const [data, setData] = useState([])
-    // const userId = localStorage.getItem("id");
-    const { wishList, deleteWishList } = useWhishList()
-    // const getwhishListdata=async()=>{
-    //     try{
-    //         const response=await axios.get(shoppingInfoApis.getWhishList(userId),config)
-    //         console.log(response.data)
-    //         setData(response.data.Wishlist)
-    //         setWishListCount(response.data.Wishlist.length); 
 
-    //     }
-    //     catch(error){
-    //         console.log(error)
-    //     }
-    // }
-    // if(wishListCount<=0){
-    //     getwhishListdata()
-    // }
-    // const deleteWishList = async (id) => {
-    //     try {
-    //         const response = await axios.delete(shoppingInfoApis.removeFromWishList(userId, id), config)
-    //         console.log(response.data)
-    //         getwhishListdata()
-    //     }
-    //     catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-    // useEffect(()=>{
-    //     getwhishListdata()
-    // },[])
+    const { wishList, deleteWishList } = useWhishList()
+
     return (
         <div>
             <h3>My whishlist</h3>
@@ -55,15 +27,6 @@ const WishList = () => {
                     })
                 }
             </div>
-
-
-            {/* {
-                wishList.map((item, index) => {
-                    return (
-                        <h1 key={index}>wish</h1>
-                    )
-                })
-            } */}
 
 
 

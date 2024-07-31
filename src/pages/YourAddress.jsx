@@ -17,7 +17,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons"; // Add necessary icons
 import axios from "axios";
 import { accountInfoApis } from "../common";
-import './pages-styles/yourAddress.styles.css'
+import './pages-styles/yourAddress.styles.css';
+import { useUserContext } from "../context/UserContext";
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     height: "100vh",
-    overflow:'scroll'
+    overflow: 'scroll'
   },
   card: {
     width: 500,
@@ -43,9 +45,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const YourAddress = () => {
+  const { addressData, setAddressData, addAddress, modalOpen, setModalOpen } = useUserContext();
   const classes = useStyles();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [addressData, setAddressData] = useState([]);
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const [addressData, setAddressData] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -75,55 +78,55 @@ const YourAddress = () => {
     }));
   };
 
-  const getAddressData = async () => {
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+  // const getAddressData = async () => {
+  //   const token = localStorage.getItem("token");
+  //   const id = localStorage.getItem("id");
 
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
+  //   const requestOptions = {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
 
-    try {
-      const response = await fetch(
-        accountInfoApis.getAddress(id),
-        requestOptions
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const result = await response.json();
-      setAddressData(result.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //   try {
+  //     const response = await fetch(
+  //       accountInfoApis.getAddress(id),
+  //       requestOptions
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const result = await response.json();
+  //     setAddressData(result.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
-  const addAddress = async () => {
-    const token = localStorage.getItem("token"); 
+  // const addAddress = async() => {
+  //   const token = localStorage.getItem("token");
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+  //   const config = {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   };
 
-    try {
-      const response = await axios.post(
-        accountInfoApis.addAddress(localStorage.getItem("id")),
-        formData,
-        config
-      );
-      console.log(response.data);
-      setAddressData([...addressData, response.data]);
-      handleCloseModal();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       accountInfoApis.addAddress(localStorage.getItem("id")),
+  //       formData,
+  //       config
+  //     );
+  //     console.log(response.data);
+  //     setAddressData([...addressData, response.data]);
+  //     handleCloseModal();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const editAddress = async (id) => {
     const addressToEdit = addressData.find(address => address._id === id);
@@ -142,19 +145,19 @@ const YourAddress = () => {
       if (!token) {
         throw new Error("Token not found in localStorage.");
       }
-  
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`
         }
       };
-  
+
       const url = accountInfoApis.deleteAddress(localStorage.getItem("id"), id);
       console.log("DELETE URL:", url);
       console.log("DELETE CONFIG:", config);
-  
+
       const response = await axios.patch(url, {}, config);
-  
+
       if (response) {
         setAddressData(addressData.filter(address => address._id !== id));
         console.log("Address deleted successfully:", response.data);
@@ -166,12 +169,12 @@ const YourAddress = () => {
       console.error('Error deleting address:', error);
     }
   };
-  
+
   const setAsDefaultAddress = async (id) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
-        accountInfoApis.setAsDefaultAddress(localStorage.getItem("id"),id),
+        accountInfoApis.setAsDefaultAddress(localStorage.getItem("id"), id),
         {},
         {
           headers: {
@@ -193,9 +196,9 @@ const YourAddress = () => {
     }
   };
 
-  useEffect(() => {
-    getAddressData();
-  }, []);
+  // useEffect(() => {
+  //   getAddressData();
+  // }, []);
 
   const handleAddAddress = () => {
     setFormData({
@@ -223,7 +226,8 @@ const YourAddress = () => {
       updateAddress(formData._id);
 
     } else {
-      addAddress();
+      addAddress(formData);
+      handleCloseModal();
 
     }
   };
@@ -239,7 +243,7 @@ const YourAddress = () => {
 
     try {
       const response = await axios.patch(
-        accountInfoApis.updateAddress(localStorage.getItem("id"),id),
+        accountInfoApis.updateAddress(localStorage.getItem("id"), id),
         formData,
         config
       );
@@ -277,16 +281,16 @@ const YourAddress = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-4 col-md-6 mb-4">
-            <div className="address-card rounded" style={{height:'85%',}}>
+            <div className="address-card rounded" style={{ height: '85%', }}>
               <IconButton
                 className="add-address-icon"
                 onClick={handleAddAddress}
-                style={{marginTop:'70%'}}
+                style={{ marginTop: '70%' }}
               >
                 <FontAwesomeIcon icon={faPlus} />
                 <h4
                   className="add-address-label"
-                  style={{ textAlign: "center"}}
+                  style={{ textAlign: "center" }}
                 >
                   Add Address
                 </h4>
@@ -298,7 +302,7 @@ const YourAddress = () => {
               <div className="col-lg-4 col-md-6 mb-4" key={val._id}>
                 <div className="address-card rounded">
                   <p>{val.markAsDefault ? "Default" : ""}</p>
-                  <hr style={{width:'100%',borderTop:'1px solid black'}} />
+                  <hr style={{ width: '100%', borderTop: '1px solid black' }} />
                   <h5>{val.name}</h5>
                   <p>
                     {val.landmark} {val.flatNumber}
@@ -308,15 +312,15 @@ const YourAddress = () => {
                     {val.state} {val.districtCity}
                   </p>
                   <p>{val.addressType}</p>
-                  <div style={{color:'brown'}}>
-                    <span onClick={() => editAddress(val._id)} style={{cursor: 'pointer'}}>
+                  <div style={{ color: 'brown' }}>
+                    <span onClick={() => editAddress(val._id)} style={{ cursor: 'pointer' }}>
                       Edit
                     </span>{" | "}
-                    <span onClick={() => deleteAddress1(val._id)} style={{cursor: 'pointer'}}>
+                    <span onClick={() => deleteAddress1(val._id)} style={{ cursor: 'pointer' }}>
                       Remove
                     </span>{" | "}
                     {!val.markAsDefault && (
-                      <span onClick={() => setAsDefaultAddress(val._id)} style={{cursor: 'pointer'}}>
+                      <span onClick={() => setAsDefaultAddress(val._id)} style={{ cursor: 'pointer' }}>
                         Set as Default
                       </span>
                     )}
