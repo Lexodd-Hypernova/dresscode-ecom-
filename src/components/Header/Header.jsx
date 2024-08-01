@@ -58,9 +58,9 @@ const Header = () => {
                   <span>({itemCount})</span>
                 </div>
               </Link>
-              <div className="ham-menu">
+              <Link to="/account-info" className="ham-menu">
                 <i className="fa-solid fa-bars"></i>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

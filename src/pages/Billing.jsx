@@ -7,6 +7,8 @@ import { accountInfoApis } from '../common';
 
 import { useUserContext } from "../context/UserContext";
 
+import AddressModal from "../components/addressModal/AddressModal"
+
 
 
 const BASE_URL = 'https://dresscode-test.onrender.com';
@@ -26,23 +28,40 @@ const Billing = () => {
     const [discountPercentage, setDiscountPercentage] = useState(10);
     const [TotalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(108);
 
-    const [addresses, setAddresses] = useState([]);
+    const [activeAddressId, setActiveAddressId] = useState(null);
+
+    const [formData, setFormData] = useState({
+        name: "",
+        mobile: "",
+        flatNumber: "",
+        locality: "",
+        pinCode: "",
+        landmark: "",
+        districtCity: "",
+        state: "",
+        addressType: "Home", // Default value
+        markAsDefault: false,
+    });
 
     const navigate = useNavigate();
 
-    const { token, id, addressData, modalOpen, setModalOpen } = useUserContext();
+    const { token, id, addressData, addAddress } = useUserContext();
+
+    const [modalOpen, setModalOpen] = useState(false);
 
 
-    // const token = localStorage.getItem("token");
-
-
-    // const userId = localStorage.getItem("id");
+    const handleSubmit = (formData) => {
+        addAddress(formData);
+        setModalOpen(false);
+    };
 
 
 
     const handlePayment = async () => {
         try {
             const amountInPaise = 108; // Example amount in paise (i.e., 1000 paise = 10 INR)
+
+
 
             if (amountInPaise < 100) {
                 alert('Amount should be at least 100 paise.');
@@ -135,7 +154,7 @@ const Billing = () => {
 
                         console.log("Creating order with data:", raw);
 
-                        const finalResponse = await fetch(`${BASE_URL}/order/createOrder/user/6684efeb975bff008871f061/address/668501dec402ab3920e3a232`, requestOptions);
+                        const finalResponse = await fetch(`${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`, requestOptions);
                         if (!finalResponse.ok) {
                             throw new Error('Network response was not ok');
                         }
@@ -178,135 +197,118 @@ const Billing = () => {
         }
     };
 
+    const handleAddressClick = (addressId) => {
+        setActiveAddressId(addressId);
+    };
 
-    // const fetchAddress = async () => {
-    //     const myHeaders = new Headers();
-    //     myHeaders.append("Authorization", `Bearer ${token}`);
-
-    //     const requestOptions = {
-    //         method: "GET",
-    //         headers: myHeaders,
-    //         redirect: "follow"
-    //     };
-
-    //     const response = await fetch(accountInfoApis.getAddress(id), requestOptions)
-
-    //     if (!response.ok) {
-    //         throw new Error('Network response was not ok');
-    //     }
-
-    //     const result = await response.json();
-    //     setAddresses(result.data);
-    //     console.log(result.data)
-    // }
-
-    // useEffect(() => {
-    //     fetchAddress();
-    // }, [])
-
+    useEffect(() => {
+        console.log(activeAddressId)
+    })
 
 
     return (
-        <section className='billing mt-5 ms-5'>
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className='col-lg-6'>
-                        <div>
-                            <h5 className='fs-3 fw-medium'>Delivery Address</h5>
-                            <p className='fs-4 fw-medium lh-1 mb-3'>We will deliver your order to this address</p>
-                        </div>
-                        {
-
-                            addressData.map((address) => {
-                                return (
-                                    <div key={address._id} className='mb-4 d-flex align-items-center gap-5'>
-                                        <div style={{ width: "40%" }}>
-                                            <div className='fs-4 fw-medium'>{address.name}</div>
-                                            <div className='fs-4' style={{ color: "#A56528" }}>
-                                                {
-                                                    address.markAsDefault === false ? "" : "Default"
-                                                }
-                                            </div>
-                                            <div className='fs-4'>
-                                                {address.flatNumber}, {address.landmark}, {address.locality}
-                                                {address.districtCity}, {address.state} , {address.pinCode}
-                                            </div>
-                                            <div className='fs-4'>
-                                                Phone: <span className='fw-medium'>{address.mobile}</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className='form-check'>
-                                                <input class="form-check-input fs-4" type="radio" name="flexRadioDefault" />
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                )
-
-
-                            })
-
-                        }
-
-                        <div className='mt-5'>
-                            <button type='button' onClick={() => setModalOpen(true)} className='fs-4 fw-medium text-capitalize border-0 text-primary' style={{ background: "none" }}>Add new Address</button>
-                        </div>
-
-                        <hr className='w-100 mt-4' />
-
-                    </div>
-                    <div className='col-lg-6'>
-                        <div className="order__bill">
-                            <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
-                                <h5 className="fs-4 fw-medium text-capitalize mb-3">Order details</h5>
-                                <p className='fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center'>
-                                    Bag total
-                                    <span>₹{price}</span>
-                                </p>
-                                <p className='fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center'>
-                                    Bag Discount
-                                    <span>₹{discountPercentage}</span>
-                                </p>
-                                <p className='fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center'>
-                                    Delivery Fee
-                                    <span>₹{deliveryCharges}</span>
-                                </p>
-                                <p className='fs-5 fw-medium lh-1 d-flex justify-content-between align-items-center'>
-                                    Order total
-                                    <span>₹{TotalPriceAfterDiscount}</span>
-                                </p>
+        <>
+            <section className='billing mt-5 ms-5'>
+                <div className='container-fluid'>
+                    <div className='row'>
+                        <div className='col-lg-6'>
+                            <div>
+                                <h5 className='fs-3 fw-medium'>Delivery Address</h5>
+                                <p className='fs-4 fw-medium lh-1 mb-3'>We will deliver your order to this address</p>
                             </div>
-                            <button type="button"
-                                style={{
-                                    backgroundColor: "#20248A",
-                                    width: "100%"
-                                }}
-                                className="btn text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize" onClick={handlePayment}>Proceed to payment</button>
+                            {addressData.map((address) => (
+                                <div
+                                    key={address._id}
+                                    className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? 'active' : ''}`}
+                                    onClick={() => handleAddressClick(address._id)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <div style={{ width: "40%" }}>
+                                        <div className='fs-4 fw-medium'>{address.name}</div>
+                                        <div className='fs-4' style={{ color: "#A56528" }}>
+                                            {address.markAsDefault === false ? "" : "Default"}
+                                        </div>
+                                        <div className='fs-4'>
+                                            {address.flatNumber}, {address.landmark}, {address.locality}, {address.districtCity}, {address.state}, {address.pinCode}
+                                        </div>
+                                        <div className='fs-4'>
+                                            Phone: <span className='fw-medium'>{address.mobile}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className='form-check'>
+                                            <input
+                                                className="form-check-input fs-4"
+                                                type="radio"
+                                                name="flexRadioDefault"
+                                                checked={address._id === activeAddressId}
+                                                readOnly
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            <div className='mt-5'>
+                                <button type='button' onClick={() => setModalOpen(true)} className='fs-4 fw-medium text-capitalize border-0 text-primary' style={{ background: "none" }}>Add new Address</button>
+                            </div>
+
+                            <hr className='w-100 mt-4' />
+
+                        </div>
+                        <div className='col-lg-6'>
+                            <div className="order__bill">
+                                <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
+                                    <h5 className="fs-4 fw-medium text-capitalize mb-3">Order details</h5>
+                                    <p className='fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center'>
+                                        Bag total
+                                        <span>₹{price}</span>
+                                    </p>
+                                    <p className='fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center'>
+                                        Bag Discount
+                                        <span>₹{discountPercentage}</span>
+                                    </p>
+                                    <p className='fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center'>
+                                        Delivery Fee
+                                        <span>₹{deliveryCharges}</span>
+                                    </p>
+                                    <p className='fs-5 fw-medium lh-1 d-flex justify-content-between align-items-center'>
+                                        Order total
+                                        <span>₹{TotalPriceAfterDiscount}</span>
+                                    </p>
+                                </div>
+                                <button type="button"
+                                    style={{
+                                        backgroundColor: "#20248A",
+                                        width: "100%"
+                                    }}
+                                    className={`btn  ${activeAddressId === null ? "disabled" : ""} text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`} onClick={handlePayment}>Proceed to payment</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='row mt-5'>
-                    <h5 className='fs-3 fw-medium'>Expected Delivery</h5>
-                    <p className='fs-4 fw-medium'>Estimated delivery dates for your order</p>
-                    <div className='d-flex mt-4 align-items-center gap-4'>
-                        <div style={{ width: "122px" }}>
-                            <img src="images/s1.png" className='w-100' alt="" />
-                        </div>
-                        <div>
-                            <div className='fs-4 fw-medium'>22 May</div>
-                            <div className='fs-4 fw-normal'>Brand</div>
-                            <div className='fs-4 fw-normal'>#1234 slip fit shits</div>
+                    <div className='row mt-5'>
+                        <h5 className='fs-3 fw-medium'>Expected Delivery</h5>
+                        <p className='fs-4 fw-medium'>Estimated delivery dates for your order</p>
+                        <div className='d-flex mt-4 align-items-center gap-4'>
+                            <div style={{ width: "122px" }}>
+                                <img src="images/s1.png" className='w-100' alt="" />
+                            </div>
+                            <div>
+                                <div className='fs-4 fw-medium'>22 May</div>
+                                <div className='fs-4 fw-normal'>Brand</div>
+                                <div className='fs-4 fw-normal'>#1234 slip fit shits</div>
+                            </div>
                         </div>
                     </div>
+
+                </div>
+                <div className=''>
+
                 </div>
 
-            </div>
-            <div className=''>
-
-            </div>
-
-        </section>
+            </section>
+            <AddressModal onSubmit={handleSubmit} formData={formData} setFormData={setFormData} modalOpen={modalOpen} setModalOpen={setModalOpen}></AddressModal>
+        </>
     )
 }
 

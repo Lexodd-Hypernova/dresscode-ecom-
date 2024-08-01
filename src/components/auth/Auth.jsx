@@ -3,13 +3,21 @@ import axios from 'axios';
 import Logo from "../../assets/logo.svg";
 import "../Header/navbar.css";
 import "./auth.styles.css";
-import {authUrls} from '../../common';
-import router from '../../routes/router';
-import Swal from 'sweetalert2/dist/sweetalert2.js'
+import { authUrls } from '../../common';
+// import router from '../../routes/router';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { useNavigate, useLocation } from 'react-router-dom';
 const Auth = () => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const redirectPath = queryParams.get('redirect') || '/account-info';
+
+
   const [formType, setFormType] = useState('one');
-  const[hideBanner, setHideBanner] = useState(false);
-  const [width,setWidth]=useState(window.innerWidth)
+  const [hideBanner, setHideBanner] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth)
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -40,18 +48,19 @@ const Auth = () => {
           password: formData.password
         });
         console.log(response.data);
-        if(response.data.message==="Success"){
-            localStorage.setItem("token", response.data.data.accessToken)
-            localStorage.setItem("id", response.data.data.userId)
-            localStorage.setItem("userName", response.data.data.firstName)
-            Swal.fire({
-              title: 'Success!',
-              text: 'Logged in successfully',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500           
-            })
-            router.navigate("/account-info")
+        if (response.data.message === "Success") {
+          localStorage.setItem("token", response.data.data.accessToken)
+          localStorage.setItem("id", response.data.data.userId)
+          localStorage.setItem("userName", response.data.data.firstName)
+          Swal.fire({
+            title: 'Success!',
+            text: 'Logged in successfully',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          // router.navigate("/account-info")
+          navigate(redirectPath);
         }
       } catch (error) {
         Swal.fire({
@@ -59,7 +68,7 @@ const Auth = () => {
           text: 'Please check your email and password or something went wrong',
           icon: 'error',
           showConfirmButton: false,
-          timer: 1500           
+          timer: 1500
         })
         console.error('Error logging in:', error.response.data);
       }
@@ -141,9 +150,9 @@ const Auth = () => {
                       width: "152px",
                       height: "45px",
                     }}>
-    {loading ?<div className="spinner-border " style={{color:'oragne'}} role="status">
-  <span className="sr-only"></span>
-</div> : "Submit"}
+                      {loading ? <div className="spinner-border " style={{ color: 'oragne' }} role="status">
+                        <span className="sr-only"></span>
+                      </div> : "Submit"}
                     </button>
                   </div>
                   <div className="under-label">
@@ -222,7 +231,7 @@ const Auth = () => {
                   background: "#F47458",
                   color: "white",
                 }}
-                onClick={handleSubmit}>
+                  onClick={handleSubmit}>
                   Sign up
                 </button>
               </div>

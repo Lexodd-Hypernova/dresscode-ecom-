@@ -53,26 +53,28 @@ const router = createBrowserRouter([
       {
         path: "/billing",
         element: (
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <Billing />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         ),
       },
       {
-        path: "/success",
-        element: <PaymentSuccess />,
-      },
-      {
         path: "/getquote",
-        element: <GetQuote />,
+        element:
+          (
+            <ProtectedRoute>
+              < GetQuote />
+            </ProtectedRoute>
+          )
       },
       {
         path: "/success",
-        element: <PaymentSuccess />,
-      },
-      {
-        path: "/getquote",
-        element: <GetQuote />,
+        element:
+          (
+            <ProtectedRoute>
+              < PaymentSuccess />
+            </ProtectedRoute>
+          )
       },
       {
         path: "/account-info",

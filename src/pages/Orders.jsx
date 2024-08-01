@@ -9,9 +9,9 @@ const Orders = () => {
   const [raised, setRaised] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-const nav=useNavigate()
-  const goToReview=(group,productId)=>{
-      nav(`/group-review/${group}/${productId}`)
+  const nav = useNavigate()
+  const goToReview = (group, productId) => {
+    nav(`/group-review/${group}/${productId}`)
   }
 
   const handleImageChange = (event) => {
@@ -91,7 +91,7 @@ const nav=useNavigate()
         <p style={{ alignSelf: "start" }}>Your Orders</p>
 
         {selected === "orders" ? (
-          data && data.length>0 ? (
+          data && data.length > 0 ? (
             data.map((val) => (
               <div
                 key={val.orderId}
@@ -187,7 +187,7 @@ const nav=useNavigate()
                         }}
                       >
                         <button className="order-button">Track Package</button>
-                        <button className="order-button" onClick={()=>goToReview(val.group,val.productId)}>Write A Product Review</button>
+                        <button className="order-button" onClick={() => goToReview(val.group, val.productId)}>Write A Product Review</button>
                       </div>
                     </div>
                   </div>
@@ -195,7 +195,7 @@ const nav=useNavigate()
               </div>
             ))
           ) : (
-            <LoadingComponent/>
+            <LoadingComponent />
           )
         ) : (
           <div>
@@ -357,7 +357,7 @@ const nav=useNavigate()
                 </div>
               ))
             ) : (
-              <div><LoadingComponent/></div>
+              <div><LoadingComponent /></div>
             )}
           </div>
         )}

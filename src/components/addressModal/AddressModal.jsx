@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Modal,
     Card,
@@ -42,8 +42,49 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const AddressModal = () => {
+const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData }) => {
     const classes = useStyles();
+
+    // const [modalOpen, setModalOpen] = useState(false);
+
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    };
+
+    const handleCheckboxChange = (e) => {
+        const { name, checked } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: checked,
+        }));
+    };
+
+
+
+    useEffect(() => {
+
+        console.log(modalOpen)
+
+
+    }, [])
+
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(formData)
+    }
 
     return (
         <>
@@ -57,7 +98,7 @@ const AddressModal = () => {
             >
                 <Card className={classes.card}>
                     <h2 id="add-address-modal-title">{formData._id ? "Edit Address" : "Add New Address"}</h2>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleFormSubmit}>
                         <TextField
                             label="Name"
                             name="name"
