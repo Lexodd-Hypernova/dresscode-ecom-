@@ -29,7 +29,10 @@ const Cart = () => {
     let total = 0;
     cart.forEach((item) => {
       if (item.productDetails.price !== undefined) {
+       
         total += item.quantityRequired * item.productDetails.price; // Assuming item.count is the quantity
+        
+        console.log("price total",total)
         console.log(item)
       }
     });
@@ -49,7 +52,7 @@ const Cart = () => {
         item._id === cartItemId ? { ...item, count: newQuantity } : item
       );
       console.log(updatedCart, "updated cart");
-      setCart(updatedCart);
+      // setCardCount(updatedCart.cartItem);
     } catch (error) {
       console.error("Error updating item quantity:", error);
     }

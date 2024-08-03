@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DressCodeApi from '../common';
 import ProductSlider from '../components/ProductSlider';
@@ -32,10 +32,14 @@ const ProductDetails = () => {
     const [price, setPrice] = useState('');
     const [count, setCount] = useState(1); // Initial value set to 1
 
-    const { addToCart } = useCart();
+    const { addToCart, token } = useCart();
 
     const { addToWishList } = useWhishList();
 
+
+    const [isLoggedIn, setIsLoggedIn] = useState(token);
+
+    const nav = useNavigate();
 
     const handleAddToWishList = () => {
         const item = {
@@ -164,7 +168,10 @@ const ProductDetails = () => {
 
     }
 
-
+    const handleButtonClick = () => {
+        const currentPath = window.location.pathname;
+        nav(`/auth?redirect=${currentPath}`);
+    };
 
 
     return (
@@ -337,7 +344,38 @@ const ProductDetails = () => {
                         </div>
                         <div className="d-grid col-6">
 
-                            {
+
+                            {isLoggedIn ? (
+                                count < 100 ? (
+                                    <button
+                                        className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#logoModal"
+                                    >
+                                        Buy Now
+                                    </button>
+                                ) : (
+                                    <Link
+                                        to="/getquote"
+                                        className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
+                                        type="button"
+                                    >
+                                        Get a Quote
+                                    </Link>
+                                )
+                            ) : (
+                                <button
+                                    className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
+                                    type="button"
+                                    onClick={handleButtonClick}
+                                >
+                                    Buy Now
+                                </button>
+                            )}
+
+
+                            {/* {
                                 count < 100 ? (
                                     <button className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
                                         data-bs-toggle="modal"
@@ -347,7 +385,7 @@ const ProductDetails = () => {
                                     <Link to="/getquote" className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
                                     >Get a Quote</Link>
                                 )
-                            }
+                            } */}
 
                             {/* <button className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
                                 data-bs-toggle="modal"

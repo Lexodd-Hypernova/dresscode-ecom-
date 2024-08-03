@@ -20,6 +20,8 @@ import { accountInfoApis } from "../common";
 import './pages-styles/yourAddress.styles.css';
 import { useUserContext } from "../context/UserContext";
 
+import AddressModal from "../components/addressModal/AddressModal";
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -45,10 +47,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const YourAddress = () => {
-  const { addressData, setAddressData, addAddress, modalOpen, setModalOpen } = useUserContext();
+  const { addressData, setAddressData, addAddress } = useUserContext();
   const classes = useStyles();
-  // const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   // const [addressData, setAddressData] = useState([]);
+
+
+
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -62,21 +67,27 @@ const YourAddress = () => {
     markAsDefault: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
 
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: checked,
-    }));
-  };
+  useEffect(() => {
+    console.log(addressData)
+  }, [])
+
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     [name]: value,
+  //   }));
+  // };
+
+  // const handleCheckboxChange = (e) => {
+  //   const { name, checked } = e.target;
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     [name]: checked,
+  //   }));
+  // };
 
   // const getAddressData = async () => {
   //   const token = localStorage.getItem("token");
@@ -220,8 +231,8 @@ const YourAddress = () => {
     setModalOpen(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault();
     if (formData._id) {
       updateAddress(formData._id);
 
@@ -262,197 +273,105 @@ const YourAddress = () => {
   };
 
   return (
-    <div style={{ background: "#EFF4FD", height: "100vh" }}>
-      <div>
-        <div
-          style={{
-            background: "white",
-            textAlign: "center",
-            height: "60px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "black",
-          }}
-        >
-          Your Address
-        </div>
-      </div>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-lg-4 col-md-6 mb-4">
-            <div className="address-card rounded" style={{ height: '85%', }}>
-              <IconButton
-                className="add-address-icon"
-                onClick={handleAddAddress}
-                style={{ marginTop: '70%' }}
-              >
-                <FontAwesomeIcon icon={faPlus} />
-                <h4
-                  className="add-address-label"
-                  style={{ textAlign: "center" }}
-                >
-                  Add Address
-                </h4>
-              </IconButton>
-            </div>
+
+
+    <>
+
+      <div style={{ background: "#EFF4FD", height: "100vh" }}>
+        <div>
+          <div
+            style={{
+              background: "white",
+              textAlign: "center",
+              height: "60px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "black",
+            }}
+          >
+            Your Address
           </div>
-          {addressData.length > 0 ? (
-            addressData.map((val) => (
-              <div className="col-lg-4 col-md-6 mb-4" key={val._id}>
-                <div className="address-card rounded">
-                  <p>{val.markAsDefault ? "Default" : ""}</p>
-                  <hr style={{ width: '100%', borderTop: '1px solid black' }} />
-                  <h5>{val.name}</h5>
-                  <p>
-                    {val.landmark} {val.flatNumber}
-                  </p>
-                  <p>{val.locality}</p>
-                  <p>
-                    {val.state} {val.districtCity}
-                  </p>
-                  <p>{val.addressType}</p>
-                  <div style={{ color: 'brown' }}>
-                    <span onClick={() => editAddress(val._id)} style={{ cursor: 'pointer' }}>
-                      Edit
-                    </span>{" | "}
-                    <span onClick={() => deleteAddress1(val._id)} style={{ cursor: 'pointer' }}>
-                      Remove
-                    </span>{" | "}
-                    {!val.markAsDefault && (
-                      <span onClick={() => setAsDefaultAddress(val._id)} style={{ cursor: 'pointer' }}>
-                        Set as Default
-                      </span>
-                    )}
+        </div>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="address-card rounded" style={{ height: '85%', }}>
+                <IconButton
+                  className="add-address-icon"
+                  onClick={handleAddAddress}
+                  style={{ marginTop: '70%' }}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  <h4
+                    className="add-address-label"
+                    style={{ textAlign: "center" }}
+                  >
+                    Add Address
+                  </h4>
+                </IconButton>
+              </div>
+            </div>
+            {addressData.length > 0 ? (
+              addressData.map((val) => (
+                <div className="col-lg-4 col-md-6 mb-4" key={val._id}>
+                  <div className="address-card rounded">
+                    <p>{val.markAsDefault ? "Default" : ""}</p>
+                    <hr style={{ width: '100%', borderTop: '1px solid black' }} />
+                    <h5>{val.name}</h5>
+                    <p>
+                      {val.landmark} {val.flatNumber}
+                    </p>
+                    <p>{val.locality}</p>
+                    <p>
+                      {val.state} {val.districtCity}
+                    </p>
+                    <p>{val.addressType}</p>
+                    <div style={{ color: 'brown' }}>
+                      <span onClick={() => editAddress(val._id)} style={{ cursor: 'pointer' }}>
+                        Edit
+                      </span>{" | "}
+                      <span onClick={() => deleteAddress1(val._id)} style={{ cursor: 'pointer' }}>
+                        Remove
+                      </span>{" | "}
+                      {!val.markAsDefault && (
+                        <span onClick={() => setAsDefaultAddress(val._id)} style={{ cursor: 'pointer' }}>
+                          Set as Default
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div>Loading...</div>
-          )}
+              ))
+            ) : (
+              <div>Loading...</div>
+            )}
+          </div>
         </div>
-      </div>
-      <Modal
-        className={classes.modal}
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="add-address-modal-title"
-        aria-describedby="add-address-modal-description"
-      >
-        <Card className={classes.card}>
-          <h2 id="add-address-modal-title">{formData._id ? "Edit Address" : "Add New Address"}</h2>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Name"
-              name="name"
-              fullWidth
-              margin="normal"
-              value={formData.name}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Mobile"
-              name="mobile"
-              fullWidth
-              margin="normal"
-              value={formData.mobile}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Flat Number / Building Name"
-              name="flatNumber"
-              fullWidth
-              margin="normal"
-              value={formData.flatNumber}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Locality / Area / Street"
-              name="locality"
-              fullWidth
-              margin="normal"
-              value={formData.locality}
-              onChange={handleChange}
-            />
-            <TextField
-              label="Pincode"
-              name="pinCode"
-              fullWidth
-              margin="normal"
-              value={formData.pinCode}
-              onChange={handleChange}
-            />
-            <TextField
-              label="District / City"
-              name="districtCity"
-              fullWidth
-              margin="normal"
-              value={formData.districtCity}
-              onChange={handleChange}
-            />
-            <TextField
-              label="State"
-              name="state"
-              fullWidth
-              margin="normal"
-              value={formData.state}
-              onChange={handleChange}
-            />
-            <FormLabel component="legend">Address Type</FormLabel>
-            <RadioGroup
-              aria-label="addressType"
-              name="addressType"
-              value={formData.addressType}
-              onChange={handleChange}
-              row
-            >
-              <FormControlLabel
-                value="Home"
-                control={<Radio />}
-                label="Home"
-              />
-              <FormControlLabel
-                value="Work"
-                control={<Radio />}
-                label="Work"
-              />
-              <FormControlLabel
-                value="Others"
-                control={<Radio />}
-                label="Others"
-              />
-            </RadioGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formData.markAsDefault}
-                  onChange={handleCheckboxChange}
-                  name="markAsDefault"
-                  color="primary"
-                />
-              }
-              label="Mark as default"
-            />
-            <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
-              <Button type="submit" variant="contained" color="primary" style={{ marginRight: "8px" }}>
-                {formData._id ? "Update" : "Save"}
-              </Button>
-              <Button variant="outlined" onClick={handleCloseModal}>
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </Card>
-      </Modal>
-      <IconButton
-        className={classes.addButton}
-        onClick={handleAddAddress}
-        color="primary"
-      >
-        <FontAwesomeIcon icon={faPlus} size="2x" />
-      </IconButton>
-    </div>
+
+
+
+
+        <AddressModal
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}></AddressModal>
+
+
+
+
+        <IconButton
+          className={classes.addButton}
+          onClick={handleAddAddress}
+          color="primary"
+        >
+          <FontAwesomeIcon icon={faPlus} size="2x" />
+        </IconButton>
+      </div >
+    </>
+
   );
 };
 

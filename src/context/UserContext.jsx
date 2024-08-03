@@ -11,7 +11,7 @@ export const UserContextProvider = ({ children }) => {
 
     const [addressData, setAddressData] = useState([]);
 
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
 
 
     const token = localStorage.getItem("token");
@@ -60,8 +60,9 @@ export const UserContextProvider = ({ children }) => {
                 formData,
                 config
             );
-            console.log(response.data);
-            setAddressData([...addressData, response.data]);
+            console.log(response.data.data);
+            setAddressData((prevData) => [...prevData, response.data.data])
+            // setAddressData([...addressData, response.data]);
             // handleCloseModal();
         } catch (err) {
             console.log(err);
@@ -78,7 +79,7 @@ export const UserContextProvider = ({ children }) => {
 
 
     return (
-        <userContext.Provider value={{ addressData, setAddressData, addAddress, modalOpen, setModalOpen, token, id }}>
+        <userContext.Provider value={{ addressData, setAddressData, addAddress, token, id }}>
             {children}
         </userContext.Provider>
     )
