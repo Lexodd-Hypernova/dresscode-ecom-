@@ -1,5 +1,6 @@
 import axios from "axios";
 import { shoppingInfoApis } from "../common";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Counter from "../common/components/Counter";
 
@@ -12,6 +13,7 @@ const Cart = () => {
   const [totalOrder, setTotalOrder] = useState(0); // State for total order value
 
   const { cart, removeFromCart, setCart, loading } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     calculateTotalOrder();
@@ -53,6 +55,14 @@ const Cart = () => {
     } catch (error) {
       console.error("Error updating item quantity:", error);
     }
+  };
+
+  const handleProceedToShipping = () => {
+    navigate("/billing", {
+      state: {
+        totalAmount: totalOrder,
+      },
+    });
   };
 
   return (
@@ -110,7 +120,7 @@ const Cart = () => {
               <div>
                 Order details
                 <div>
-                  Total: {item.quantityRequired * item.productDetails.price}
+                  Total: ₹{item.quantityRequired * item.productDetails.price}
                 </div>
               </div>
             </div>
@@ -120,9 +130,10 @@ const Cart = () => {
           <div className="d-flex justify-content-end">
             <div style={{ textAlign: "right" }}>
               <div style={{ textAlign: "center" }}>
-                Bag total: ${totalOrder}
+                {`Bag total: ₹${totalOrder}`}
               </div>
               <button
+                onClick={handleProceedToShipping}
                 style={{
                   background: "#20248A",
                   color: "white",
