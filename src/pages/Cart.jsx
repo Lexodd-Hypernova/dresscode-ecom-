@@ -60,6 +60,7 @@ const Cart = () => {
   const handleProceedToShipping = () => {
     navigate("/billing", {
       state: {
+        cart: cart,
         totalAmount: totalOrder,
       },
     });

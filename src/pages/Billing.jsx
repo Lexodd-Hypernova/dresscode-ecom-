@@ -48,7 +48,8 @@ const Billing = () => {
   //accessing order total amount received from cart page
   const location = useLocation();
   const { state } = location;
-  const { totalAmount } = state || {};
+  const { totalAmount, cart: orderedItems } = state || {};
+  console.log(orderedItems, "52");
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -320,15 +321,49 @@ const Billing = () => {
             <p className="fs-4 fw-medium">
               Estimated delivery dates for your order
             </p>
-            <div className="d-flex mt-4 align-items-center gap-4">
-              <div style={{ width: "122px" }}>
-                <img src="images/s1.png" className="w-100" alt="" />
-              </div>
-              <div>
-                <div className="fs-4 fw-medium">22 May</div>
-                <div className="fs-4 fw-normal">Brand</div>
-                <div className="fs-4 fw-normal">#1234 slip fit shits</div>
-              </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "16px",
+              }}
+            >
+              {orderedItems.map((product) => (
+                <div
+                  key={product._id}
+                  className="d-flex mt-4 align-items-center gap-4"
+                  style={{
+                    border: "1px solid #ddd",
+                    padding: "16px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <div style={{ width: "180px", flexShrink: 0 }}>
+                    <img
+                      // src={product.productDetails.productType.imageUrl}
+                      src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+                      alt={product.productDetails.productType.type}
+                      width={180}
+                      height={200}
+                      style={{ display: "block", maxWidth: "100%" }}
+                    />
+                  </div>
+                  <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
+                    <div className="fs-4 fw-medium">{product.color.name}</div>
+                    <div className="fs-4 fw-normal">
+                      {product.productDetails.group.name}
+                    </div>
+                    <div className="fs-4 fw-normal">
+                      {product.productDetails.category.name} -{" "}
+                      {product.productDetails.subCategory.name}
+                    </div>
+                    <div className="fs-4 fw-normal">
+                      {`Quantity: ${product.quantityRequired}`}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
