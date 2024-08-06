@@ -6,6 +6,7 @@ import DressCodeApi from '../common';
 import { accountInfoApis } from '../common';
 
 import { useUserContext } from "../context/UserContext";
+import { useCart } from '../context/CartContext';
 
 import AddressModal from "../components/addressModal/AddressModal"
 
@@ -15,12 +16,14 @@ const BASE_URL = 'https://dresscode-test.onrender.com';
 
 const Billing = () => {
 
+    const { cart } = useCart();
+
     const [paymentId, setPaymentId] = useState('');
-    const [group, setGroup] = useState('ELITE');
-    const [productId, setProductId] = useState('6F698F');
-    const [color, setColor] = useState('WHITE');
-    const [size, setSize] = useState('S');
-    const [quantityOrdered, setQuantityOrdered] = useState(1);
+    // const [group, setGroup] = useState('ELITE');
+    // const [productId, setProductId] = useState('6F698F');
+    // const [color, setColor] = useState('WHITE');
+    // const [size, setSize] = useState('S');
+    // const [quantityOrdered, setQuantityOrdered] = useState(1);
     const [price, setPrice] = useState(195);
     const [logoUrl, setLogoUrl] = useState(null);
     const [logoPosition, setLogoPosition] = useState(null);
@@ -55,6 +58,10 @@ const Billing = () => {
         setModalOpen(false);
     };
 
+
+    useEffect(() => {
+        console.log("cart", cart)
+    }, [])
 
 
     const handlePayment = async () => {

@@ -148,6 +148,10 @@ const ProductDetails = () => {
             setAvailableSizes(availableSizeSet);
             console.log("availableSizes Set:", availableSizeSet);
 
+            const defaultSize = availableSizeSet.values().next().value;
+
+            setActiveSize(defaultSize);
+
         }
     }, [data]);
 
@@ -192,7 +196,9 @@ const ProductDetails = () => {
                         <span className='ms-2 fs-5'>10 Ratings</span>
                     </div>
                     <div className='pr_price fs-3 my-2 fw-normal'>
-                        MRP ₹ 195.00
+                        MRP {
+                            price.toLocaleString('en-in',{style:'currency',currency:'INR'})
+                        }
                     </div>
                     <div className='var__Color'>
                         <span className='fs-3 mt-2 fw-normal'>Color</span>
@@ -352,6 +358,7 @@ const ProductDetails = () => {
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#logoModal"
+                                        onClick={handleAddToCart}
                                     >
                                         Buy Now
                                     </button>

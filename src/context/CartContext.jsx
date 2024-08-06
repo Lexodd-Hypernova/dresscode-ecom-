@@ -71,7 +71,7 @@ export const CartProvider = ({ children }) => {
             // newItem = newItem.cartItem;
             console.log(UpdatedItem)
             setCart((prevCart) => [...prevCart, UpdatedItem]);
-            nav("/cart")
+            // nav("/cart")
         } catch (error) {
             console.error('Error adding item to cart:', error);
         } finally {
