@@ -37,7 +37,7 @@ const Cart = () => {
     setTotalOrder(total.toFixed(2)); // Adjust to your formatting needs
   };
 
-  const updateItemQuantity = (newQuantity, cartItemId) => {
+  const updateItemQuantity = async (newQuantity, cartItemId) => {
     try {
       //   const response = await axios.patch(
       //     shoppingInfoApis.handleItemsCount(userId, cartItemId),

@@ -5,6 +5,7 @@ import { shoppingInfoApis } from "..";
 
 const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   const [count, setCount] = useState(initialCount);
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
   const config = {
@@ -30,6 +31,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   };
 
   const updateAPI = async (quantity) => {
+    setLoading(true);
     console.log("hitting in counter");
     try {
       const response = await axios.patch(
@@ -43,6 +45,8 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
       // Call the parent component's callback to update quantity in cartData
     } catch (error) {
       console.error("Error updating item quantity:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +75,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
       <button
         className="counter-btn"
         onClick={decrement}
-        disabled={count === 0}
+        disabled={count === 0 || loading}
       >
         -
       </button>
@@ -81,10 +85,11 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
         className="counter-display"
         onChange={handleChange}
       />
-      <button className="counter-btn" onClick={increment}>
+      <button className="counter-btn" onClick={increment} disabled={loading}>
         +
       </button>
       <span>{price}</span>
+      {loading && <span className="loading-indicator">Updating...</span>}
     </div>
   );
 };
