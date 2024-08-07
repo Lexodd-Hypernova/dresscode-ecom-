@@ -1,0 +1,30 @@
+@media only screen and (max-width: 1600px) {
+    .back_link span {
+        font-size: 22px;
+        line-height: 42px;
+    }
+
+    .back_link img {
+        width: 40px;
+    }
+
+    .hm__Ttl-para p {
+        font-size: 20px;
+        line-height: 42px;
+    }
+
+    .hm_ct-ttl h3 {
+        font-size: 45px;
+    }
+
+    .bt_arw {
+        width: 14px;
+    }
+
+    .bt_arw img {
+        width: 100%;
+    }
+    .srt__Name{
+        font-size: 14px;
+    }
+}

@@ -6,7 +6,7 @@ import "./auth.styles.css";
 import { authUrls } from '../../common';
 // import router from '../../routes/router';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 const Auth = () => {
 
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ const Auth = () => {
 
 
   const [formType, setFormType] = useState('one');
-  const [hideBanner, setHideBanner] = useState(false);
-  const [width, setWidth] = useState(window.innerWidth)
+  // const [hideBanner, setHideBanner] = useState(false);
+  // const [width, setWidth] = useState(window.innerWidth)
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -90,69 +90,39 @@ const Auth = () => {
       }
     }
   };
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-      if (window.innerWidth < 950) {
-        setHideBanner(true);
-      } else {
-        setHideBanner(false);
-      }
-    };
 
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
 
   const renderForms = () => {
     switch (formType) {
       case 'one':
         return (
-          <div style={{
-            width: `${hideBanner ? "70%" : "50%"}`,
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-            <div style={{
-              width: "70%",
-              boxShadow: "0px 19.335px 40.705px 0px",
-              borderRadius: "2%",
-              height: "80%",
-              marginLeft: "30%",
-              padding: "0px 50px 0px 50px",
-            }}>
-              <img src={Logo} alt="DressCode logo" style={{ width: "150.1px", height: "80px" }} />
+          <div className='auth-container'>
+            <div className='auth-inner'>
+              <Link to="/" className='auth-logo'>
+                <img src={Logo} alt="DressCode logo" className='w-100' />
+              </Link>
+
               <p className="welcome-back">Welcome back !!!</p>
               <h3 className="sign-in">Sign in</h3>
               <div>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label form-labels">Email address</label>
-                    <input type="email" className="form-control" id="email" value={formData.email} onChange={handleInputChange} aria-describedby="emailHelp" />
+                    <input type="email" className="form-control auth-input" id="email" value={formData.email} onChange={handleInputChange} aria-describedby="emailHelp" />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="password" className="form-label form-labels">Password</label>
-                    <input type="password" className="form-control" id="password" value={formData.password} onChange={handleInputChange} />
+                    <input type="password" className="form-control auth-input" id="password" value={formData.password} onChange={handleInputChange} />
                   </div>
-                  <div className="button">
-                    <button type="submit" className="btn" style={{
-                      background: "#F47458",
-                      color: "white",
-                      borderRadius: "23.405px",
-                      width: "152px",
-                      height: "45px",
+                  <div className="auth-btn">
+                    <button type="submit" className="" style={{
+
                     }}>
                       {loading ? <div className="spinner-border " style={{ color: 'oragne' }} role="status">
                         <span className="sr-only"></span>
-                      </div> : "Submit"}
+                      </div> : "Sign in"}
                     </button>
                   </div>
                   <div className="under-label">
@@ -165,76 +135,59 @@ const Auth = () => {
         );
       case 'two':
         return (
-          <div style={{
-            width: "50%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "white",
-          }}>
-            <div style={{
-              width: "70%",
-              boxShadow: "0px 19.335px 40.705px 0px rgba(0, 0, 0, 0.05) inset",
-              borderRadius: "2%",
-              height: "95%",
-              marginLeft: "30%",
-              paddingTop: "50px",
-              paddingBottom: "100px",
-              display: "flex",
-              flexDirection: "column",
-            }}>
+          <div className='auth-container'>
+            <div className='auth-inner'>
               <div className="sign-up-header">
                 Welcome to Dresscode
               </div>
-              <div style={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
-              }}>
-                <div className="mb-3">
+              <div>
+                <div className="">
                   <label htmlFor="firstName" className="form-label form-labels">First Name</label>
-                  <input value={formData.firstName} onChange={handleInputChange} type="text" className="form-control form-control-sm" id="firstName" aria-describedby="firstNameHelp" style={{ height: "20px", width: "350px" }} />
+                  <input value={formData.firstName} onChange={handleInputChange} type="text" className="auth-input form-control form-control-sm" id="firstName" aria-describedby="firstNameHelp" />
                 </div>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="lastName" className="form-label form-labels">Last Name</label>
-                  <input value={formData.lastName} onChange={handleInputChange} type="text" className="form-control form-control-sm" id="lastName" aria-describedby="lastNameHelp" style={{ height: "20px", width: "350px" }} />
+                  <input value={formData.lastName} onChange={handleInputChange} type="text" className="auth-input form-control form-control-sm" id="lastName" aria-describedby="lastNameHelp" />
                 </div>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="email" className="form-label form-labels">Email address</label>
-                  <input value={formData.email} onChange={handleInputChange} type="email" className="form-control form-control-sm" id="email" aria-describedby="emailHelp" style={{ height: "20px", width: "350px" }} />
+                  <input value={formData.email} onChange={handleInputChange} type="email" className="auth-input form-control form-control-sm" id="email" aria-describedby="emailHelp" />
                 </div>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="gender" className="form-label form-labels">Gender</label>
-                  <select value={formData.gender} onChange={handleInputChange} className="form-control form-control-sm" id="gender" style={{ height: "20px", width: "350px" }}>
+                  <select value={formData.gender} onChange={handleInputChange} className="form-control form-control-sm" id="gender" >
                     <option value="">Select Gender</option>
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
                     <option value="OTHER">Other</option>
                   </select>
                 </div>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="phoneNumber" className="form-label form-labels">Phone Number</label>
-                  <input value={formData.phoneNumber} onChange={handleInputChange} type="tel" className="form-control form-control-sm" id="phoneNumber" aria-describedby="phoneNumberHelp" style={{ height: "20px", width: "350px" }} />
+                  <input value={formData.phoneNumber} onChange={handleInputChange} type="tel" className="auth-input form-control form-control-sm" id="phoneNumber" aria-describedby="phoneNumberHelp" />
                 </div>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="password" className="form-label form-labels">Password</label>
-                  <input value={formData.password} onChange={handleInputChange} type="password" className="form-control form-control-sm" id="password" aria-describedby="passwordHelp" style={{ height: "20px", width: "350px" }} />
+                  <input value={formData.password} onChange={handleInputChange} type="password" className="auth-input form-control form-control-sm" id="password" aria-describedby="passwordHelp" />
                 </div>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="confirmPassword" className="form-label form-labels">Confirm Password</label>
-                  <input value={formData.confirmPassword} onChange={handleInputChange} type="password" className="form-control form-control-sm" id="confirmPassword" aria-describedby="confirmPasswordHelp" style={{ height: "20px", width: "350px" }} />
+                  <input value={formData.confirmPassword} onChange={handleInputChange} type="password" className="auth-input form-control form-control-sm" id="confirmPassword" aria-describedby="confirmPasswordHelp" />
                 </div>
-                <button type="submit" className="btn" style={{
-                  background: "#F47458",
-                  color: "white",
-                }}
-                  onClick={handleSubmit}>
-                  Sign up
-                </button>
+                <div className='auth-btn'>
+                  <button type="submit" className="btn" style={{
+                    background: "#F47458",
+                    color: "white",
+                  }}
+                    onClick={handleSubmit}>
+                    Sign up
+                  </button>
+                </div>
+
               </div>
+            </div>
+            <div className='auth-back' onClick={() => setFormType('one')}>
+              <img src="/images/auth/back-arrow.svg" alt="" />
             </div>
           </div>
         );
@@ -244,29 +197,13 @@ const Auth = () => {
   };
 
   return (
-    <div style={{
-      display: `${hideBanner ? "block" : "flex"}`,
-      justifyContent: "space-between",
-      alignItems: "center",
-      height: "100vh",
-      width: "100%",
-    }}>
+    <div className='auth-screen'>
       {renderForms()}
-      <div></div>
-      <div style={{
-        width: `${hideBanner ? "100%" : "30%"}`,
-        background: "#FFEDE1",
-        position: "relative",
-        height: "100%",
-        display: `${hideBanner ? "none" : "block"}`,
-      }}>
-        <img src="/images/auth/home-page-men.png" alt="" style={{
-          width: "70%",
-          height: "75%",
-          position: "absolute",
-          bottom: "50px",
-          right: "50%",
-        }} />
+
+      <div className='auth-banner'>
+        <div className='auth-banner-img'>
+          <img src="/images/auth/home-page-men.png" alt="" />
+        </div>
       </div>
     </div>
   );
