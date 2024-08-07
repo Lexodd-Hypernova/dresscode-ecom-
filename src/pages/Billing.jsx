@@ -60,7 +60,7 @@ const Billing = () => {
 
   const handlePayment = async () => {
     try {
-      const amountInPaise = 108; // Example amount in paise (i.e., 1000 paise = 10 INR)
+      const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
       if (amountInPaise < 100) {
         alert("Amount should be at least 100 paise.");
@@ -70,7 +70,7 @@ const Billing = () => {
       // Define the headers including the Authorization token
       const headers = {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       };
 
       console.log("Creating payment order with amount:", amountInPaise);
@@ -94,7 +94,7 @@ const Billing = () => {
         key: "rzp_test_xMaFmOwuo05QVV", // Replace with your actual Razorpay key
         amount: orderData.order.amount.toString(),
         currency: "INR",
-        name: "Your App Name",
+        name: "Dress Code ",
         description: "Test Transaction",
         order_id: orderData.order.id, // This is the order ID created in the previous step
         handler: async (response) => {
@@ -109,7 +109,7 @@ const Billing = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(verifyPayload),
           };
@@ -128,7 +128,7 @@ const Billing = () => {
             // Step 4: Create the order on your server
             const myHeaders = {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             };
 
             const raw = JSON.stringify({
