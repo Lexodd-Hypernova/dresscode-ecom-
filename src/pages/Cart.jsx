@@ -10,14 +10,21 @@ const Cart = () => {
   const token = localStorage.getItem("token");
   const [cartData, setCartData] = useState([]);
   const [cartCount, setCardCount] = useState(0);
-  const [totalOrder, setTotalOrder] = useState(0); // State for total order value
+  const [productTotal, setProductTotal] = useState({});
+  const [bagTotal, setBagTotal] = useState(0); // State for total order value
 
   const { cart, removeFromCart, setCart, loading } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
-    calculateTotalOrder();
+    calculateBagTotal();
   }, [cart]);
+
+  useEffect(() => {
+    if (!loading) {
+      calculateInitialProductTotals();
+    }
+  }, [loading]);
 
   const config = {
     headers: {
@@ -27,14 +34,31 @@ const Cart = () => {
 
   const userId = localStorage.getItem("id");
 
-  const calculateTotalOrder = () => {
+  //calculate total amount of each item on loading cart page initially.
+  const calculateInitialProductTotals = () => {
+    cart.forEach((item) => {
+      calculateProductTotal(item);
+    });
+  };
+
+  //total calculation for each item on change in quantity
+  const calculateProductTotal = (item) => {
+    const total = item.quantityRequired * item.productDetails.price;
+    setProductTotal((prevTotals) => ({
+      ...prevTotals,
+      [item._id]: total,
+    }));
+  };
+
+  //total calculation of all item i.e. bag total
+  const calculateBagTotal = () => {
     let total = 0;
     cart.forEach((item) => {
       if (item.productDetails.price !== undefined) {
         total += item.quantityRequired * item.productDetails.price; // Assuming item.count is the quantity
       }
     });
-    setTotalOrder(total.toFixed(2)); // Adjust to your formatting needs
+    setBagTotal(total.toFixed(2)); // Adjust to your formatting needs
   };
 
   const updateItemQuantity = async (newQuantity, cartItemId) => {
@@ -52,6 +76,9 @@ const Cart = () => {
           : item
       );
       setCart(updatedCart);
+
+      const updatedItem = updatedCart.find((item) => item._id === cartItemId);
+      calculateProductTotal(updatedItem);
     } catch (error) {
       console.error("Error updating item quantity:", error);
     }
@@ -76,7 +103,7 @@ const Cart = () => {
         <div>
           {cart.map((item) => (
             <div
-              key={item.id}
+              key={item._id}
               className="d-flex justify-content-around align-items-center"
             >
               {/* img */}
@@ -120,9 +147,7 @@ const Cart = () => {
               {/* last */}
               <div>
                 Order details
-                <div>
-                  Total: ₹{item.quantityRequired * item.productDetails.price}
-                </div>
+                <div>Total: ₹{productTotal[item._id]}</div>
               </div>
             </div>
           ))}
@@ -131,7 +156,7 @@ const Cart = () => {
           <div className="d-flex justify-content-end">
             <div style={{ textAlign: "right" }}>
               <div style={{ textAlign: "center" }}>
-                {`Bag total: ₹${totalOrder}`}
+                {`Bag total: ₹${bagTotal}`}
               </div>
               <button
                 onClick={handleProceedToShipping}

@@ -16,10 +16,6 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
 
   const userId = localStorage.getItem("id");
 
-  useEffect(() => {
-    setCount(initialCount);
-  }, [initialCount]);
-
   const debounce = (func, delay) => {
     let timer;
     return (...args) => {
