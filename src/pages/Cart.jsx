@@ -88,7 +88,7 @@ const Cart = () => {
     navigate("/billing", {
       state: {
         cart: cart,
-        totalAmount: totalOrder,
+        totalAmount: bagTotal,
       },
     });
   };
