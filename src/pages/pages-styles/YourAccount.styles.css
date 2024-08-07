@@ -1,7 +1,11 @@
+.your-account-screen {
+    padding: 0 120px;
+}
+
 .info-card {
     border-radius: 22.388px;
     border: 0.509px solid #817979;
-    width: 408.285px;
+    /* width: 408.285px; */
     height: 209.632px;
     flex-shrink: 0;
     display: flex;
@@ -11,15 +15,39 @@
     padding: 0px;
     cursor: pointer;
 }
-.container{
-    background-color: white;
-}
-.your-account{
+
+.your-account {
     color: #000;
-font-family: Satoshi;
-font-size: 32.564px;
-font-style: normal;
-font-weight: lighter;
-line-height: normal;
-text-transform: capitalize;
+    font-family: 'Poppins';
+    font-size: 32px;
+    font-weight: lighter;
+    line-height: 43px;
+    text-transform: capitalize;
+    margin-top: 35px;
+    margin-bottom: 60px;
+    display: inline-block;
+}
+
+
+@media only screen and (max-width: 1600px) {
+    .your-account-screen {
+        padding: 0 60px;
+    }
+
+    .acc-icons {
+        width: 60px;
+    }
+
+    .acc-icons img {
+        width: 100%;
+    }
+
+    .info-card {
+        height: 180px;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .info-card h4 {}
+
 }
