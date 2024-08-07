@@ -207,3 +207,25 @@
         border-radius: 20px;
     }
 }
+
+@media only screen and (max-width: 991px) {
+    .auth-container {
+        width: 100%;
+        display: block;
+        padding: 10px;
+        margin-top: 40px;
+    }
+
+    .auth-inner {
+        width: 100%;
+    }
+
+    .auth-banner {
+        display: none;
+    }
+
+    .auth-back {
+        top: 2%;
+        left: 20px;
+    }
+}

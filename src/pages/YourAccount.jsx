@@ -45,6 +45,16 @@ const YourAccount = () => {
   const goToOrders = () => {
     history("/your-orders")
   }
+
+  const handleLogOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('userName');
+    history('/auth')
+
+  }
+
+
   return (
 
 
@@ -97,6 +107,9 @@ const YourAccount = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="log-out">
+          <button type="btn" className="btn btn-danger fs-3" onClick={handleLogOut}>Log out</button>
         </div>
         {/* showModal={showModal} setShowModal={setShowModal} */}
         <EditPersonalinfo userData={userData}// Set user data in state
