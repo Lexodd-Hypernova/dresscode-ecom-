@@ -105,3 +105,13 @@
         width: 160px;
     }
 }
+
+@media only screen and (max-width: 500px) {
+    .logo {
+        width: 100px;
+    }
+
+    .nav-sec {
+        padding: 0px 20px;
+    }
+}

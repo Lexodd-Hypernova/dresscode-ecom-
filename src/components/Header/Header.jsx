@@ -34,7 +34,7 @@ const Header = () => {
             </div>
 
             <div className="nv__Right">
-              <div className="nv_Search">
+              {/* <div className="nv_Search">
                 <form className="d-flex" role="search">
                   <input
                     className="form-control me-2"
@@ -46,7 +46,7 @@ const Header = () => {
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </button>
                 </form>
-              </div>
+              </div> */}
               {/* onClick={goToWishlist} */}
               <div className="nav__Ht" onClick={goToWishlist}>
                 <i className="fa-regular fa-heart"><span className="m-2">{wishListCount}</span></i>
@@ -59,7 +59,7 @@ const Header = () => {
                 </div>
               </Link>
               <Link to="/account-info" className="ham-menu">
-                <i className="fa-solid fa-bars"></i>
+                <i className="fa-solid fa-user"></i>
               </Link>
             </div>
           </div>

@@ -373,3 +373,131 @@ footer {
         top: 50px;
     }
 }
+
+
+@media only screen and (max-width: 991px) {
+    .thank {
+        font-size: 50px;
+        line-height: 50px;
+        letter-spacing: 0.6px;
+    }
+
+    .visit {
+        font-size: 30px;
+        line-height: 30px;
+        letter-spacing: 0.3px;
+    }
+
+    .ft_str {
+        width: 80px;
+    }
+
+    .ft-card-ttl {
+        font-size: 13px;
+        line-height: 30px;
+    }
+
+    .ft-card-loc address {
+        font-size: 11px;
+        line-height: 18px;
+        letter-spacing: 0px;
+    }
+
+    .ft-cn {
+        font-size: 11px;
+        line-height: 18px;
+        letter-spacing: 0px;
+    }
+
+    .ft_dir {
+        font-size: 11px;
+        line-height: 20px;
+        padding: 5px 16px;
+    }
+
+    .ft-card-links a {
+        font-size: 11px;
+        line-height: 18px;
+        letter-spacing: 0px;
+    }
+
+    .social-links a {
+        font-size: 11px;
+        line-height: 19px;
+        letter-spacing: 0px;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .ft-icn {
+        width: 30px;
+    }
+
+    .ft-cs h5 {
+        font-size: 8px;
+        line-height: 23px;
+    }
+
+    .ft__Row2 {
+        flex-direction: column;
+    }
+
+    .ft_thk {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .ft_card {
+        width: 100%;
+    }
+
+    .ft__Row2 {
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .ft-card-loc {
+        border-right: none;
+    }
+
+    .ft-card-links {
+        border-right: none;
+    }
+
+    .ft-card-row:nth-of-type(1) {
+        border-bottom: none;
+    }
+
+    .ft_card {
+        border-left: none;
+    }
+
+    .ft_Ttl {
+        font-size: 45px;
+        line-height: 1;
+        top: 25px;
+    }
+
+    .ft__Row3 {
+        height: 55px;
+    }
+
+    .ft_str {
+        width: 60px;
+        bottom: 0;
+        right: 85px;
+    }
+
+    .thank {
+        font-size: 40px;
+        line-height: 40px;
+        letter-spacing: 0.6px;
+    }
+
+    .visit {
+        font-size: 20px;
+        line-height: 20px;
+        letter-spacing: 0.3px;
+    }
+}
