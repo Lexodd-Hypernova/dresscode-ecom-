@@ -1,11 +1,11 @@
-
-import { useState, useCallback, useEffect } from 'react';
-import './counter.styles.css';
-import axios from 'axios';
-import { shoppingInfoApis } from '..';
+import { useState, useCallback, useEffect } from "react";
+import "./counter.styles.css";
+import axios from "axios";
+import { shoppingInfoApis } from "..";
 
 const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   const [count, setCount] = useState(initialCount);
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
   const config = {
@@ -15,10 +15,6 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   };
 
   const userId = localStorage.getItem("id");
-
-  useEffect(() => {
-    setCount(initialCount);
-  }, [initialCount]);
 
   const debounce = (func, delay) => {
     let timer;
@@ -31,7 +27,8 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   };
 
   const updateAPI = async (quantity) => {
-    console.log("hitting in counter")
+    setLoading(true);
+    console.log("hitting in counter");
     try {
       const response = await axios.patch(
         shoppingInfoApis.handleItemsCount(userId, cartItemId),
@@ -43,7 +40,9 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
       console.log(response.data);
       // Call the parent component's callback to update quantity in cartData
     } catch (error) {
-      console.error('Error updating item quantity:', error);
+      console.error("Error updating item quantity:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,15 +68,24 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
 
   return (
     <div className="counter">
-      <button className="counter-btn" onClick={decrement} disabled={count === 0}>-</button>
+      <button
+        className="counter-btn"
+        onClick={decrement}
+        disabled={count === 0 || loading}
+      >
+        -
+      </button>
       <input
         type="number"
         value={count}
-        className='counter-display'
+        className="counter-display"
         onChange={handleChange}
       />
-      <button className="counter-btn" onClick={increment}>+</button>
+      <button className="counter-btn" onClick={increment} disabled={loading}>
+        +
+      </button>
       <span>{price}</span>
+      {loading && <span className="loading-indicator">Updating...</span>}
     </div>
   );
 };

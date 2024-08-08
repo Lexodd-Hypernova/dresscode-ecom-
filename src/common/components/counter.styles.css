@@ -1,45 +1,46 @@
 .counter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px;
-  }
-  
-  .counter-btn {
-    background-color: #686c68; 
-    border: none;
-    color: rgb(15, 14, 14);
-    /* padding: 10px 24px; */
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
 
-  }
-  
-  .counter-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .counter-btn:hover:nth-of-type(1) {
-    background-color: red;
-  }
-  
-  
-  .counter-display {
-    font-size: 15px;
-    margin: 0 15px;
-    min-width: 40px;
-    text-align: center;
-    display: inline-block;
-    font-weight: bold;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-  }
-  
+.counter-btn {
+  background-color: #686c68;
+  border: none;
+  color: rgb(15, 14, 14);
+  /* padding: 10px 24px; */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.counter-btn:hover {
+  background-color: #45a049;
+}
+
+.counter-btn:hover:nth-of-type(1) {
+  background-color: red;
+}
+
+.counter-display {
+  font-size: 15px;
+  margin: 0 15px;
+  min-width: 40px;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+.loading-indicator {
+  margin-left: 10px;
+  color: #999;
+}
