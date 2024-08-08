@@ -10,6 +10,11 @@ const LogoUploader = () => {
     // const [areaLabel, setAreaLabel] = useState("");
     const navigate = useNavigate();
 
+
+    const handleSkip = () => {
+        navigate("/billing")
+    }
+
     const handleDrop = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -65,7 +70,7 @@ const LogoUploader = () => {
     return (
 
         <>
-            <div className="modal fade" id="logoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="logoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -112,7 +117,7 @@ const LogoUploader = () => {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Skip</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleSkip}>Skip</button>
                             <button type="button" className="btn btn-primary" data-bs-dismiss={`${imageUrl ? "modal" : ""}`} onClick={handleSave}>Save</button>
                         </div>
                     </div>

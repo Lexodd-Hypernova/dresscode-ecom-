@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
   },
   addButton: {
-    position: "fixed",
-    bottom: theme.spacing(2),
+    position: "absolute",
+    // bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
 }));
@@ -277,7 +277,7 @@ const YourAddress = () => {
 
     <>
 
-      <div style={{ background: "#EFF4FD", height: "100vh" }}>
+      <div className="address-screen">
         <div>
           <div
             style={{
@@ -296,11 +296,11 @@ const YourAddress = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-4 col-md-6 mb-4">
-              <div className="address-card rounded" style={{ height: '85%', }}>
+              <div className="address-card rounded">
                 <IconButton
                   className="add-address-icon"
                   onClick={handleAddAddress}
-                  style={{ marginTop: '70%' }}
+                  
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   <h4

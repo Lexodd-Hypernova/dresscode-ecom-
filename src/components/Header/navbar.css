@@ -29,8 +29,8 @@
 }
 
 .logo {
+    display: inline-block;
     width: 260px;
-    height: 60px;
 }
 
 .logo img {
@@ -68,4 +68,50 @@
     font-size: 20px;
     color: #000;
 }
-  
+
+
+@media only screen and (max-width: 1600px) {
+    .nav-sec {
+        padding: 10px 40px;
+    }
+
+    .logo {
+        width: 180px;
+    }
+
+    .nv_Search i {
+        font-size: 14px;
+    }
+
+    .nav__Ht i {
+        font-size: 14px;
+    }
+
+    .nav__Cart i {
+        font-size: 14px;
+    }
+
+    .cart-braces span {
+        font-size: 14px;
+    }
+
+    .ham-menu i {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .logo {
+        width: 160px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .logo {
+        width: 100px;
+    }
+
+    .nav-sec {
+        padding: 0px 20px;
+    }
+}

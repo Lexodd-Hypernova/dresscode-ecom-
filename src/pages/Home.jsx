@@ -7,8 +7,10 @@ function Home() {
   return (
     <>
       {/* <TextMove title="All Uniforms"/> */}
+
       <BannerGroup />
       <Cards />
+
     </>
   );
 }
