@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import DressCodeApi from '../common';
+import { useProductContext } from '../context/ProductContext';
 
 const LogoUploader = () => {
 
     const [imageUrl, setImageUrl] = useState('');
     const [uploading, setUploading] = useState(false);
     const [logoPlacement, setLogoPlacement] = useState('');
+
+
+    const { product } = useProductContext();
+
+
     // const [areaLabel, setAreaLabel] = useState("");
     const navigate = useNavigate();
 
 
     const handleSkip = () => {
-        navigate("/billing")
+        navigate("/billing", {
+            state: {
+                product: product,
+                totalAmount: product.totalPrice
+            },
+        })
+
     }
 
     const handleDrop = (event) => {
@@ -61,8 +73,12 @@ const LogoUploader = () => {
     const handleSave = () => {
         // e.preventDefault();
         if (imageUrl) {
-            // setAreaLabel("Close")
-            navigate("/billing");
+            navigate("/billing", {
+                state: {
+                    product: product,
+                    totalAmount: product.totalPrice
+                },
+            })
         }
 
     }

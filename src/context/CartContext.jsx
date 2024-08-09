@@ -43,6 +43,10 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, []); // Add dependencies to useEffect
 
+
+
+
+
   const addToCart = async (item) => {
     setLoading(true);
     try {

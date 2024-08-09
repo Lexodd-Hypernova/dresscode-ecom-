@@ -48,7 +48,7 @@ const Billing = () => {
   //accessing order total amount received from cart page
   const location = useLocation();
   const { state } = location;
-  const { totalAmount, cart: orderedItems } = state || {};
+  const { totalAmount, cart: orderedItems, product } = state || {};
   console.log(orderedItems, "52");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -57,6 +57,12 @@ const Billing = () => {
     addAddress(formData);
     setModalOpen(false);
   };
+
+
+  useEffect(() => {
+    console.log("product", product)
+  }, [])
+
 
   const handlePayment = async () => {
     try {
@@ -126,46 +132,89 @@ const Billing = () => {
 
           if (verifyData.success) {
             // Step 4: Create the order on your server
-            const myHeaders = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+            // const myHeaders = {
+            //   "Content-Type": "application/json",
+            //   Authorization: `Bearer ${token}`,
+            // };
+
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             };
 
-            const raw = JSON.stringify({
-              paymentId: response.paymentId,
-              group: "ELITE",
-              productId: "6F698F",
-              color: "WHITE",
-              size: "S",
-              quantityOrdered: 1,
-              price: 195,
-              logoUrl: null,
-              logoPosition: null,
-              deliveryCharges: 20,
-              discountPercentage: 10,
-              TotalPriceAfterDiscount: 108,
-            });
 
-            const requestOptions = {
-              method: "POST",
-              headers: myHeaders,
-              body: raw,
-            };
+            const raw = JSON.stringify(
+              {
+                paymentId: response.razorpay_payment_id,
+
+                items: orderedItems.map((item) => ({
+                  group: item.group,
+                  productId: item.productId,
+                  color: item.color.name,
+                  size: item.size,
+                  quantityOrdered: item.quantityRequired,
+                  price: item.productDetails.price,
+                  logoUrl: item.logoUrl,
+                  logoPosition: item.logoPosition,
+                  deliveryCharges: deliveryCharges,
+                  discountPercentage: discountPercentage,
+                  totalPriceAfterDiscount: TotalPriceAfterDiscount,
+                })),
+              }
+            )
+
+
+
+            // const raw = JSON.stringify({
+            //   paymentId: response.paymentId,
+            //   group: "ELITE",
+            //   productId: "6F698F",
+            //   color: "WHITE",
+            //   size: "S",
+            //   quantityOrdered: 1,
+            //   price: 195,
+            //   logoUrl: null,
+            //   logoPosition: null,
+            //   deliveryCharges: 20,
+            //   discountPercentage: 10,
+            //   TotalPriceAfterDiscount: 108,
+            // });
+
+            // const requestOptions = {
+            //   method: "POST",
+            //   headers: myHeaders,
+            //   body: raw,
+            // };
 
             console.log("Creating order with data:", raw);
 
-            const finalResponse = await fetch(
+            // const finalResponse = await fetch(
+            //   `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+            //   requestOptions
+            // );
+
+
+            const finalResponse = await axios.post(
               `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-              requestOptions
+              raw, config
             );
-            if (!finalResponse.ok) {
-              throw new Error("Network response was not ok");
-            } else {
-              const result = await finalResponse.json();
-              console.log("Order creation response:", result);
-              alert("Order created successfully!");
-              navigate("/success");
-            }
+
+            const result = await finalResponse.data;
+
+            console.log(result)
+
+
+
+
+            // if (!finalResponse.ok) {
+            //   throw new Error("Network response was not ok");
+            // } else {
+            //   const result = await finalResponse.json();
+            //   console.log("Order creation response:", result);
+            //   alert("Order created successfully!");
+            //   navigate("/success");
+            // }
           } else {
             alert("Payment verification failed!");
           }
@@ -215,6 +264,81 @@ const Billing = () => {
     setTotalPriceAfterDiscount(totalPrice);
   };
 
+
+  const showCartItems = (orderedItems) => {
+    if (orderedItems) {
+      return orderedItems.map((product) => (
+        <div
+          key={product._id}
+          className="d-flex mt-4 align-items-center gap-4"
+          style={{
+            border: "1px solid #ddd",
+            padding: "16px",
+            borderRadius: "8px",
+          }}
+        >
+          <div style={{ width: "180px", flexShrink: 0 }}>
+            <img
+              // src={product.productDetails.productType.imageUrl}
+              src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+              alt={product.productDetails.productType.type}
+              width={180}
+              height={200}
+              style={{ display: "block", maxWidth: "100%" }}
+            />
+          </div>
+          <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
+            <div className="fs-4 fw-medium">{product.color.name}</div>
+            <div className="fs-4 fw-normal">
+              {product.productDetails.group.name}
+            </div>
+            <div className="fs-4 fw-normal">
+              {product.productDetails.category.name} -{" "}
+              {product.productDetails.subCategory.name}
+            </div>
+            <div className="fs-4 fw-normal">
+              {`Quantity: ${product.quantityRequired}`}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  }
+
+
+  const showBuyNowProduct = (product) => {
+    if (product) {
+      return <div
+        className="d-flex mt-4 align-items-center gap-4"
+        style={{
+          border: "1px solid #ddd",
+          padding: "16px",
+          borderRadius: "8px",
+        }}
+      >
+        <div style={{ width: "180px", flexShrink: 0 }}>
+          <img
+            // src={product.productDetails.productType.imageUrl}
+            src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+            alt={product.group}
+            width={180}
+            height={200}
+            style={{ display: "block", maxWidth: "100%" }}
+          />
+        </div>
+        <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
+          <div className="fs-4 fw-medium">{product.color}</div>
+          <div className="fs-4 fw-normal">
+            {product.group}
+          </div>
+          <div className="fs-4 fw-normal">
+            {`Quantity: ${product.quantityRequired}`}
+          </div>
+        </div>
+      </div>
+    }
+  }
+
   return (
     <>
       <section className="billing mt-5 ms-5">
@@ -227,12 +351,14 @@ const Billing = () => {
                   We will deliver your order to this address
                 </p>
               </div>
+
+              {/* show address data */}
+
               {addressData.map((address) => (
                 <div
                   key={address._id}
-                  className={`mb-4 d-flex align-items-center gap-5 ${
-                    address._id === activeAddressId ? "active" : ""
-                  }`}
+                  className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? "active" : ""
+                    }`}
                   onClick={() => handleAddressClick(address._id)}
                   style={{ cursor: "pointer" }}
                 >
@@ -264,6 +390,8 @@ const Billing = () => {
                 </div>
               ))}
 
+              {/* add address button */}
+
               <div className="mt-5">
                 <button
                   type="button"
@@ -277,6 +405,8 @@ const Billing = () => {
 
               <hr className="w-100 mt-4" />
             </div>
+
+            {/* --------------Order details----------- */}
             <div className="col-lg-6">
               <div className="order__bill">
                 <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
@@ -306,9 +436,8 @@ const Billing = () => {
                     backgroundColor: "#20248A",
                     width: "100%",
                   }}
-                  className={`btn  ${
-                    activeAddressId === null ? "disabled" : ""
-                  } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
+                  className={`btn  ${activeAddressId === null ? "disabled" : ""
+                    } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
                   onClick={handlePayment}
                 >
                   Proceed to payment
@@ -322,6 +451,8 @@ const Billing = () => {
               Estimated delivery dates for your order
             </p>
 
+            {/* --------------order items------------ */}
+
             <div
               style={{
                 display: "grid",
@@ -329,42 +460,15 @@ const Billing = () => {
                 gap: "16px",
               }}
             >
-              {orderedItems.map((product) => (
-                <div
-                  key={product._id}
-                  className="d-flex mt-4 align-items-center gap-4"
-                  style={{
-                    border: "1px solid #ddd",
-                    padding: "16px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <div style={{ width: "180px", flexShrink: 0 }}>
-                    <img
-                      // src={product.productDetails.productType.imageUrl}
-                      src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-                      alt={product.productDetails.productType.type}
-                      width={180}
-                      height={200}
-                      style={{ display: "block", maxWidth: "100%" }}
-                    />
-                  </div>
-                  <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
-                    <div className="fs-4 fw-medium">{product.color.name}</div>
-                    <div className="fs-4 fw-normal">
-                      {product.productDetails.group.name}
-                    </div>
-                    <div className="fs-4 fw-normal">
-                      {product.productDetails.category.name} -{" "}
-                      {product.productDetails.subCategory.name}
-                    </div>
-                    <div className="fs-4 fw-normal">
-                      {`Quantity: ${product.quantityRequired}`}
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {
+                showBuyNowProduct(product)
+              }
+
+              {
+                showCartItems(orderedItems)
+              }
             </div>
+
           </div>
         </div>
         <div className=""></div>

@@ -7,6 +7,7 @@ import ProductSlider from "../components/ProductSlider";
 import LogoUploader from "../components/LogoUploader";
 import { useCart } from "../context/CartContext";
 import { useWhishList } from "../context/WishListContext";
+import { useProductContext } from "../context/ProductContext";
 
 const normalizeName = (name) => {
   if (typeof name === "string") {
@@ -31,9 +32,18 @@ const ProductDetails = () => {
   const [price, setPrice] = useState("");
   const [count, setCount] = useState(1); // Initial value set to 1
 
+  const [totalPrice, setTotalPrice] = useState();
+
+
+  const [type, setType] = useState();
+
+
   const { addToCart, token } = useCart();
 
   const { addToWishList } = useWhishList();
+
+  const { addProduct } = useProductContext();
+
 
   const [isLoggedIn, setIsLoggedIn] = useState(token);
 
@@ -69,13 +79,23 @@ const ProductDetails = () => {
   };
 
   const increment = () => {
-    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => {
+      const newQuantity = prevCount + 1;
+      updateTotalPrice(newQuantity);
+      return newQuantity;
+    });
   };
 
   const decrement = () => {
-    setCount((prevCount) => Math.max(1, prevCount - 1));
+    setCount((prevCount) => {
+      const newCount = Math.max(1, prevCount - 1);
+      updateTotalPrice(newCount);
+      return newCount;
+    });
   };
 
+
+  // Handle change in input field for quantity
   const handleChange = (e) => {
     const value = e.target.value;
 
@@ -91,6 +111,7 @@ const ProductDetails = () => {
     // If the parsed value is a valid number and not less than 1, update the count
     if (!isNaN(parsedValue) && parsedValue >= 1) {
       setCount(parsedValue);
+      updateTotalPrice(parsedValue);
     }
   };
 
@@ -103,7 +124,17 @@ const ProductDetails = () => {
 
   const reset = () => {
     setCount(0);
+    updateTotalPrice(1);
   };
+
+
+  // Update the total price based on the count
+  const updateTotalPrice = (newCount) => {
+    setTotalPrice(newCount * price);
+  };
+
+
+
 
   useEffect(() => {
     console.log("productId", productId);
@@ -111,7 +142,7 @@ const ProductDetails = () => {
       try {
         const response = await fetch(
           DressCodeApi.getProductDetailsWithSpecificVariant.url +
-            `?groupName=${groupName}&productId=${productId}&color=${color}`
+          `?groupName=${groupName}&productId=${productId}&color=${color}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -121,6 +152,7 @@ const ProductDetails = () => {
         setData(result);
         setActiveColor(color);
         setPrice(result.productDetails.price);
+        setTotalPrice(result.productDetails.price)
         // setActiveSize(result.productDetails.variants[0].variantSizes[0].size)
         setLoading(false);
 
@@ -177,6 +209,24 @@ const ProductDetails = () => {
     nav(`/auth?redirect=${currentPath}`);
   };
 
+
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+    const itemToAdd = {
+      group: groupName,
+      productId: productId,
+      color: activeColor,
+      size: activeSize,
+      price: price,
+      totalPrice: totalPrice,
+      quantityRequired: count, // Example: default quantity is 1, adjust as needed
+    };
+    addProduct(itemToAdd)
+    // sessionStorage.setItem("itemToAdd", JSON.stringify(itemToAdd))
+    // setType('quote');
+  }
+
+
   return (
     <>
       <section className="product__Details">
@@ -193,7 +243,7 @@ const ProductDetails = () => {
             </button>
             <span className="ms-2 fs-5">10 Ratings</span>
           </div>
-          <div className="pr_price fs-3 my-2 fw-normal">MRP ₹ 195.00</div>
+          <div className="pr_price fs-3 my-2 fw-normal">{totalPrice}</div>
           <div className="var__Color">
             <span className="fs-3 mt-2 fw-normal">Color</span>
             {loading ? (
@@ -222,13 +272,11 @@ const ProductDetails = () => {
                           onClick={() => {
                             handleFilter("color", color.name);
                           }}
-                          className={`list-group-item rounded-circle ${
-                            isAvailable ? "" : "disabled"
-                          } ${
-                            activeColor === color.name
+                          className={`list-group-item rounded-circle ${isAvailable ? "" : "disabled"
+                            } ${activeColor === color.name
                               ? "border-primary shadow-lg border-2"
                               : ""
-                          }`}
+                            }`}
                           id={`color${color.name}`}
                           // value={color.name}
                           style={{
@@ -285,11 +333,9 @@ const ProductDetails = () => {
                       // console.log(`Checking size: "${size}" - Available: ${isAvailable}`);
                       return (
                         <li
-                          className={`size_item list-group-item rounded-circle fs-5 fw-normal ${
-                            isAvailable ? "" : "disabled"
-                          } ${
-                            activeSize === size ? "bg-primary shadow-lg" : ""
-                          }`}
+                          className={`size_item list-group-item rounded-circle fs-5 fw-normal ${isAvailable ? "" : "disabled"
+                            } ${activeSize === size ? "bg-primary shadow-lg" : ""
+                            }`}
                           id={`size${size}`}
                           key={index}
                           style={{ position: "relative" }}
@@ -375,24 +421,15 @@ const ProductDetails = () => {
             </div>
             <div className="d-grid col-6">
               {isLoggedIn ? (
-                count < 100 ? (
-                  <button
-                    className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#logoModal"
-                  >
-                    Buy Now
-                  </button>
-                ) : (
-                  <Link
-                    to="/getquote"
-                    className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
-                    type="button"
-                  >
-                    Get a Quote
-                  </Link>
-                )
+                <button
+                  className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#logoModal"
+                  onClick={handleBuyNow}
+                >
+                  Buy Now
+                </button>
               ) : (
                 <button
                   className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
@@ -403,24 +440,6 @@ const ProductDetails = () => {
                 </button>
               )}
 
-              {/* {
-                                count < 100 ? (
-                                    <button className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#logoModal"
-                                    >Buy Now</button>
-                                ) : (
-                                    <Link to="/getquote" className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
-                                    >Get a Quote</Link>
-                                )
-                            } */}
-
-              {/* <button className="btn btn-primary fs-5 fw-normal text-capitalize w-100" type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#logoModal"
-                            >
-                                {count < 100 ? 'Buy Now' : 'Get a Quote'}
-                            </button> */}
             </div>
             <div className="d-grid col-6">
               <button
@@ -431,6 +450,28 @@ const ProductDetails = () => {
                 Save to wishlist
               </button>
             </div>
+            {/* <div className="d-grid col-6">
+              {isLoggedIn ? (
+                <button
+                  className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#logoModal"
+                  onClick={() => { setType("buyNow") }}
+                >
+                  Buy Now
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
+                  type="button"
+                  onClick={handleButtonClick}
+                >
+                  Buy Now
+                </button>
+              )}
+
+            </div> */}
           </div>
           <div className="pr__dt">
             <h3 className="fs-3 fw-normal text-primary mt-4">
@@ -447,7 +488,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </section>
-      <LogoUploader quantity={count}></LogoUploader>
+      <LogoUploader type={type}></LogoUploader>
 
       {/* <!-- Modal --> */}
     </>

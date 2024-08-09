@@ -8,7 +8,7 @@ function Home() {
     <>
       {/* <TextMove title="All Uniforms"/> */}
 
-      <BannerGroup />
+      {/* <BannerGroup /> */}
       <Cards />
 
     </>
