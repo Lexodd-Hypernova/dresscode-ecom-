@@ -89,6 +89,7 @@ const Cart = () => {
       state: {
         cart: cart,
         totalAmount: bagTotal,
+        type: "cart"
       },
     });
   };
@@ -101,9 +102,9 @@ const Cart = () => {
         <div>Loading...</div>
       ) : (
         <div>
-          {cart.map((item) => (
+          {cart.map((item, index) => (
             <div
-              key={item._id}
+              key={index}
               className="d-flex justify-content-around align-items-center"
             >
               {/* img */}

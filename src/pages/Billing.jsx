@@ -1,32 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import DressCodeApi from "../common";
-
-import { accountInfoApis } from "../common";
-
 import { useUserContext } from "../context/UserContext";
-
 import AddressModal from "../components/addressModal/AddressModal";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://dresscode-test.onrender.com";
 
 const Billing = () => {
-  const [paymentId, setPaymentId] = useState("");
-  const [group, setGroup] = useState("ELITE");
-  const [productId, setProductId] = useState("6F698F");
-  const [color, setColor] = useState("WHITE");
-  const [size, setSize] = useState("S");
-  const [quantityOrdered, setQuantityOrdered] = useState(1);
-  const [price, setPrice] = useState(195);
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [logoPosition, setLogoPosition] = useState(null);
+  const navigate = useNavigate();
   const [deliveryCharges, setDeliveryCharges] = useState(20);
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [TotalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(0);
 
   const [activeAddressId, setActiveAddressId] = useState(null);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -40,28 +29,55 @@ const Billing = () => {
     addressType: "Home", // Default value
     markAsDefault: false,
   });
-
-  const navigate = useNavigate();
-
-  const { token, id, addressData, addAddress } = useUserContext();
-
-  //accessing order total amount received from cart page
-  const location = useLocation();
-  const { state } = location;
-  const { totalAmount, cart: orderedItems, product } = state || {};
-  console.log(orderedItems, "52");
-
-  const [modalOpen, setModalOpen] = useState(false);
-
   const handleSubmit = (formData) => {
     addAddress(formData);
     setModalOpen(false);
   };
 
 
+
+  const { token, id, addressData, addAddress } = useUserContext();
+
+  //accessing order total amount received from cart page
+  const location = useLocation();
+  const { state } = location;
+  const { totalAmount, cart: orderedItems, product, type } = state || {};
+  console.log(orderedItems, "52");
+
+  console.log(type, "type");
+
+  console.log(product, "product");
+
+
+
   useEffect(() => {
-    console.log("product", product)
-  }, [])
+    calculateTotalPrice();
+  }, [totalAmount, discountPercentage, deliveryCharges]);
+
+  const calculateTotalPrice = () => {
+    const discountAmount = (discountPercentage * totalAmount) / 100;
+    const totalAfterDiscount = totalAmount - discountAmount;
+    const totalPrice = totalAfterDiscount + deliveryCharges;
+    setTotalPriceAfterDiscount(totalPrice);
+  };
+
+  const convertToCurrency = (num) => {
+    let convertedNumber = num.toLocaleString("en-US", { style: "currency", currency: "INR" })
+    return convertedNumber;
+  }
+
+
+
+  // const handlePayment = () => {
+  //   if (type === "cart") {
+  //     console.log("handle cart payment")
+  //   }
+  //   else if (type === "buyNow") {
+  //     console.log("handle buyNow payment")
+  //   }
+  // }
+
+
 
 
   const handlePayment = async () => {
@@ -111,38 +127,23 @@ const Billing = () => {
             razorpay_signature: response.razorpay_signature,
           };
 
-          const requestOptions = {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(verifyPayload),
-          };
 
-          // const responseData = await fetch(`${BASE_URL}/payment/verifyPayment`, requestOptions);
-          const responseData = await fetch(
+          const responseData = await axios.post(
             DressCodeApi.verifyPayment.url,
-            requestOptions
+            verifyPayload,
+            { headers }
           );
 
-          const verifyData = await responseData.json();
+
+          // const verifyData = await responseData.json();
+
+          const verifyData = await responseData.data;
+
 
           console.log("Payment verification response:", verifyData);
 
           if (verifyData.success) {
             // Step 4: Create the order on your server
-            // const myHeaders = {
-            //   "Content-Type": "application/json",
-            //   Authorization: `Bearer ${token}`,
-            // };
-
-            const config = {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            };
-
 
             const raw = JSON.stringify(
               {
@@ -165,56 +166,24 @@ const Billing = () => {
             )
 
 
-
-            // const raw = JSON.stringify({
-            //   paymentId: response.paymentId,
-            //   group: "ELITE",
-            //   productId: "6F698F",
-            //   color: "WHITE",
-            //   size: "S",
-            //   quantityOrdered: 1,
-            //   price: 195,
-            //   logoUrl: null,
-            //   logoPosition: null,
-            //   deliveryCharges: 20,
-            //   discountPercentage: 10,
-            //   TotalPriceAfterDiscount: 108,
-            // });
-
-            // const requestOptions = {
-            //   method: "POST",
-            //   headers: myHeaders,
-            //   body: raw,
-            // };
-
             console.log("Creating order with data:", raw);
-
-            // const finalResponse = await fetch(
-            //   `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-            //   requestOptions
-            // );
-
 
             const finalResponse = await axios.post(
               `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-              raw, config
+              raw,
+              { headers }
             );
 
             const result = await finalResponse.data;
 
             console.log(result)
 
+            if (result.response.status = "200") {
+              console.log("Order creation response:", result);
+              alert("Order created successfully!");
+              navigate("/success");
+            }
 
-
-
-            // if (!finalResponse.ok) {
-            //   throw new Error("Network response was not ok");
-            // } else {
-            //   const result = await finalResponse.json();
-            //   console.log("Order creation response:", result);
-            //   alert("Order created successfully!");
-            //   navigate("/success");
-            // }
           } else {
             alert("Payment verification failed!");
           }
@@ -248,20 +217,6 @@ const Billing = () => {
 
   const handleAddressClick = (addressId) => {
     setActiveAddressId(addressId);
-  };
-
-  useEffect(() => {
-    console.log(activeAddressId);
-  });
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [totalAmount, discountPercentage, deliveryCharges]);
-
-  const calculateTotalPrice = () => {
-    const discountAmount = (discountPercentage * totalAmount) / 100;
-    const totalAfterDiscount = totalAmount - discountAmount;
-    const totalPrice = totalAfterDiscount + deliveryCharges;
-    setTotalPriceAfterDiscount(totalPrice);
   };
 
 
@@ -415,19 +370,21 @@ const Billing = () => {
                   </h5>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     Bag total
-                    <span>₹{totalAmount}</span>
+                    {/* <span>{convertToCurrency(totalAmount)}</span> */}
+                    <span>{Number(totalAmount).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
+
                   </p>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     {`Bag Discount ${discountPercentage}%`}
-                    <span>(-)₹{(discountPercentage * totalAmount) / 100}</span>
+                    <span>(-){((discountPercentage * totalAmount) / 100).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
                   </p>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     Delivery Fee
-                    <span>(+)₹{deliveryCharges}</span>
+                    <span>(+){convertToCurrency(deliveryCharges)}</span>
                   </p>
                   <p className="fs-5 fw-medium lh-1 d-flex justify-content-between align-items-center">
                     Order total
-                    <span>₹{TotalPriceAfterDiscount}</span>
+                    <span>{convertToCurrency(TotalPriceAfterDiscount)}</span>
                   </p>
                 </div>
                 <button

@@ -18,8 +18,7 @@ const normalizeName = (name) => {
   }
 };
 const ProductDetails = () => {
-  const { productId, color, productType, subCategory, category, groupName } =
-    useParams();
+  const { productId, color, productType, subCategory, category, groupName } = useParams();
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(5).fill(null);
   const [data, setData] = useState({});
@@ -32,13 +31,19 @@ const ProductDetails = () => {
   const [price, setPrice] = useState("");
   const [count, setCount] = useState(1); // Initial value set to 1
 
+  const [cartItem, setCartItem] = useState();
+
+  const [buyItem, setBuyItem] = useState();
+
+  // const [logoData, setLogoData] = useState({ url: null, position: '' })
+
   const [totalPrice, setTotalPrice] = useState();
 
 
-  const [type, setType] = useState();
+  const [selectType, setSelectType] = useState();
 
 
-  const { addToCart, token } = useCart();
+  const { token } = useCart();
 
   const { addToWishList } = useWhishList();
 
@@ -48,6 +53,12 @@ const ProductDetails = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(token);
 
   const nav = useNavigate();
+
+
+  // const handleLogoUpload = ({ logoUrl, logoPosition }) => {
+  //   setLogoData({ url: logoUrl, position: logoPosition })
+  // }
+
 
   const handleAddToWishList = () => {
     const item = {
@@ -61,21 +72,29 @@ const ProductDetails = () => {
     addToWishList(item);
   };
 
-  const handleAddToCart = () => {
-    // Prepare the data to send to addToCart function
-    const itemToAdd = {
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+
+    setCartItem({
       group: groupName,
       productId: productId,
       color: activeColor,
       size: activeSize,
       price: price,
-      quantityRequired: count, // Example: default quantity is 1, adjust as needed
-      logoUrl: null,
-      logoPosition: null,
-    };
+      quantityRequired: count,
+    })
+
+
+    // Prepare the data to send to addToCart function
+    // const itemToAdd = {
+    //   logoUrl: logoData.url,
+    //   logoPosition: logoData.position,
+    // };
 
     // Call addToCart function from context
-    addToCart(itemToAdd);
+    setSelectType("cartType");
+    // addToCart(itemToAdd);
+
   };
 
   const increment = () => {
@@ -212,19 +231,20 @@ const ProductDetails = () => {
 
   const handleBuyNow = (e) => {
     e.preventDefault();
-    const itemToAdd = {
+    setBuyItem({
       group: groupName,
       productId: productId,
       color: activeColor,
       size: activeSize,
       price: price,
       totalPrice: totalPrice,
-      quantityRequired: count, // Example: default quantity is 1, adjust as needed
-    };
-    addProduct(itemToAdd)
-    // sessionStorage.setItem("itemToAdd", JSON.stringify(itemToAdd))
-    // setType('quote');
+      quantityRequired: count
+    })
+    setSelectType("buyNowType")
   }
+
+
+
 
 
   return (
@@ -243,7 +263,7 @@ const ProductDetails = () => {
             </button>
             <span className="ms-2 fs-5">10 Ratings</span>
           </div>
-          <div className="pr_price fs-3 my-2 fw-normal">{totalPrice}</div>
+          <div className="pr_price fs-3 my-2 fw-normal">{Number(totalPrice).toLocaleString("en-US", { style: "currency", currency: "INR" })}</div>
           <div className="var__Color">
             <span className="fs-3 mt-2 fw-normal">Color</span>
             {loading ? (
@@ -411,13 +431,32 @@ const ProductDetails = () => {
           </div>
           <div className="row row-gap-4 mt-5">
             <div className="d-grid col-6">
-              <button
+              {isLoggedIn ? (
+                <button
+                  className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100"
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#logoModal"
+                  onClick={handleAddToCart}
+                >
+                  Add to bag
+                </button>
+              ) : (
+                <button
+                  className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100"
+                  type="button"
+                  onClick={handleButtonClick}
+                >
+                  Add to bag
+                </button>
+              )}
+              {/* <button
                 onClick={handleAddToCart}
                 className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100"
                 type="button"
               >
                 Add to bag
-              </button>
+              </button> */}
             </div>
             <div className="d-grid col-6">
               {isLoggedIn ? (
@@ -488,7 +527,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </section>
-      <LogoUploader type={type}></LogoUploader>
+      <LogoUploader cartItem={cartItem} buyItem={buyItem} selectType={selectType} ></LogoUploader>
 
       {/* <!-- Modal --> */}
     </>

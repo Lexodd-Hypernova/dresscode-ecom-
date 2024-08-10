@@ -1,4 +1,4 @@
-const baseUrl = "https://dresscode-test.onrender.com";
+const baseUrl = "https://dresscode-updated.onrender.com";
 const DressCodeApi = {
   getGroups: {
     url: `${baseUrl}/e-com/getGroups`,

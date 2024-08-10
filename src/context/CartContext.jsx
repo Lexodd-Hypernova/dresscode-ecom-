@@ -12,6 +12,7 @@ export const CartProvider = ({ children }) => {
 
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [logoUrl, setLogoUrl] = useState('');
 
   const nav = useNavigate();
 

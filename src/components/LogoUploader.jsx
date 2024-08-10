@@ -1,16 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import DressCodeApi from '../common';
 import { useProductContext } from '../context/ProductContext';
 
-const LogoUploader = () => {
+import { useCart } from '../context/CartContext';
 
-    const [imageUrl, setImageUrl] = useState('');
+const LogoUploader = ({ selectType, cartItem, buyItem }) => {
+
+    // console.log(item)
+
+    const { addToCart } = useCart();
+    const { addProduct } = useProductContext();
+
+    const [imageUrl, setImageUrl] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [logoPlacement, setLogoPlacement] = useState('');
 
+    const [cartItemToAdd, setCartItemToAdd] = useState({
+        group: "",
+        productId: "",
+        color: "",
+        size: "",
+        price: "",
+        quantityRequired: "",
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement
+    });
 
-    const { product } = useProductContext();
+
+    const [buyItemToAdd, setBuyItemToAdd] = useState({
+        group: "",
+        productId: "",
+        color: "",
+        size: "",
+        price: "",
+        totalPrice: "",
+        quantityRequired: "",
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement
+    })
+
+
+
+
+    useEffect(() => {
+        if (cartItem) {
+            setCartItemToAdd({
+                group: cartItem.group,
+                productId: cartItem.productId,
+                color: cartItem.color,
+                size: cartItem.size,
+                price: cartItem.price,
+                quantityRequired: cartItem.quantityRequired,
+                logoUrl: imageUrl,      // Reset or keep existing logoUrl
+                logoPosition: logoPlacement // Reset or keep existing logoPosition
+            });
+        }
+
+
+        if (buyItem) {
+            setBuyItemToAdd({
+                group: buyItem.group,
+                productId: buyItem.productId,
+                color: buyItem.color,
+                size: buyItem.size,
+                price: buyItem.price,
+                totalPrice: buyItem.totalPrice,
+                quantityRequired: buyItem.quantityRequired,
+                logoUrl: imageUrl,      // Reset or keep existing logoUrl
+                logoPosition: logoPlacement // Reset or keep existing logoPosition
+            })
+        }
+
+
+    }, [cartItem, buyItem]);
 
 
     // const [areaLabel, setAreaLabel] = useState("");
@@ -18,14 +81,36 @@ const LogoUploader = () => {
 
 
     const handleSkip = () => {
-        navigate("/billing", {
-            state: {
-                product: product,
-                totalAmount: product.totalPrice
-            },
-        })
 
-    }
+        if (selectType === "cartType") {
+            const updatedItem = {
+                ...cartItemToAdd,              // Spread the current itemToAdd state
+                logoUrl: imageUrl,         // Add or update the logoUrl with the current imageUrl
+                logoPosition: logoPlacement // Add or update the logoPosition with the selected placement
+            };
+            setCartItemToAdd(updatedItem); // Update the state with the new object
+            addToCart(updatedItem);    // Pass the updated item directly to addToCart
+        } else if (selectType === "buyNowType") {
+
+            const updatedBuyItem = {
+                ...buyItemToAdd,
+                logoUrl: imageUrl,
+                logoPosition: logoPlacement
+            }
+
+            setBuyItemToAdd(updatedBuyItem);
+            addProduct(updatedBuyItem);
+
+            navigate("/billing", {
+                state: {
+                    product: buyItemToAdd,
+                    totalAmount: buyItem.totalPrice,
+                    type: "buyNow",
+                },
+            });
+        }
+    };
+
 
     const handleDrop = (event) => {
         event.preventDefault();
@@ -73,14 +158,35 @@ const LogoUploader = () => {
     const handleSave = () => {
         // e.preventDefault();
         if (imageUrl) {
-            navigate("/billing", {
-                state: {
-                    product: product,
-                    totalAmount: product.totalPrice
-                },
-            })
-        }
 
+            if (selectType === "cartType") {
+                const updatedItem = {
+                    ...cartItemToAdd,              // Spread the current itemToAdd state
+                    logoUrl: imageUrl,         // Add or update the logoUrl with the current imageUrl
+                    logoPosition: logoPlacement // Add or update the logoPosition with the selected placement
+                };
+                setCartItemToAdd(updatedItem); // Update the state with the new object
+                addToCart(updatedItem);    // Pass the updated item directly to addToCart
+            } else if (selectType === "buyNowType") {
+
+                const updatedBuyItem = {
+                    ...buyItemToAdd,
+                    logoUrl: imageUrl,
+                    logoPosition: logoPlacement
+                }
+
+                setBuyItemToAdd(updatedBuyItem);
+                addProduct(updatedBuyItem);
+
+                navigate("/billing", {
+                    state: {
+                        product: buyItemToAdd,
+                        totalAmount: buyItem.totalPrice,
+                        type: "buyNow",
+                    },
+                });
+            }
+        }
     }
 
     return (
