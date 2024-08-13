@@ -3,11 +3,9 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import DressCodeApi from "../common";
 import ProductSlider from "../components/ProductSlider";
-// import Breadcrumb from '../components/Breadcrumb';
 import LogoUploader from "../components/LogoUploader";
 import { useCart } from "../context/CartContext";
 import { useWhishList } from "../context/WishListContext";
-import { useProductContext } from "../context/ProductContext";
 
 const normalizeName = (name) => {
   if (typeof name === "string") {
@@ -35,8 +33,6 @@ const ProductDetails = () => {
 
   const [buyItem, setBuyItem] = useState();
 
-  // const [logoData, setLogoData] = useState({ url: null, position: '' })
-
   const [totalPrice, setTotalPrice] = useState();
 
 
@@ -47,17 +43,10 @@ const ProductDetails = () => {
 
   const { addToWishList } = useWhishList();
 
-  const { addProduct } = useProductContext();
-
 
   const [isLoggedIn, setIsLoggedIn] = useState(token);
 
   const nav = useNavigate();
-
-
-  // const handleLogoUpload = ({ logoUrl, logoPosition }) => {
-  //   setLogoData({ url: logoUrl, position: logoPosition })
-  // }
 
 
   const handleAddToWishList = () => {
@@ -84,16 +73,7 @@ const ProductDetails = () => {
       quantityRequired: count,
     })
 
-
-    // Prepare the data to send to addToCart function
-    // const itemToAdd = {
-    //   logoUrl: logoData.url,
-    //   logoPosition: logoData.position,
-    // };
-
-    // Call addToCart function from context
     setSelectType("cartType");
-    // addToCart(itemToAdd);
 
   };
 
@@ -253,9 +233,6 @@ const ProductDetails = () => {
         <ProductSlider />
 
         <div className="productContent mt-5">
-          {/* <Breadcrumb
-                    groupName={groupName} category={category} subCategory={subCategory} productType={productType}
-                /> */}
           <h2 className="pr_name mt-5">Product Name</h2>
           <div className="pr_rating">
             <button type="button" className="btn btn-success fs-5">

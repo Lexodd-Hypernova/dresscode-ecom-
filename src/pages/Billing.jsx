@@ -4,8 +4,10 @@ import DressCodeApi from "../common";
 import { useUserContext } from "../context/UserContext";
 import AddressModal from "../components/addressModal/AddressModal";
 import { useLocation, useNavigate } from "react-router-dom";
+import { shoppingInfoApis } from "../common";
+import { useCart } from "../context/CartContext";
 
-const BASE_URL = "https://dresscode-test.onrender.com";
+const BASE_URL = "https://dresscode-updated.onrender.com";
 
 const Billing = () => {
   const navigate = useNavigate();
@@ -18,15 +20,15 @@ const Billing = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    mobile: "",
-    flatNumber: "",
-    locality: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
     pinCode: "",
-    landmark: "",
-    districtCity: "",
+    city: "",
     state: "",
-    addressType: "Home", // Default value
+    country: "",
     markAsDefault: false,
   });
   const handleSubmit = (formData) => {
@@ -38,11 +40,16 @@ const Billing = () => {
 
   const { token, id, addressData, addAddress } = useUserContext();
 
+  const { fetchCart } = useCart();
+
   //accessing order total amount received from cart page
   const location = useLocation();
   const { state } = location;
   const { totalAmount, cart: orderedItems, product, type } = state || {};
-  console.log(orderedItems, "52");
+  console.log(orderedItems, "orderedItems");
+
+  console.log(totalAmount, "totalAmount");
+
 
   console.log(type, "type");
 
@@ -67,16 +74,33 @@ const Billing = () => {
   }
 
 
+  const removeCartItems = (productIds) => {
 
-  // const handlePayment = () => {
-  //   if (type === "cart") {
-  //     console.log("handle cart payment")
-  //   }
-  //   else if (type === "buyNow") {
-  //     console.log("handle buyNow payment")
-  //   }
-  // }
 
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const raw = JSON.stringify({
+      "cartItemIds": productIds
+    });
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch(shoppingInfoApis.removeCartItems(id), requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        fetchCart();
+      })
+      .catch((error) => console.log(error));
+
+  }
 
 
 
@@ -144,45 +168,80 @@ const Billing = () => {
 
           if (verifyData.success) {
             // Step 4: Create the order on your server
+            // var raw = "";
 
-            const raw = JSON.stringify(
-              {
-                paymentId: response.razorpay_payment_id,
+            if (type === "cart") {
+              const raw = JSON.stringify(
+                {
+                  paymentId: verifyData.paymentId,
 
-                items: orderedItems.map((item) => ({
-                  group: item.group,
-                  productId: item.productId,
-                  color: item.color.name,
-                  size: item.size,
-                  quantityOrdered: item.quantityRequired,
-                  price: item.productDetails.price,
-                  logoUrl: item.logoUrl,
-                  logoPosition: item.logoPosition,
+                  products: orderedItems.map((item) => ({
+                    group: item.group,
+                    productId: item.productId,
+                    color: item.color.name,
+                    size: item.size,
+                    quantityOrdered: item.quantityRequired,
+                    price: item.productDetails.price,
+                    logoUrl: item.logoUrl,
+                    logoPosition: item.logoPosition,
+                  })),
                   deliveryCharges: deliveryCharges,
                   discountPercentage: discountPercentage,
-                  totalPriceAfterDiscount: TotalPriceAfterDiscount,
-                })),
+                  TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+                }
+              )
+              console.log("Creating order with data:", raw);
+
+              const finalResponse = await axios.post(
+                `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+                raw,
+                { headers }
+              );
+
+              if (finalResponse.status === 201) {
+                console.log("Order creation response:", finalResponse.data);
+                const productIds = orderedItems.map((item) => item._id)
+                console.log("productIds of cart", productIds);
+
+                removeCartItems(productIds);
+
+                navigate("/success");
               }
-            )
-
-
-            console.log("Creating order with data:", raw);
-
-            const finalResponse = await axios.post(
-              `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-              raw,
-              { headers }
-            );
-
-            const result = await finalResponse.data;
-
-            console.log(result)
-
-            if (result.response.status = "200") {
-              console.log("Order creation response:", result);
-              alert("Order created successfully!");
-              navigate("/success");
             }
+            else if (type === "buyNow") {
+              const raw = JSON.stringify(
+                {
+                  paymentId: verifyData.paymentId,
+
+                  products: product.map((item) => ({
+                    group: item.group,
+                    productId: item.productId,
+                    color: item.color,
+                    size: item.size,
+                    quantityOrdered: item.quantityRequired,
+                    price: item.price,
+                    logoUrl: item.logoUrl,
+                    logoPosition: item.logoPosition,
+                  })),
+                  deliveryCharges: deliveryCharges,
+                  discountPercentage: discountPercentage,
+                  TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+                }
+              )
+              const finalResponse = await axios.post(
+                `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+                raw,
+                { headers }
+              );
+              const result = await finalResponse.data;
+              console.log(result)
+            }
+
+            // if (result.response.status = "200") {
+            //   console.log("Order creation response:", result);
+            //   alert("Order created successfully!");
+            //   navigate("/success");
+            // }
 
           } else {
             alert("Payment verification failed!");
@@ -263,34 +322,40 @@ const Billing = () => {
 
   const showBuyNowProduct = (product) => {
     if (product) {
-      return <div
-        className="d-flex mt-4 align-items-center gap-4"
-        style={{
-          border: "1px solid #ddd",
-          padding: "16px",
-          borderRadius: "8px",
-        }}
-      >
-        <div style={{ width: "180px", flexShrink: 0 }}>
-          <img
-            // src={product.productDetails.productType.imageUrl}
-            src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-            alt={product.group}
-            width={180}
-            height={200}
-            style={{ display: "block", maxWidth: "100%" }}
-          />
-        </div>
-        <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
-          <div className="fs-4 fw-medium">{product.color}</div>
-          <div className="fs-4 fw-normal">
-            {product.group}
+      return product.map((item, index) => {
+        return (
+          <div
+            className="d-flex mt-4 align-items-center gap-4"
+            key={index}
+            style={{
+              border: "1px solid #ddd",
+              padding: "16px",
+              borderRadius: "8px",
+            }}
+          >
+            <div style={{ width: "180px", flexShrink: 0 }}>
+              <img
+                // src={product.productDetails.productType.imageUrl}
+                src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+                alt={item.group}
+                width={180}
+                height={200}
+                style={{ display: "block", maxWidth: "100%" }}
+              />
+            </div>
+            <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
+              <div className="fs-4 fw-medium">{item.color}</div>
+              <div className="fs-4 fw-normal">
+                {item.group}
+              </div>
+              <div className="fs-4 fw-normal">
+                {`Quantity: ${item.quantityRequired}`}
+              </div>
+            </div>
           </div>
-          <div className="fs-4 fw-normal">
-            {`Quantity: ${product.quantityRequired}`}
-          </div>
-        </div>
-      </div>
+        )
+
+      })
     }
   }
 
@@ -323,12 +388,11 @@ const Billing = () => {
                       {address.markAsDefault === false ? "" : "Default"}
                     </div>
                     <div className="fs-4">
-                      {address.flatNumber}, {address.landmark},{" "}
-                      {address.locality}, {address.districtCity},{" "}
-                      {address.state}, {address.pinCode}
+                      {address.address},&nbsp; {address.city},&nbsp;{address.pinCode},&nbsp;{address.state},
+                      &nbsp;{address.country}
                     </div>
                     <div className="fs-4">
-                      Phone: <span className="fw-medium">{address.mobile}</span>
+                      Phone: <span className="fw-medium">{address.phone}</span>
                     </div>
                   </div>
                   <div>

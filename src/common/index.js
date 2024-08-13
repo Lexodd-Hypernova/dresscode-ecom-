@@ -58,6 +58,7 @@ export const shoppingInfoApis = {
     `${baseUrl}/user/${userId}/removeCartItem/${productId}`,
   getWhishList: (userId) => `${baseUrl}/user/${userId}/getWishlist`,
   addWhishList: (userId) => `${baseUrl}/user/${userId}/addToWishlist`,
+  removeCartItems: (userId) => `${baseUrl}/user/${userId}/removeCartItems`,
   removeFromWishList: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeWishlistItem/${productId}`,
   addReview: (group, productId) => `${baseUrl}/user/${group}/${productId}/writeReview`,

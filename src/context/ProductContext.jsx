@@ -4,15 +4,17 @@ const ProductContext = createContext();
 
 export const ProductContextProvider = ({ children }) => {
 
-    const [product, setProduct] = useState();
+    const [product, setProduct] = useState([]);
 
-    const addProduct = (item) => {
-        setProduct(item)
-    }
+    // const addProduct = (item) => {
+    //     setProduct((prevItem) => [
+    //         ...prevItem, item
+    //     ])
+    // }
 
 
     return (
-        <ProductContext.Provider value={{ product, addProduct }}>{children}</ProductContext.Provider>
+        <ProductContext.Provider value={{ product, setProduct }}>{children}</ProductContext.Provider>
     )
 }
 

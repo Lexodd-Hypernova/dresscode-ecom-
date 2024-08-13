@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import DressCodeApi from '../common';
-import { useProductContext } from '../context/ProductContext';
 
 import { useCart } from '../context/CartContext';
 
 const LogoUploader = ({ selectType, cartItem, buyItem }) => {
 
-    // console.log(item)
-
     const { addToCart } = useCart();
-    const { addProduct } = useProductContext();
+    const [product, setProduct] = useState([]);
 
     const [imageUrl, setImageUrl] = useState(null);
     const [uploading, setUploading] = useState(false);
@@ -39,8 +36,6 @@ const LogoUploader = ({ selectType, cartItem, buyItem }) => {
         logoUrl: imageUrl,
         logoPosition: logoPlacement
     })
-
-
 
 
     useEffect(() => {
@@ -99,15 +94,18 @@ const LogoUploader = ({ selectType, cartItem, buyItem }) => {
             }
 
             setBuyItemToAdd(updatedBuyItem);
-            addProduct(updatedBuyItem);
+            setProduct((prevItem) => [...prevItem, updatedBuyItem]);
 
-            navigate("/billing", {
-                state: {
-                    product: buyItemToAdd,
-                    totalAmount: buyItem.totalPrice,
-                    type: "buyNow",
-                },
-            });
+            // Delay navigation until state is set
+            setTimeout(() => {
+                navigate("/billing", {
+                    state: {
+                        product: [...product, updatedBuyItem],
+                        totalAmount: buyItem.totalPrice,
+                        type: "buyNow",
+                    },
+                });
+            }, 100);
         }
     };
 
@@ -176,15 +174,18 @@ const LogoUploader = ({ selectType, cartItem, buyItem }) => {
                 }
 
                 setBuyItemToAdd(updatedBuyItem);
-                addProduct(updatedBuyItem);
+                setProduct((prevItem) => [...prevItem, updatedBuyItem]);
 
-                navigate("/billing", {
-                    state: {
-                        product: buyItemToAdd,
-                        totalAmount: buyItem.totalPrice,
-                        type: "buyNow",
-                    },
-                });
+                // Delay navigation until state is set
+                setTimeout(() => {
+                    navigate("/billing", {
+                        state: {
+                            product: [...product, updatedBuyItem],
+                            totalAmount: buyItem.totalPrice,
+                            type: "buyNow",
+                        },
+                    });
+                }, 100);
             }
         }
     }

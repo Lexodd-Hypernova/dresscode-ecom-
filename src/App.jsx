@@ -56,13 +56,13 @@ function App() {
       <UserContextProvider>
         <WishListProvider>
           <CartProvider>
-            <ProductContextProvider>
+            {/* <ProductContextProvider> */}
               <Header />
               <main>
                 {isLoading ? <LoadingComponent /> : <Outlet />}
               </main>
               <Footer />
-            </ProductContextProvider>
+            {/* </ProductContextProvider> */}
           </CartProvider>
         </WishListProvider>
       </UserContextProvider>
