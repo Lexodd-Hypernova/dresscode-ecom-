@@ -40,7 +40,7 @@ export const WishListProvider = ({ children }) => {
     const addToWishList = async (item) => {
         try {
 
-            const res = await axios.post(shoppingInfoApis.addWhishList(userId), JSON.stringify(item), {
+            const res = await axios.post(shoppingInfoApis.addWhishList(userId), item, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -56,25 +56,6 @@ export const WishListProvider = ({ children }) => {
         } catch (error) {
             console.log(error)
         }
-
-
-        // const myHeaders = new Headers();
-        // myHeaders.append("Content-Type", "application/json");
-        // myHeaders.append("Authorization", `Bearer ${token}`);
-
-        // const raw = JSON.stringify(item);
-
-        // const requestOptions = {
-        //     method: "POST",
-        //     headers: myHeaders,
-        //     body: raw,
-        //     redirect: "follow"
-        // };
-
-        // fetch(shoppingInfoApis.addWhishList(userId), requestOptions)
-        //     .then((response) => response.text())
-        //     .then((result) => console.log(result))
-        //     .catch((error) => console.error(error));
     }
 
     const deleteWishList = async (productId) => {
@@ -86,7 +67,7 @@ export const WishListProvider = ({ children }) => {
 
 
     return (
-        <WishListContext.Provider value={{ wishList, addToWishList, deleteWishList }}>
+        <WishListContext.Provider value={{ wishList, addToWishList, deleteWishList, getWishList }}>
             {children}
         </WishListContext.Provider>
     );

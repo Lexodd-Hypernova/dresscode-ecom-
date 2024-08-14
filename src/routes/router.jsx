@@ -20,6 +20,7 @@ import CustomerReviews from "../pages/CustomerReviews";
 import PaymentSuccess from "../pages/PaymentSuccess";
 import GetQuote from "../pages/GetQuote";
 import ProtectedRoute from "./ProtectedRoute";
+import ComingSoon from "../components/ComingSoon";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/:groupName",
         element: <Categories />,
+      },
+      {
+        path: "/coming-soon",
+        element: <ComingSoon />,
       },
       {
         path: "/:groupName/:category",

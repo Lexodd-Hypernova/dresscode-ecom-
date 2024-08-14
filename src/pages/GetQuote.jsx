@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+
 const GetQuote = () => {
 
     const [formData, setFormData] = useState({
@@ -13,6 +14,23 @@ const GetQuote = () => {
         lane: '',
         postalCode: ''
     });
+
+
+    const productDetails = sessionStorage.getItem("itemToAdd")
+
+    useEffect(() => {
+
+        if (productDetails) {
+            const parseDetails = JSON.parse(productDetails)
+            console.log(parseDetails)
+        }
+
+
+
+
+    }, [])
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;

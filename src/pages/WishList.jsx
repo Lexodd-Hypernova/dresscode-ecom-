@@ -19,8 +19,8 @@ const WishList = () => {
                                 <img className="card-img-top" src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg" alt="Card image cap" />
                                 <div className="card-body">
                                     <p className="card-text">{item.color.name} {item.group} </p>
-                                    <p className="card-text">{item.productDetails.fit} {item.productDetails.neckline}</p>
-                                    <p className="card-text">${item.productDetails.price}</p>
+                                    {/* <p className="card-text">{item.productDetails.fit} {item.productDetails.neckline}</p> */}
+                                    {/* <p className="card-text">${item.productDetails.price}</p> */}
                                 </div>
                             </div>
                         )

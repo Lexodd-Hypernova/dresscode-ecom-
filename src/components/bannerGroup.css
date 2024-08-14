@@ -31,3 +31,19 @@
     letter-spacing: 0.3px;
     text-transform: uppercase;
 }
+
+
+@media only screen and (max-width: 1600px) {
+    .cat__Lbl {
+        font-size: 75px;
+    }
+
+    .group__Slider .carousel-indicators [data-bs-target] {
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 100%;
+        margin-right: 6px !important;
+        margin-left: 6px !important;
+        background-color: #000 !important;
+    }
+}

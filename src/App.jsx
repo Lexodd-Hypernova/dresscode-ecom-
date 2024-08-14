@@ -33,6 +33,7 @@ import 'sweetalert2/src/sweetalert2.scss';
 import LoadingComponent from "./common/components/LoadingComponent";
 
 import { UserContextProvider } from "./context/UserContext";
+import { ProductContextProvider } from "./context/ProductContext";
 
 function App() {
   const navigation = useNavigation();
@@ -55,11 +56,13 @@ function App() {
       <UserContextProvider>
         <WishListProvider>
           <CartProvider>
-            <Header />
-            <main>
-              {isLoading ? <LoadingComponent /> : <Outlet />}
-            </main>
-            <Footer />
+            {/* <ProductContextProvider> */}
+              <Header />
+              <main>
+                {isLoading ? <LoadingComponent /> : <Outlet />}
+              </main>
+              <Footer />
+            {/* </ProductContextProvider> */}
           </CartProvider>
         </WishListProvider>
       </UserContextProvider>
