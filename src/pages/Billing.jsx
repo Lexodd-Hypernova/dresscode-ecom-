@@ -108,7 +108,7 @@ const Billing = () => {
 
   const handlePayment = async () => {
     try {
-      const amountInPaise = TotalPriceAfterDiscount * 100; // Example amount in paise (i.e., 1000 paise = 10 INR)
+      const amountInPaise = TotalPriceAfterDiscount ; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
       if (amountInPaise < 100) {
         alert("Amount should be at least 100 paise.");
