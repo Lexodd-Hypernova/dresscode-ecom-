@@ -1,19 +1,114 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import DressCodeApi from '../common';
 
-const LogoUploader = () => {
+import { useCart } from '../context/CartContext';
 
-    const [imageUrl, setImageUrl] = useState('');
+const LogoUploader = ({ selectType, cartItem, buyItem }) => {
+
+    const { addToCart } = useCart();
+    const [product, setProduct] = useState([]);
+
+    const [imageUrl, setImageUrl] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [logoPlacement, setLogoPlacement] = useState('');
+
+    const [cartItemToAdd, setCartItemToAdd] = useState({
+        group: "",
+        productId: "",
+        color: "",
+        size: "",
+        price: "",
+        quantityRequired: "",
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement
+    });
+
+
+    const [buyItemToAdd, setBuyItemToAdd] = useState({
+        group: "",
+        productId: "",
+        color: "",
+        size: "",
+        price: "",
+        totalPrice: "",
+        quantityRequired: "",
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement
+    })
+
+
+    useEffect(() => {
+        if (cartItem) {
+            setCartItemToAdd({
+                group: cartItem.group,
+                productId: cartItem.productId,
+                color: cartItem.color,
+                size: cartItem.size,
+                price: cartItem.price,
+                quantityRequired: cartItem.quantityRequired,
+                logoUrl: imageUrl,      // Reset or keep existing logoUrl
+                logoPosition: logoPlacement // Reset or keep existing logoPosition
+            });
+        }
+
+
+        if (buyItem) {
+            setBuyItemToAdd({
+                group: buyItem.group,
+                productId: buyItem.productId,
+                color: buyItem.color,
+                size: buyItem.size,
+                price: buyItem.price,
+                totalPrice: buyItem.totalPrice,
+                quantityRequired: buyItem.quantityRequired,
+                logoUrl: imageUrl,      // Reset or keep existing logoUrl
+                logoPosition: logoPlacement // Reset or keep existing logoPosition
+            })
+        }
+
+
+    }, [cartItem, buyItem]);
+
+
     // const [areaLabel, setAreaLabel] = useState("");
     const navigate = useNavigate();
 
 
     const handleSkip = () => {
-        navigate("/billing")
-    }
+
+        if (selectType === "cartType") {
+            const updatedItem = {
+                ...cartItemToAdd,              // Spread the current itemToAdd state
+                logoUrl: imageUrl,         // Add or update the logoUrl with the current imageUrl
+                logoPosition: logoPlacement // Add or update the logoPosition with the selected placement
+            };
+            setCartItemToAdd(updatedItem); // Update the state with the new object
+            addToCart(updatedItem);    // Pass the updated item directly to addToCart
+        } else if (selectType === "buyNowType") {
+
+            const updatedBuyItem = {
+                ...buyItemToAdd,
+                logoUrl: imageUrl,
+                logoPosition: logoPlacement
+            }
+
+            setBuyItemToAdd(updatedBuyItem);
+            setProduct((prevItem) => [...prevItem, updatedBuyItem]);
+
+            // Delay navigation until state is set
+            setTimeout(() => {
+                navigate("/billing", {
+                    state: {
+                        product: [...product, updatedBuyItem],
+                        totalAmount: buyItem.totalPrice,
+                        type: "buyNow",
+                    },
+                });
+            }, 100);
+        }
+    };
+
 
     const handleDrop = (event) => {
         event.preventDefault();
@@ -61,10 +156,38 @@ const LogoUploader = () => {
     const handleSave = () => {
         // e.preventDefault();
         if (imageUrl) {
-            // setAreaLabel("Close")
-            navigate("/billing");
-        }
 
+            if (selectType === "cartType") {
+                const updatedItem = {
+                    ...cartItemToAdd,              // Spread the current itemToAdd state
+                    logoUrl: imageUrl,         // Add or update the logoUrl with the current imageUrl
+                    logoPosition: logoPlacement // Add or update the logoPosition with the selected placement
+                };
+                setCartItemToAdd(updatedItem); // Update the state with the new object
+                addToCart(updatedItem);    // Pass the updated item directly to addToCart
+            } else if (selectType === "buyNowType") {
+
+                const updatedBuyItem = {
+                    ...buyItemToAdd,
+                    logoUrl: imageUrl,
+                    logoPosition: logoPlacement
+                }
+
+                setBuyItemToAdd(updatedBuyItem);
+                setProduct((prevItem) => [...prevItem, updatedBuyItem]);
+
+                // Delay navigation until state is set
+                setTimeout(() => {
+                    navigate("/billing", {
+                        state: {
+                            product: [...product, updatedBuyItem],
+                            totalAmount: buyItem.totalPrice,
+                            type: "buyNow",
+                        },
+                    });
+                }, 100);
+            }
+        }
     }
 
     return (

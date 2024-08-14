@@ -1,62 +1,108 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import DressCodeApi from "../common";
-
-import { accountInfoApis } from "../common";
-
 import { useUserContext } from "../context/UserContext";
-
 import AddressModal from "../components/addressModal/AddressModal";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { shoppingInfoApis } from "../common";
+import { useCart } from "../context/CartContext";
 
-const BASE_URL = "https://dresscode-test.onrender.com";
+const BASE_URL = "https://dresscode-updated.onrender.com";
 
 const Billing = () => {
-  const [paymentId, setPaymentId] = useState("");
-  const [group, setGroup] = useState("ELITE");
-  const [productId, setProductId] = useState("6F698F");
-  const [color, setColor] = useState("WHITE");
-  const [size, setSize] = useState("S");
-  const [quantityOrdered, setQuantityOrdered] = useState(1);
-  const [price, setPrice] = useState(195);
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [logoPosition, setLogoPosition] = useState(null);
+  const navigate = useNavigate();
   const [deliveryCharges, setDeliveryCharges] = useState(20);
   const [discountPercentage, setDiscountPercentage] = useState(10);
   const [TotalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(0);
 
   const [activeAddressId, setActiveAddressId] = useState(null);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    mobile: "",
-    flatNumber: "",
-    locality: "",
-    pinCode: "",
-    landmark: "",
-    districtCity: "",
-    state: "",
-    addressType: "Home", // Default value
-    markAsDefault: false,
-  });
-
-  const navigate = useNavigate();
-
-  const { token, id, addressData, addAddress } = useUserContext();
-
-  //accessing order total amount received from cart page
-  const location = useLocation();
-  const { state } = location;
-  const { totalAmount, cart: orderedItems } = state || {};
-  console.log(orderedItems, "52");
-
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    pinCode: "",
+    city: "",
+    state: "",
+    country: "",
+    markAsDefault: false,
+  });
   const handleSubmit = (formData) => {
     addAddress(formData);
     setModalOpen(false);
   };
+
+
+
+  const { token, id, addressData, addAddress } = useUserContext();
+
+  const { fetchCart } = useCart();
+
+  //accessing order total amount received from cart page
+  const location = useLocation();
+  const { state } = location;
+  const { totalAmount, cart: orderedItems, product, type } = state || {};
+  console.log(orderedItems, "orderedItems");
+
+  console.log(totalAmount, "totalAmount");
+
+
+  console.log(type, "type");
+
+  console.log(product, "product");
+
+
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [totalAmount, discountPercentage, deliveryCharges]);
+
+  const calculateTotalPrice = () => {
+    const discountAmount = (discountPercentage * totalAmount) / 100;
+    const totalAfterDiscount = totalAmount - discountAmount;
+    const totalPrice = totalAfterDiscount + deliveryCharges;
+    setTotalPriceAfterDiscount(totalPrice);
+  };
+
+  const convertToCurrency = (num) => {
+    let convertedNumber = num.toLocaleString("en-US", { style: "currency", currency: "INR" })
+    return convertedNumber;
+  }
+
+
+  const removeCartItems = (productIds) => {
+
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const raw = JSON.stringify({
+      "cartItemIds": productIds
+    });
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch(shoppingInfoApis.removeCartItems(id), requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        fetchCart();
+      })
+      .catch((error) => console.log(error));
+
+  }
+
+
 
   const handlePayment = async () => {
     try {
@@ -105,67 +151,98 @@ const Billing = () => {
             razorpay_signature: response.razorpay_signature,
           };
 
-          const requestOptions = {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(verifyPayload),
-          };
 
-          // const responseData = await fetch(`${BASE_URL}/payment/verifyPayment`, requestOptions);
-          const responseData = await fetch(
+          const responseData = await axios.post(
             DressCodeApi.verifyPayment.url,
-            requestOptions
+            verifyPayload,
+            { headers }
           );
 
-          const verifyData = await responseData.json();
+
+          // const verifyData = await responseData.json();
+
+          const verifyData = await responseData.data;
+
 
           console.log("Payment verification response:", verifyData);
 
           if (verifyData.success) {
             // Step 4: Create the order on your server
-            const myHeaders = {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            };
+            // var raw = "";
 
-            const raw = JSON.stringify({
-              paymentId: response.paymentId,
-              group: "ELITE",
-              productId: "6F698F",
-              color: "WHITE",
-              size: "S",
-              quantityOrdered: 1,
-              price: 195,
-              logoUrl: null,
-              logoPosition: null,
-              deliveryCharges: 20,
-              discountPercentage: 10,
-              TotalPriceAfterDiscount: 108,
-            });
+            if (type === "cart") {
+              const raw = JSON.stringify(
+                {
+                  paymentId: verifyData.paymentId,
 
-            const requestOptions = {
-              method: "POST",
-              headers: myHeaders,
-              body: raw,
-            };
+                  products: orderedItems.map((item) => ({
+                    group: item.group,
+                    productId: item.productId,
+                    color: item.color.name,
+                    size: item.size,
+                    quantityOrdered: item.quantityRequired,
+                    price: item.productDetails.price,
+                    logoUrl: item.logoUrl,
+                    logoPosition: item.logoPosition,
+                  })),
+                  deliveryCharges: deliveryCharges,
+                  discountPercentage: discountPercentage,
+                  TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+                }
+              )
+              console.log("Creating order with data:", raw);
 
-            console.log("Creating order with data:", raw);
+              const finalResponse = await axios.post(
+                `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+                raw,
+                { headers }
+              );
 
-            const finalResponse = await fetch(
-              `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-              requestOptions
-            );
-            if (!finalResponse.ok) {
-              throw new Error("Network response was not ok");
-            } else {
-              const result = await finalResponse.json();
-              console.log("Order creation response:", result);
-              alert("Order created successfully!");
-              navigate("/success");
+              if (finalResponse.status === 201) {
+                console.log("Order creation response:", finalResponse.data);
+                const productIds = orderedItems.map((item) => item._id)
+                console.log("productIds of cart", productIds);
+
+                removeCartItems(productIds);
+
+                navigate("/success");
+              }
             }
+            else if (type === "buyNow") {
+              const raw = JSON.stringify(
+                {
+                  paymentId: verifyData.paymentId,
+
+                  products: product.map((item) => ({
+                    group: item.group,
+                    productId: item.productId,
+                    color: item.color,
+                    size: item.size,
+                    quantityOrdered: item.quantityRequired,
+                    price: item.price,
+                    logoUrl: item.logoUrl,
+                    logoPosition: item.logoPosition,
+                  })),
+                  deliveryCharges: deliveryCharges,
+                  discountPercentage: discountPercentage,
+                  TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+                }
+              )
+              const finalResponse = await axios.post(
+                `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+                raw,
+                { headers }
+              );
+              const result = await finalResponse.data;
+              console.log(result)
+            }
+
+            // if (result.response.status = "200") {
+            //   console.log("Order creation response:", result);
+            //   alert("Order created successfully!");
+            //   navigate("/success");
+            // }
+
           } else {
             alert("Payment verification failed!");
           }
@@ -201,19 +278,86 @@ const Billing = () => {
     setActiveAddressId(addressId);
   };
 
-  useEffect(() => {
-    console.log(activeAddressId);
-  });
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [totalAmount, discountPercentage, deliveryCharges]);
 
-  const calculateTotalPrice = () => {
-    const discountAmount = (discountPercentage * totalAmount) / 100;
-    const totalAfterDiscount = totalAmount - discountAmount;
-    const totalPrice = totalAfterDiscount + deliveryCharges;
-    setTotalPriceAfterDiscount(totalPrice);
-  };
+  const showCartItems = (orderedItems) => {
+    if (orderedItems) {
+      return orderedItems.map((product) => (
+        <div
+          key={product._id}
+          className="d-flex mt-4 align-items-center gap-4"
+          style={{
+            border: "1px solid #ddd",
+            padding: "16px",
+            borderRadius: "8px",
+          }}
+        >
+          <div style={{ width: "180px", flexShrink: 0 }}>
+            <img
+              // src={product.productDetails.productType.imageUrl}
+              src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+              alt={product.productDetails.productType.type}
+              width={180}
+              height={200}
+              style={{ display: "block", maxWidth: "100%" }}
+            />
+          </div>
+          <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
+            <div className="fs-4 fw-medium">{product.color.name}</div>
+            <div className="fs-4 fw-normal">
+              {product.productDetails.group.name}
+            </div>
+            <div className="fs-4 fw-normal">
+              {product.productDetails.category.name} -{" "}
+              {product.productDetails.subCategory.name}
+            </div>
+            <div className="fs-4 fw-normal">
+              {`Quantity: ${product.quantityRequired}`}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  }
+
+
+  const showBuyNowProduct = (product) => {
+    if (product) {
+      return product.map((item, index) => {
+        return (
+          <div
+            className="d-flex mt-4 align-items-center gap-4"
+            key={index}
+            style={{
+              border: "1px solid #ddd",
+              padding: "16px",
+              borderRadius: "8px",
+            }}
+          >
+            <div style={{ width: "180px", flexShrink: 0 }}>
+              <img
+                // src={product.productDetails.productType.imageUrl}
+                src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+                alt={item.group}
+                width={180}
+                height={200}
+                style={{ display: "block", maxWidth: "100%" }}
+              />
+            </div>
+            <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
+              <div className="fs-4 fw-medium">{item.color}</div>
+              <div className="fs-4 fw-normal">
+                {item.group}
+              </div>
+              <div className="fs-4 fw-normal">
+                {`Quantity: ${item.quantityRequired}`}
+              </div>
+            </div>
+          </div>
+        )
+
+      })
+    }
+  }
 
   return (
     <>
@@ -227,12 +371,14 @@ const Billing = () => {
                   We will deliver your order to this address
                 </p>
               </div>
+
+              {/* show address data */}
+
               {addressData.map((address) => (
                 <div
                   key={address._id}
-                  className={`mb-4 d-flex align-items-center gap-5 ${
-                    address._id === activeAddressId ? "active" : ""
-                  }`}
+                  className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? "active" : ""
+                    }`}
                   onClick={() => handleAddressClick(address._id)}
                   style={{ cursor: "pointer" }}
                 >
@@ -242,12 +388,11 @@ const Billing = () => {
                       {address.markAsDefault === false ? "" : "Default"}
                     </div>
                     <div className="fs-4">
-                      {address.flatNumber}, {address.landmark},{" "}
-                      {address.locality}, {address.districtCity},{" "}
-                      {address.state}, {address.pinCode}
+                      {address.address},&nbsp; {address.city},&nbsp;{address.pinCode},&nbsp;{address.state},
+                      &nbsp;{address.country}
                     </div>
                     <div className="fs-4">
-                      Phone: <span className="fw-medium">{address.mobile}</span>
+                      Phone: <span className="fw-medium">{address.phone}</span>
                     </div>
                   </div>
                   <div>
@@ -264,6 +409,8 @@ const Billing = () => {
                 </div>
               ))}
 
+              {/* add address button */}
+
               <div className="mt-5">
                 <button
                   type="button"
@@ -277,6 +424,8 @@ const Billing = () => {
 
               <hr className="w-100 mt-4" />
             </div>
+
+            {/* --------------Order details----------- */}
             <div className="col-lg-6">
               <div className="order__bill">
                 <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
@@ -285,19 +434,21 @@ const Billing = () => {
                   </h5>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     Bag total
-                    <span>₹{totalAmount}</span>
+                    {/* <span>{convertToCurrency(totalAmount)}</span> */}
+                    <span>{Number(totalAmount).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
+
                   </p>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     {`Bag Discount ${discountPercentage}%`}
-                    <span>(-)₹{(discountPercentage * totalAmount) / 100}</span>
+                    <span>(-){((discountPercentage * totalAmount) / 100).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
                   </p>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     Delivery Fee
-                    <span>(+)₹{deliveryCharges}</span>
+                    <span>(+){convertToCurrency(deliveryCharges)}</span>
                   </p>
                   <p className="fs-5 fw-medium lh-1 d-flex justify-content-between align-items-center">
                     Order total
-                    <span>₹{TotalPriceAfterDiscount}</span>
+                    <span>{convertToCurrency(TotalPriceAfterDiscount)}</span>
                   </p>
                 </div>
                 <button
@@ -306,9 +457,8 @@ const Billing = () => {
                     backgroundColor: "#20248A",
                     width: "100%",
                   }}
-                  className={`btn  ${
-                    activeAddressId === null ? "disabled" : ""
-                  } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
+                  className={`btn  ${activeAddressId === null ? "disabled" : ""
+                    } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
                   onClick={handlePayment}
                 >
                   Proceed to payment
@@ -322,6 +472,8 @@ const Billing = () => {
               Estimated delivery dates for your order
             </p>
 
+            {/* --------------order items------------ */}
+
             <div
               style={{
                 display: "grid",
@@ -329,42 +481,15 @@ const Billing = () => {
                 gap: "16px",
               }}
             >
-              {orderedItems.map((product) => (
-                <div
-                  key={product._id}
-                  className="d-flex mt-4 align-items-center gap-4"
-                  style={{
-                    border: "1px solid #ddd",
-                    padding: "16px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <div style={{ width: "180px", flexShrink: 0 }}>
-                    <img
-                      // src={product.productDetails.productType.imageUrl}
-                      src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-                      alt={product.productDetails.productType.type}
-                      width={180}
-                      height={200}
-                      style={{ display: "block", maxWidth: "100%" }}
-                    />
-                  </div>
-                  <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
-                    <div className="fs-4 fw-medium">{product.color.name}</div>
-                    <div className="fs-4 fw-normal">
-                      {product.productDetails.group.name}
-                    </div>
-                    <div className="fs-4 fw-normal">
-                      {product.productDetails.category.name} -{" "}
-                      {product.productDetails.subCategory.name}
-                    </div>
-                    <div className="fs-4 fw-normal">
-                      {`Quantity: ${product.quantityRequired}`}
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {
+                showBuyNowProduct(product)
+              }
+
+              {
+                showCartItems(orderedItems)
+              }
             </div>
+
           </div>
         </div>
         <div className=""></div>

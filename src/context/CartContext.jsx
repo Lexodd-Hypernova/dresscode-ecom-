@@ -12,6 +12,7 @@ export const CartProvider = ({ children }) => {
 
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [logoUrl, setLogoUrl] = useState('');
 
   const nav = useNavigate();
 
@@ -42,6 +43,10 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     fetchCart();
   }, []); // Add dependencies to useEffect
+
+
+
+
 
   const addToCart = async (item) => {
     setLoading(true);
@@ -92,7 +97,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, loading, token, setCart }}
+      value={{ cart, addToCart, removeFromCart, loading, token, setCart, fetchCart }}
     >
       {children}
     </CartContext.Provider>

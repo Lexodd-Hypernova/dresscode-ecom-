@@ -67,7 +67,8 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   };
 
   return (
-    <div className="counter">
+    <div className="c_counter">
+      Qty 
       <button
         className="counter-btn"
         onClick={decrement}
@@ -84,7 +85,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
       <button className="counter-btn" onClick={increment} disabled={loading}>
         +
       </button>
-      <span>{price}</span>
+      {/* <span>{price}</span> */}
       {loading && <span className="loading-indicator">Updating...</span>}
     </div>
   );

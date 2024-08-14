@@ -1,4 +1,4 @@
-const baseUrl = "https://dresscode-test.onrender.com";
+const baseUrl = "https://dresscode-updated.onrender.com";
 const DressCodeApi = {
   getGroups: {
     url: `${baseUrl}/e-com/getGroups`,
@@ -58,6 +58,7 @@ export const shoppingInfoApis = {
     `${baseUrl}/user/${userId}/removeCartItem/${productId}`,
   getWhishList: (userId) => `${baseUrl}/user/${userId}/getWishlist`,
   addWhishList: (userId) => `${baseUrl}/user/${userId}/addToWishlist`,
+  removeCartItems: (userId) => `${baseUrl}/user/${userId}/removeCartItems`,
   removeFromWishList: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeWishlistItem/${productId}`,
   addReview: (group, productId) => `${baseUrl}/user/${group}/${productId}/writeReview`,
