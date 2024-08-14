@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext";
 import "./pages-styles/cart.styles.css";
 
 import { useNavigate } from 'react-router-dom';
+import { useWhishList } from "../context/WishListContext";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Cart = () => {
   const [bagTotal, setBagTotal] = useState(0);
 
   const { cart, removeFromCart, setCart, loading } = useCart();
+
+  const { addToWishList } = useWhishList();
 
 
 
@@ -107,6 +110,25 @@ const Cart = () => {
   };
 
 
+  const handleWishList = (item) => {
+
+    const itemToAdd = {
+      group: item.group,
+      productId: item.productId,
+      color: item.color.name,
+      size: item.size,
+      logoUrl: item.logoUrl,
+      logoPosition: item.logoPosition,
+      productDetails: null
+    };
+    addToWishList(itemToAdd);
+
+    removeFromCart(item._id)
+
+    // console.log("item", item)
+  }
+
+
   return (
     <div className="cart_screen">
       <div className="cart-back" onClick={handleGoBack}>
@@ -137,7 +159,7 @@ const Cart = () => {
                     </div>
                     <div className="p_act">
                       <span onClick={() => removeFromCart(item._id)}>Delete</span>{" "}
-                      <span>
+                      <span onClick={() => handleWishList(item)}>
                         <i className="fa-regular fa-heart"></i> Move to wishlist
                       </span>
                     </div>
@@ -159,29 +181,34 @@ const Cart = () => {
                     price={item.productDetails.price}
                     onUpdateQuantity={updateItemQuantity}
                   />
+                  <div className="p_price">Rs. {productTotal[item._id]}</div>
                 </div>
 
-                <div className="p_price">Rs. {productTotal[item._id]}</div>
-
-                <div className="p_logo">
-                  <div>Logo</div>
-                  <div className="logo_f">
-                    <img src={item.logoUrl} className="w-100" alt="" />
+                <div className="logo_detail">
+                  <div className="p_logo">
+                    <div>Logo</div>
+                    <div className="logo_f">
+                      <img src={item.logoUrl} className="w-100" alt="" />
+                    </div>
+                  </div>
+                  <div className="p_logo-pos">
+                    <div>Logo placement</div>
+                    <div className="lg_ttl">{item.logoPosition}</div>
                   </div>
                 </div>
-                <div className="p_logo-pos">
-                  <div>Logo placement</div>
-                  <div className="lg_ttl">{item.logoPosition}</div>
+
+                <div className="p_remark">
+                  <div className="form-check form-switch">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id={`flexSwitchCheckDefault-${index}`}
+                      checked={item.checked}
+                      onChange={() => handleCheckboxChange(item._id)}
+                    />
+                  </div>
                 </div>
-                <div className="form-check form-switch">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id={`flexSwitchCheckDefault-${index}`}
-                    checked={item.checked}
-                    onChange={() => handleCheckboxChange(item._id)}
-                  />
-                </div>
+
               </div>
             ))}
 

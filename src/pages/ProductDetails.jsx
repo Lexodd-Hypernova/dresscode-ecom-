@@ -57,6 +57,7 @@ const ProductDetails = () => {
       size: activeSize,
       logoUrl: null,
       logoPosition: null,
+      productDetails: null
     };
     addToWishList(item);
   };

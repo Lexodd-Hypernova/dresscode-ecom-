@@ -2,6 +2,11 @@
     padding: 80px 100px;
 }
 
+.p_counter {
+    display: flex;
+    gap: 40px;
+}
+
 .bag_title {
     font-family: Inter;
     font-size: 32px;
@@ -54,6 +59,11 @@
     font-size: 20px;
     font-weight: 500;
     line-height: 27px;
+}
+
+.logo_detail {
+    display: flex;
+    gap: 40px;
 }
 
 .p_logo {
@@ -117,4 +127,137 @@
     background-color: #20248A;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+}
+
+
+@media screen and (max-width: 1600px) {
+    .cart_screen {
+        padding: 40px 60px;
+    }
+
+    .bag_title {
+        font-size: 24px;
+        line-height: 36px;
+        margin: 20px 0;
+    }
+
+    .p_cart {
+        padding: 20px 0;
+    }
+
+    .p_outer {
+        gap: 20px;
+    }
+
+    .p_img {
+        width: 130px;
+    }
+
+    .p_name {
+        font-size: 14px;
+    }
+
+    .p_act {
+        font-size: 14px;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .p_size {
+        font-size: 14px;
+    }
+
+    .p_price {
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    .p_logo {
+        font-size: 16px;
+        line-height: 25px;
+        gap: 20px;
+    }
+
+    .logo_f {
+        width: 60px;
+    }
+
+    .p_logo-pos {
+        font-size: 16px;
+        line-height: 25px;
+        gap: 20px;
+    }
+
+    .cart_total {
+        margin-top: 20px;
+    }
+
+    .cart_amt {
+        padding: 15px;
+        font-size: 19px;
+        line-height: 30px;
+    }
+
+    .cart_total button {
+        font-size: 16px;
+        line-height: 25px;
+        padding: 12px 80px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .cart_screen {
+        padding: 40px 20px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .p_cart {
+        flex-direction: column;
+        width: fit-content;
+        padding: 20px;
+        border: 1px solid #727272;
+        gap: 15px;
+    }
+
+    .p_logo {
+        gap: 10px;
+    }
+
+    .p_logo-pos {
+        gap: 10px;
+    }
+
+    .logo_f {
+        width: 50px;
+    }
+
+    .p_img {
+        width: 100px;
+    }
+
+    .p_act {
+        font-size: 14px;
+        gap: 40px;
+        margin-top: 26px;
+    }
+
+    .cart_total {
+        justify-content: start;
+    }
+
+    .p_remark {
+        display: flex;
+        justify-content: end;
+    }
+
+    .cart_total button {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .cart_total {
+        justify-content: center;
+    }
 }
