@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
   },
   addButton: {
-    position: "fixed",
-    bottom: theme.spacing(2),
+    position: "absolute",
+    // bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
 }));
@@ -213,15 +213,15 @@ const YourAddress = () => {
 
   const handleAddAddress = () => {
     setFormData({
-      name: "",
-      mobile: "",
-      flatNumber: "",
-      locality: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: "",
       pinCode: "",
-      landmark: "",
-      districtCity: "",
+      city: "",
       state: "",
-      addressType: "Home",
+      country: "",
       markAsDefault: false,
     });
     setModalOpen(true);
@@ -277,7 +277,7 @@ const YourAddress = () => {
 
     <>
 
-      <div style={{ background: "#EFF4FD", height: "100vh" }}>
+      <div className="address-screen">
         <div>
           <div
             style={{
@@ -296,11 +296,11 @@ const YourAddress = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-4 col-md-6 mb-4">
-              <div className="address-card rounded" style={{ height: '85%', }}>
+              <div className="address-card rounded">
                 <IconButton
                   className="add-address-icon"
                   onClick={handleAddAddress}
-                  style={{ marginTop: '70%' }}
+
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   <h4
@@ -318,15 +318,15 @@ const YourAddress = () => {
                   <div className="address-card rounded">
                     <p>{val.markAsDefault ? "Default" : ""}</p>
                     <hr style={{ width: '100%', borderTop: '1px solid black' }} />
-                    <h5>{val.name}</h5>
+                    <h5>{val.firstName}&nbsp;{val.lastName}</h5>
                     <p>
-                      {val.landmark} {val.flatNumber}
+                      {val.address}
                     </p>
-                    <p>{val.locality}</p>
+                    <p>{val.city}&nbsp;{val.pinCode}</p>
                     <p>
-                      {val.state} {val.districtCity}
+                      {val.state}
                     </p>
-                    <p>{val.addressType}</p>
+                    <p>{val.country}</p>
                     <div style={{ color: 'brown' }}>
                       <span onClick={() => editAddress(val._id)} style={{ cursor: 'pointer' }}>
                         Edit

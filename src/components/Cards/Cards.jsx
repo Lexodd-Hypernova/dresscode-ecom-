@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import DressCodeApi from "../../common";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./cards.css";
 
 const Cards = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
+  const loadingList = new Array(6).fill(null);
+
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     const requestOptions = {
@@ -29,41 +33,59 @@ const Cards = () => {
     fetchData();
   }, []);
 
-  return loading ? (
-    <div className="placeholder-glow w-100 vh-100 rounded-14">
-      <span className="placeholder h-100 d-inline-block w-100"></span>
-    </div>
-  ) : (
-    <div className="container mt-5">
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {groups.map((group, index) => (
-          <div className="col" key={index}>
-            <div className="card h-100">
-              <img
-                src={group.imageUrl || "https://via.placeholder.com/150"}
-                className="card-img-top"
-                alt={group.groupName || "Card image"}
-              />
-              <div className="card-body">
-                <h5 className="card-title">
-                  {group.groupName || "Default Title"}
-                </h5>
-              </div>
-              <div className="card-footer">
-                <Link
-                  to={`/${group.groupName}`}
-                  key={index}
-                  className="btn btn-primary"
-                >
-                  Go somewhere
-                </Link>
-              </div>
+
+  const handleClick = (groupName) => {
+    console.log(groupName);
+    if (groupName === "ELITE") {
+      navigate("/ELITE")
+    } else {
+      navigate("/coming-soon")
+    }
+  }
+
+
+  return (
+    <section className="card-section">
+      {
+        loading ? (
+          <div className='container-fluid'>
+            <div className='row row-gap-5'>{
+              loadingList.map((item, index) => {
+                return (
+                  <div className="col-lg-4" key={index}>
+                    <div className='placeholder-glow' style={{ height: "50vh" }}>
+                      <span className="placeholder d-inline-block h-100 w-100"></span>
+                    </div>
+                    <h5 className="placeholder-glow">
+                      <span className="placeholder d-inline-block w-100"></span>
+                    </h5>
+                  </div>
+                )
+              })
+            }
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
+        ) : (
+          <div className="container-fluid">
+            <div className="row row-gap-4">
+              {groups.map((group, index) => (
+                <div className="col-lg-4" role="button" key={index} onClick={() => handleClick(group.groupName)}>
+                  <img
+                    src="https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+                    className="w-100 rounded"
+                    alt={group.groupName || "Card image"}
+                  />
+                  <h3 className="card-title mt-2">{group.groupName}</h3>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </section>
+  )
+
+
 };
 
 export default Cards;

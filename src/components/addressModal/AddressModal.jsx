@@ -100,51 +100,60 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
                     <h2 id="add-address-modal-title">{formData._id ? "Edit Address" : "Add New Address"}</h2>
                     <form onSubmit={handleFormSubmit}>
                         <TextField
-                            label="Name"
-                            name="name"
+                            label="First Name"
+                            name="firstName"
                             fullWidth
                             margin="normal"
                             value={formData.name}
                             onChange={handleChange}
                         />
                         <TextField
-                            label="Mobile"
-                            name="mobile"
+                            label="Last Name"
+                            name="lastName"
+                            fullWidth
+                            margin="normal"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Phone No"
+                            name="phone"
                             fullWidth
                             margin="normal"
                             value={formData.mobile}
                             onChange={handleChange}
                         />
                         <TextField
-                            label="Flat Number / Building Name"
-                            name="flatNumber"
+                            label="Email"
+                            name="email"
+                            fullWidth
+                            margin="normal"
+                            value={formData.mobile}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            label="Address"
+                            name="address"
                             fullWidth
                             margin="normal"
                             value={formData.flatNumber}
                             onChange={handleChange}
                         />
+
                         <TextField
-                            label="Locality / Area / Street"
-                            name="locality"
+                            label="City"
+                            name="city"
                             fullWidth
                             margin="normal"
-                            value={formData.locality}
+                            value={formData.districtCity}
                             onChange={handleChange}
                         />
                         <TextField
-                            label="Pincode"
+                            label="Pin code"
                             name="pinCode"
                             fullWidth
                             margin="normal"
                             value={formData.pinCode}
-                            onChange={handleChange}
-                        />
-                        <TextField
-                            label="District / City"
-                            name="districtCity"
-                            fullWidth
-                            margin="normal"
-                            value={formData.districtCity}
                             onChange={handleChange}
                         />
                         <TextField
@@ -155,7 +164,15 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
                             value={formData.state}
                             onChange={handleChange}
                         />
-                        <FormLabel component="legend">Address Type</FormLabel>
+                        <TextField
+                            label="Country"
+                            name="country"
+                            fullWidth
+                            margin="normal"
+                            value={formData.locality}
+                            onChange={handleChange}
+                        />
+                        {/* <FormLabel component="legend">Address Type</FormLabel>
                         <RadioGroup
                             aria-label="addressType"
                             name="addressType"
@@ -178,7 +195,7 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
                                 control={<Radio />}
                                 label="Others"
                             />
-                        </RadioGroup>
+                        </RadioGroup> */}
                         <FormControlLabel
                             control={
                                 <Checkbox

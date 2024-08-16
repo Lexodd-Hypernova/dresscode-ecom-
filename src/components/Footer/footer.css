@@ -218,8 +218,286 @@ footer {
     border-bottom: 1px solid #fff;
 }
 
-.ft__Row3{
+.ft__Row3 {
     position: relative;
     height: 270px;
     width: 100%;
+}
+
+
+@media only screen and (max-width: 1600px) {
+    .ft-icn {
+        width: 50px;
+    }
+
+    .ft-cs h5 {
+        font-size: 17px;
+        line-height: 60px;
+        letter-spacing: 1px;
+    }
+
+    .thank {
+        font-size: 100px;
+        line-height: 100px;
+        letter-spacing: 2.6px;
+    }
+
+    .visit {
+        font-size: 55px;
+        line-height: 70px;
+        letter-spacing: 2.3px;
+        margin-top: 20px;
+    }
+
+    .ft_str {
+        width: 160px;
+    }
+
+    .ft_str img {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .ft-card-ttl {
+        font-size: 19px;
+        line-height: 60px;
+        letter-spacing: 1px;
+    }
+
+    .ft-card-loc address {
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 1px;
+        padding-right: 0%;
+    }
+
+    .ft-cn {
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 1px;
+    }
+
+    .ft_dir {
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 1px;
+        padding: 7px 30px;
+        border-radius: 50px;
+        margin-top: 26px;
+    }
+
+    .ft-card-links a {
+        font-size: 13px;
+        line-height: 22px;
+        letter-spacing: 1px;
+    }
+
+    .social-links a {
+        font-size: 14px;
+        line-height: 26px;
+        letter-spacing: 1px;
+    }
+
+    .ft__Row3 {
+        height: 220px;
+    }
+
+    .ft_Ttl {
+        font-size: 200px;
+        line-height: 200px;
+    }
+
+    .ft-card-loc {
+        padding: 26px 0 0 26px;
+    }
+
+    .ft-card-contact {
+        padding: 26px 0 0 26px;
+    }
+
+    .ft-card-links {
+        padding: 26px 0 0 26px;
+    }
+
+    .ft-card-stalk {
+        padding: 26px 0 0 26px;
+    }
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .ft-icn {
+        width: 40px;
+    }
+
+    .ft-cs h5 {
+        font-size: 14px;
+        line-height: 44px;
+    }
+
+    .thank {
+        font-size: 75px;
+        line-height: 80px;
+        letter-spacing: 1.6px;
+    }
+
+    .visit {
+        font-size: 40px;
+        line-height: 50px;
+        letter-spacing: 1.3px;
+    }
+
+    .ft_str {
+        width: 120px;
+    }
+
+    .ft-card-ttl {
+        font-size: 16px;
+        line-height: 45px;
+    }
+
+    .ft_dir {
+        font-size: 13px;
+        line-height: 23px;
+        padding: 5px 20px;
+        margin-top: 20px;
+    }
+
+    .ft__Row3 {
+        height: 160px;
+    }
+
+    .ft_Ttl {
+        font-size: 150px;
+        line-height: 170px;
+        top: 50px;
+    }
+}
+
+
+@media only screen and (max-width: 991px) {
+    .thank {
+        font-size: 50px;
+        line-height: 50px;
+        letter-spacing: 0.6px;
+    }
+
+    .visit {
+        font-size: 30px;
+        line-height: 30px;
+        letter-spacing: 0.3px;
+    }
+
+    .ft_str {
+        width: 80px;
+    }
+
+    .ft-card-ttl {
+        font-size: 13px;
+        line-height: 30px;
+    }
+
+    .ft-card-loc address {
+        font-size: 11px;
+        line-height: 18px;
+        letter-spacing: 0px;
+    }
+
+    .ft-cn {
+        font-size: 11px;
+        line-height: 18px;
+        letter-spacing: 0px;
+    }
+
+    .ft_dir {
+        font-size: 11px;
+        line-height: 20px;
+        padding: 5px 16px;
+    }
+
+    .ft-card-links a {
+        font-size: 11px;
+        line-height: 18px;
+        letter-spacing: 0px;
+    }
+
+    .social-links a {
+        font-size: 11px;
+        line-height: 19px;
+        letter-spacing: 0px;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .ft-icn {
+        width: 30px;
+    }
+
+    .ft-cs h5 {
+        font-size: 8px;
+        line-height: 23px;
+    }
+
+    .ft__Row2 {
+        flex-direction: column;
+    }
+
+    .ft_thk {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .ft_card {
+        width: 100%;
+    }
+
+    .ft__Row2 {
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .ft-card-loc {
+        border-right: none;
+    }
+
+    .ft-card-links {
+        border-right: none;
+    }
+
+    .ft-card-row:nth-of-type(1) {
+        border-bottom: none;
+    }
+
+    .ft_card {
+        border-left: none;
+    }
+
+    .ft_Ttl {
+        font-size: 45px;
+        line-height: 1;
+        top: 25px;
+    }
+
+    .ft__Row3 {
+        height: 55px;
+    }
+
+    .ft_str {
+        width: 60px;
+        bottom: 0;
+        right: 85px;
+    }
+
+    .thank {
+        font-size: 40px;
+        line-height: 40px;
+        letter-spacing: 0.6px;
+    }
+
+    .visit {
+        font-size: 20px;
+        line-height: 20px;
+        letter-spacing: 0.3px;
+    }
 }

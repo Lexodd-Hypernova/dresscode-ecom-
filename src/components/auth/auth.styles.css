@@ -1,66 +1,231 @@
-.welcome-back{
-    /* color: rgba(0, 0, 0, 0.50);
-font-family: Poppins;
-font-size: 16.282px;
-font-style: normal;
-font-weight: 400;
-line-height: 22.388px; /* 137.5% */
-color: rgba(0, 0, 0, 0.50);
-font-family: Poppins;
-font-size: 14.282px;
-font-style: normal;
-font-weight: 200;
-line-height: 22.388px;
-letter-spacing: 0.488px;
-margin-top: 10%;
+.auth-screen {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background: #FFFFFF;
+}
+
+.auth-container {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-inner {
+    width: 50%;
+    border-radius: 20px;
+    padding: 60px;
+    background: #FFFFFF;
+    box-shadow: 0px 19.33px 40.71px 0px #0000000D inset;
+}
+
+.auth-banner {
+    width: 40%;
+    background: #FFEDE1;
+    position: relative;
+}
+
+.auth-banner-img {
+    position: absolute;
+    width: 95%;
+    bottom: 75px;
+    right: 170px;
+}
+
+.auth-banner-img img {
+    width: 100%;
+    object-fit: cover;
+}
+
+
+.auth-logo {
+    display: inline-block;
+    width: 260px;
+}
+
+.welcome-back {
+    font-family: Poppins;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #00000080;
+    letter-spacing: 0.03em;
+    margin-top: 10%;
 
 }
-.sign-in{
+
+.sign-in {
     color: #000;
-font-family: Poppins;
-font-size: 40.987px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
+    font-family: Poppins;
+    font-size: 60px;
+    font-weight: 500;
+    line-height: 85px;
 }
-.form-labels{
+
+.form-labels {
+    font-family: Poppins;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 24px;
     color: #000;
-font-family: Poppins;
-font-size: 10.282px;
-font-style: normal;
-font-weight: 900;
-line-height: normal;
 }
-.under-label{
+
+.under-label {
     margin-top: 5%;
     color: rgba(0, 0, 0, 0.20);
-font-family: Poppins;
-font-size: 12.282px;
-font-style: normal;
-font-weight: 400;
-line-height: 22.388px; /* 137.5% */
-letter-spacing: 0.488px;
-display: flex;
-   justify-content: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.488px;
+    display: flex;
+    justify-content: center;
 }
-.form-control{
-width: 90%;
+
+.auth-input {
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    background: #FFF6F4;
 }
-.button{
+
+.auth-btn {
     margin-top: 10%;
-   display: flex;
-   justify-content: center;
-
+    display: flex;
+    justify-content: center;
 }
 
-.sign-up-header{
+.auth-btn button {
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    padding: 11px 30px;
+    border: none;
+    background: #F47458;
+    color: white;
+    border-radius: 24px;
+}
+
+.sign-up-header {
     color: #2C3796;
-font-family: Satoshi;
-font-size: 17.423px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
-align-self: self-start;
-margin-left: 80px;
-padding-bottom: 10px;
+    font-family: 'Poppins';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    padding-bottom: 30px;
+}
+
+.auth-back {
+    top: 14%;
+    position: absolute;
+    left: 60px;
+    width: 60px;
+    cursor: pointer;
+}
+
+.under-label p {
+    margin: 0;
+}
+
+
+@media only screen and (max-width: 1600px) {
+    .auth-logo {
+        width: 180px;
+    }
+
+    .welcome-back {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .sign-in {
+        font-size: 32px;
+        line-height: 50px;
+    }
+
+    .form-labels {
+        font-size: 12px;
+        line-height: 12px;
+    }
+
+    .auth-btn button {
+        font-size: 14px;
+        line-height: 20px;
+        padding: 9px 27px;
+        border-radius: 20px;
+    }
+
+    .sign-up-header {
+        font-size: 20px;
+        line-height: 24px;
+        padding-bottom: 20px;
+    }
+
+    .auth-inner {
+        padding: 20px;
+    }
+
+    .auth-btn {
+        margin-top: 6%;
+    }
+
+    .auth-back {
+        top: 4%;
+    }
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .auth-logo {
+        width: 120px;
+    }
+
+    .sign-in {
+        font-size: 26px;
+        line-height: 30px;
+    }
+
+    .under-label {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .auth-banner-img {
+        bottom: 55px;
+        right: 100px;
+    }
+
+    .auth-btn button {
+        font-size: 12px;
+        line-height: 17px;
+        padding: 7px 25px;
+        border-radius: 20px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .auth-container {
+        width: 100%;
+        display: block;
+        padding: 10px;
+        margin-top: 40px;
+    }
+
+    .auth-inner {
+        width: 100%;
+    }
+
+    .auth-banner {
+        display: none;
+    }
+
+    .auth-back {
+        top: 2%;
+        left: 20px;
+    }
 }
