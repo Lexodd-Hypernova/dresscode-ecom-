@@ -29,9 +29,10 @@ const DressCodeApi = {
   },
   verifyPayment: {
     url: `${baseUrl}/payment/verifyPayment`,
-  }
+  },
 };
 export default DressCodeApi;
+
 export const authUrls = {
   login: `${baseUrl}/user/login`,
   signup: `${baseUrl}/user/createUser`,
@@ -60,8 +61,10 @@ export const shoppingInfoApis = {
   addWhishList: (userId) => `${baseUrl}/user/${userId}/addToWishlist`,
   removeFromWishList: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeWishlistItem/${productId}`,
-  addReview: (group, productId) => `${baseUrl}/user/${group}/${productId}/writeReview`,
-  getReviews: (group, productId) => `${baseUrl}/user/${group}/${productId}/getProductReviews`,
+  addReview: (group, productId) =>
+    `${baseUrl}/user/${group}/${productId}/writeReview`,
+  getReviews: (group, productId) =>
+    `${baseUrl}/user/${group}/${productId}/getProductReviews`,
 };
 export const S3imageApis = {
   uploadImage: `${baseUrl}/image/generateImgUrl`,

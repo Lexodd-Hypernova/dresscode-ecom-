@@ -163,7 +163,7 @@ const Billing = () => {
               const result = await finalResponse.json();
               console.log("Order creation response:", result);
               alert("Order created successfully!");
-              navigate("/success");
+              navigate("/success", { orderID: 123 });
             }
           } else {
             alert("Payment verification failed!");
