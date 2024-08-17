@@ -174,3 +174,215 @@
   font-family: Inter;
   font-weight: 400;
 }
+
+@media screen and (max-width: 1600px) {
+  .orders-container {
+    padding: 0 60px;
+  }
+
+  .order_navbar {
+    gap: 50px;
+  }
+
+  .ord_nav-item {
+    font-size: 26px;
+    line-height: 46px;
+  }
+
+  .order_head {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+
+  .order_content {
+    gap: 40px;
+  }
+
+  .order_Ttl {
+    padding: 15px 50px;
+  }
+
+  .ord_plcd,
+  .ord_id {
+    font-size: 20px;
+    line-height: 32px;
+  }
+
+  .order_outer {
+    padding: 30px 50px;
+  }
+
+  .dt_delivery {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .ord_desc {
+    gap: 20px;
+  }
+
+  .ord_img {
+    width: 130px;
+  }
+
+  .prd_name {
+    font-size: 19px;
+    line-height: 30px;
+  }
+
+  .pr_price,
+  .pr_size,
+  .pr_color,
+  .pr_lg-place {
+    font-size: 19px;
+    line-height: 30px;
+  }
+
+  .pr_action button {
+    font-size: 14px;
+    padding: 12px 30px;
+  }
+
+  .pr-logo {
+    gap: 15px;
+    font-size: 14px;
+  }
+
+  .pr_action {
+    gap: 20px;
+  }
+
+  .pr_lg_det {
+    width: 60px;
+  }
+}
+
+
+@media screen and (max-width: 991px) {
+  .orders-container {
+    padding: 0 20px;
+  }
+
+  .ord_nav-item {
+    font-size: 20px;
+    line-height: 34px;
+  }
+
+  .order_navbar {
+    gap: 40px;
+  }
+
+  .order_head {
+    font-size: 16px;
+    margin: 16px 0;
+  }
+
+  .order_Ttl {
+    padding: 15px 30px;
+  }
+
+  .ord_plcd,
+  .ord_id {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .order_outer {
+    padding: 20px 30px;
+  }
+
+  .dt_delivery {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .prd_name {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .pr_price,
+  .pr_size,
+  .pr_color,
+  .pr_lg-place {
+    font-size: 16px;
+    line-height: 25px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .ord_nav-item {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .ord_nav-item.selected::after {
+    height: 1px;
+  }
+
+  .order_navbar {
+    gap: 30px;
+  }
+
+  .order_head {
+    font-size: 14px;
+    margin: 15px 0;
+    margin-top: 0;
+  }
+
+  .order_Ttl {
+    padding: 15px 20px;
+  }
+
+  .ord_plcd,
+  .ord_id {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .order_content {
+    gap: 30px;
+  }
+
+  .order_outer {
+    padding: 20px 20px;
+  }
+
+  .dt_delivery {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .order_item {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .prd_name {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .pr_price,
+  .pr_size,
+  .pr_color,
+  .pr_lg-place {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .ord_img {
+    width: 100px;
+  }
+
+  .pr_action button {
+    font-size: 14px;
+    padding: 10px 25px;
+  }
+
+  .order_outer {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+}
