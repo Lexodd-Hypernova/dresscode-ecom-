@@ -7,6 +7,8 @@ import LogoUploader from "../components/LogoUploader";
 import { useCart } from "../context/CartContext";
 import { useWhishList } from "../context/WishListContext";
 
+import "./pages-styles/productDetails.style.css";
+
 const normalizeName = (name) => {
   if (typeof name === "string") {
     return name.trim().toLowerCase();
@@ -233,15 +235,15 @@ const ProductDetails = () => {
       <section className="product__Details">
         <ProductSlider />
 
-        <div className="productContent mt-5">
-          <h2 className="pr_name mt-5">Product Name</h2>
+        <div className="productContent">
+          <h2 className="pr_name">Product Name</h2>
           <div className="pr_rating">
-            <button type="button" className="btn btn-success fs-5">
+            <button type="button" className="btn btn-success">
               4.5
             </button>
-            <span className="ms-2 fs-5">10 Ratings</span>
+            <span className="ms-2">10 Ratings</span>
           </div>
-          <div className="pr_price fs-3 my-2 fw-normal">{Number(totalPrice).toLocaleString("en-US", { style: "currency", currency: "INR" })}</div>
+          <div className="var_price my-2">MRP {Number(totalPrice).toLocaleString("en-US", { style: "currency", currency: "INR" })}</div>
           <div className="var__Color">
             <span className="fs-3 mt-2 fw-normal">Color</span>
             {loading ? (

@@ -1,7 +1,6 @@
 .c_counter {
   display: flex;
-  /* align-items: center; */
-  justify-content: center;
+  flex-direction: column;
 }
 
 .counter-btn {
@@ -39,6 +38,7 @@
   height: 30px;
   text-align: center;
 }
+
 .loading-indicator {
   margin-left: 10px;
   color: #999;

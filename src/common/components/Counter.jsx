@@ -8,6 +8,8 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
+  const [conterError, setCounterError] = useState();
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,12 +37,15 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
         { quantityNeedToChange: quantity },
         config
       );
-      onUpdateQuantity(quantity, cartItemId);
+      onUpdateQuantity(quantity, cartItemId, true); // Keep the item checked
+      setCounterError()
 
       console.log(response.data);
       // Call the parent component's callback to update quantity in cartData
     } catch (error) {
       console.error("Error updating item quantity:", error);
+      setCounterError(error.response.data.message)
+      onUpdateQuantity(quantity, cartItemId, false); // Uncheck the item
     } finally {
       setLoading(false);
     }
@@ -68,7 +73,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
 
   return (
     <div className="c_counter">
-      Qty 
+      Qty
       <button
         className="counter-btn"
         onClick={decrement}
@@ -87,6 +92,8 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
       </button>
       {/* <span>{price}</span> */}
       {loading && <span className="loading-indicator">Updating...</span>}
+
+      {conterError && <span className="text-danger">{conterError}</span>}
     </div>
   );
 };

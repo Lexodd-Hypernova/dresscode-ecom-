@@ -8,11 +8,16 @@ import "./pages-styles/cart.styles.css";
 import { useNavigate } from 'react-router-dom';
 import { useWhishList } from "../context/WishListContext";
 
+// import { shoppingInfoApis } from "../common"
+
+// import { shoppingInfoApis } from "../common";
+
 const Cart = () => {
   const navigate = useNavigate();
 
 
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("id")
 
   const [cartData, setCartData] = useState([]);
   const [cartCount, setCardCount] = useState(0);
@@ -24,19 +29,43 @@ const Cart = () => {
   const { addToWishList } = useWhishList();
 
 
-
   useEffect(() => {
     if (!loading) {
       // Initialize checked property for each item in the cart
-      const updatedCart = cart.map((item) => ({
-        ...item,
-        checked: true, // Initially checked
-      }));
-      setCart(updatedCart);
-      calculateBagTotal(updatedCart);
-      calculateInitialProductTotals(updatedCart);
+      // const updatedCart = cart.map((item) => ({
+      //   ...item,
+      //   checked: item.checked !== undefined ? item.checked : true, 
+      // }));
+
+      // console.log("Cart initialized with checked property:", updatedCart);
+      setCart(cart);
+      calculateBagTotal(cart);
+      calculateInitialProductTotals(cart);
+
+      // setCart(updatedCart);
+      // calculateBagTotal(updatedCart);
+      // calculateInitialProductTotals(updatedCart);
     }
   }, [loading]);
+
+
+
+  // useEffect(() => {
+  //   if (!loading) {
+  //     // Initialize checked property for each item in the cart
+  //     const updatedCart = cart.map((item) => ({
+  //       ...item,
+  //       checked: item.checked !== undefined ? item.checked : true, // Ensure 'checked' is initialized
+  //     }));
+
+  //     console.log("Cart initialized with checked property:", updatedCart);
+
+  //     setCart(updatedCart);
+  //     calculateBagTotal(updatedCart);
+  //     calculateInitialProductTotals(updatedCart);
+  //   }
+  // }, [loading]);
+
 
   //calculate total amount of each item on loading cart page initially.
   const calculateInitialProductTotals = (updatedCart) => {
@@ -67,13 +96,22 @@ const Cart = () => {
     );
   };
 
-  const updateItemQuantity = async (newQuantity, cartItemId) => {
+  const updateItemQuantity = async (newQuantity, cartItemId, isChecked) => {
     try {
-      const updatedCart = cart.map((item) =>
-        item._id === cartItemId
-          ? { ...item, quantityRequired: newQuantity }
-          : item
-      );
+      const updatedCart = cart.map((item) => {
+        if (item._id === cartItemId) {
+          return {
+            ...item,
+            quantityRequired: newQuantity, // Update the quantity
+            checked: isChecked, // Update the checkbox status based on isChecked parameter
+            isRequiredQuantityPresent: isChecked
+          };
+        }
+        return item;
+      });
+
+      console.log("updatedCart after", updatedCart)
+
       setCart(updatedCart);
 
       const updatedItem = updatedCart.find((item) => item._id === cartItemId);
@@ -84,13 +122,66 @@ const Cart = () => {
     }
   };
 
-  const handleCheckboxChange = (cartItemId) => {
-    const updatedCart = cart.map((item) =>
-      item._id === cartItemId ? { ...item, checked: !item.checked } : item
-    );
-    setCart(updatedCart);
-    calculateBagTotal(updatedCart);
+  const handleCheckboxChange = async (cartItemId) => {
+    const updatedCart = cart.map((item) => {
+      if (item._id === cartItemId) {
+        // Only toggle checkbox if stock is present and no issues
+        if (item.isRequiredQuantityPresent) {
+          return { ...item, checked: !item.checked };
+        }
+        // If stock is not present, do not change the checkbox status
+        return item;
+      }
+      return item;
+    });
+
+    const updatedItem = updatedCart.find((item) => item._id === cartItemId);
+
+    try {
+      // Call the API to update the checked state on the server
+      await axios.patch(
+        // `/CartItemCheck/${userId}/updateCartItemCheck/${cartItemId}`,
+        shoppingInfoApis.updateCartItemCheck(userId, cartItemId),
+        { checked: updatedItem.checked },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Update the local cart state after successful API call
+      setCart(updatedCart);
+      calculateBagTotal(updatedCart);
+    } catch (error) {
+      console.error("Error updating checked state:", error);
+      // Optionally, handle error (e.g., show a notification)
+    }
   };
+
+
+
+
+
+
+  // const handleCheckboxChange = (cartItemId) => {
+  //   const updatedCart = cart.map((item) => {
+  //     if (item._id === cartItemId) {
+  //       // Only toggle checkbox if stock is present and no issues
+  //       if (item.isRequiredQuantityPresent) {
+  //         return { ...item, checked: !item.checked };
+  //       }
+  //       // If stock is not present, do not change the checkbox status
+  //       return item;
+  //     }
+  //     return item;
+  //   });
+
+  //   setCart(updatedCart);
+  //   calculateBagTotal(updatedCart);
+  // };
+
+
 
   const handleProceedToShipping = () => {
     const checkedItems = cart.filter((item) => item.checked);
@@ -204,6 +295,7 @@ const Cart = () => {
                       type="checkbox"
                       id={`flexSwitchCheckDefault-${index}`}
                       checked={item.checked}
+                      // disabled={!item.isRequiredQuantityPresentt} // Disable if stock is insufficient
                       onChange={() => handleCheckboxChange(item._id)}
                     />
                   </div>
