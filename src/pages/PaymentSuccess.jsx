@@ -14,7 +14,6 @@ const PaymentSuccess = ({ orderID }) => {
 
   //API to get order details using order id
   const getOrderDetails = async () => {
-    let orderID = "9E34C5";
     //on orderId undefined show msg to user
     if (orderID == undefined) {
       console.log("order ID is undefined show proper message to user");
