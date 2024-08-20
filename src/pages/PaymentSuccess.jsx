@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import InvoiceGenerate from "../components/InvoiceGenerate";
 
-const PaymentSuccess = ({ orderID }) => {
+const PaymentSuccess = () => {
+  const location = useLocation();
+  const orderId = location?.state?.orderId;
   const BaseURL = "https://dresscode-updated.onrender.com";
   const [orderDetails, setOrderDetails] = useState({});
 
@@ -14,8 +16,9 @@ const PaymentSuccess = ({ orderID }) => {
 
   //API to get order details using order id
   const getOrderDetails = async () => {
+    console.log(orderId);
     //on orderId undefined show msg to user
-    if (orderID == undefined) {
+    if (orderId == undefined) {
       console.log("order ID is undefined show proper message to user");
       return;
     }
@@ -30,7 +33,7 @@ const PaymentSuccess = ({ orderID }) => {
 
     try {
       const response = await axios.get(
-        `${BaseURL}/dashboard/getOrderDetails/${orderID}`,
+        `${BaseURL}/dashboard/getOrderDetails/${orderId}`,
         config
       );
       setOrderDetails(response?.data?.orderDetails);
