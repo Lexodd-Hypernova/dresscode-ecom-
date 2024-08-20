@@ -5,6 +5,13 @@ import moment from "moment";
 
 const generateInvoice = (invoiceData) => {
   const doc = new jsPDF("p", "mm", "a4"); // Portrait mode, millimeters, A4 size
+  // Get page dimensions
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // Calculate the center position
+  const centerX = pageWidth / 2;
+  const centerY = pageHeight / 2;
 
   // Add header
   doc.setFontSize(20);
@@ -17,10 +24,9 @@ const generateInvoice = (invoiceData) => {
 
   // Add watermark
   doc.setTextColor(0, 0, 0, 0.3); // Light gray color
-  doc.setFontSize(50);
-  doc.text("Dress", 105, 150, { align: "center", angle: -45 });
+  doc.setFontSize(100);
+  doc.text("DressCode", 50, 80, { angle: -50 });
   doc.setTextColor("#df3701"); // Darker color
-  doc.text("Code", 105, 170, { align: "center", angle: -45 });
 
   // Add seller and billing address
   doc.setFontSize(14);
@@ -44,7 +50,7 @@ const generateInvoice = (invoiceData) => {
   );
   doc.text(`${invoiceData?.addressDetails?.address}`, 105, 80);
   doc.text(
-    `${invoiceData?.addressDetails?.city}, ${invoiceData?.addressDetails?.state} ${invoiceData?.addressDetails?.country} ${invoiceData?.billingAddress?.pinCode}`,
+    `${invoiceData?.addressDetails?.city}, ${invoiceData?.addressDetails?.state} ${invoiceData?.addressDetails?.country} ${invoiceData?.addressDetails?.pinCode}`,
     105,
     90
   );
@@ -57,20 +63,27 @@ const generateInvoice = (invoiceData) => {
         "Sr. No",
         "Description",
         "Unit Price",
-        "Discount",
         "Quantity",
+        `Discount (${invoiceData?.discountPercentage}%)`,
         "Total Amt",
       ],
     ],
     body: invoiceData?.products?.map((item, index) => [
       index + 1,
-      item?.productDetails?.productType?.type,
+      `${item?.productDetails?.productType?.type} ${item?.color?.name}`,
       item?.price,
-      `${invoiceData?.discountPercentage}%`,
       item?.quantityOrdered,
       (
-        item?.price * item?.quantityOrdered -
-        invoiceData?.discountPercentage * 0.01 * item?.price
+        item?.price *
+        item?.quantityOrdered *
+        invoiceData?.discountPercentage *
+        0.01
+      ).toFixed(2),
+      (
+        item?.price *
+        item?.quantityOrdered *
+        (100 - invoiceData?.discountPercentage) *
+        0.01
       ).toFixed(2),
     ]),
     foot: [

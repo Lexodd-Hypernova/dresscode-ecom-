@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import InvoiceGenerate from "../components/InvoiceGenerate";
 
-const PaymentSuccess = ({ orderID = "86CD35" }) => {
+const PaymentSuccess = ({ orderID }) => {
   const BaseURL = "https://dresscode-updated.onrender.com";
   const [orderDetails, setOrderDetails] = useState({});
 
@@ -14,6 +14,13 @@ const PaymentSuccess = ({ orderID = "86CD35" }) => {
 
   //API to get order details using order id
   const getOrderDetails = async () => {
+    let orderID = "9E34C5";
+    //on orderId undefined show msg to user
+    if (orderID == undefined) {
+      console.log("order ID is undefined show proper message to user");
+      return;
+    }
+
     const token = localStorage.getItem("token");
 
     const config = {
@@ -27,7 +34,7 @@ const PaymentSuccess = ({ orderID = "86CD35" }) => {
         `${BaseURL}/dashboard/getOrderDetails/${orderID}`,
         config
       );
-      setOrderDetails(response.data.orderDetails);
+      setOrderDetails(response?.data?.orderDetails);
     } catch (error) {
       console.error("Error fetching account info:", error);
     }
