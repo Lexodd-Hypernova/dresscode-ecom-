@@ -78,7 +78,7 @@ const Billing = () => {
     myHeaders.append("Authorization", `Bearer ${token}`);
 
     const raw = JSON.stringify({
-      "cartItemIds": productIds,
+      cartItemIds: productIds,
     });
 
     const requestOptions = {
@@ -99,7 +99,7 @@ const Billing = () => {
 
   const handlePayment = async () => {
     try {
-      const amountInPaise = TotalPriceAfterDiscount ; // Example amount in paise (i.e., 1000 paise = 10 INR)
+      const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
       if (amountInPaise < 100) {
         alert("Amount should be at least 100 paise.");
@@ -194,7 +194,7 @@ const Billing = () => {
                 removeCartItems(productIds);
 
                 navigate("/success", {
-                  state: { orderId: response?.data?.order?.orderId },
+                  state: { orderId: finalResponse?.data?.order?.orderId },
                 });
               }
             } else if (type === "buyNow") {
@@ -222,6 +222,9 @@ const Billing = () => {
               );
               const result = await finalResponse.data;
               console.log(result);
+              navigate("/success", {
+                state: { orderId: result?.order?.orderId },
+              });
             }
 
             // if (result.response.status = "200") {
