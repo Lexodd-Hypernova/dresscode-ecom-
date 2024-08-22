@@ -74,6 +74,8 @@ const ProductDetails = () => {
       size: activeSize,
       price: price,
       quantityRequired: count,
+      checked: true,
+      isRequiredQuantityPresent: true,
     })
 
     setSelectType("cartType");

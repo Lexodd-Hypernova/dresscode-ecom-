@@ -28,6 +28,29 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
     };
   };
 
+  // const updateAPI = async (quantity) => {
+  //   setLoading(true);
+  //   console.log("hitting in counter");
+  //   try {
+  //     const response = await axios.patch(
+  //       shoppingInfoApis.handleItemsCount(userId, cartItemId),
+  //       { quantityNeedToChange: quantity },
+  //       config
+  //     );
+  //     onUpdateQuantity(quantity, cartItemId, true); // Keep the item checked
+  //     setCounterError()
+
+  //     console.log(response.data);
+  //     // Call the parent component's callback to update quantity in cartData
+  //   } catch (error) {
+  //     console.error("Error updating item quantity:", error);
+  //     setCounterError(error.response.data.message)
+  //     onUpdateQuantity(quantity, cartItemId, false); // Uncheck the item
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const updateAPI = async (quantity) => {
     setLoading(true);
     console.log("hitting in counter");
@@ -37,19 +60,23 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
         { quantityNeedToChange: quantity },
         config
       );
-      onUpdateQuantity(quantity, cartItemId, true); // Keep the item checked
-      setCounterError()
+      // If the API call is successful, keep the item checked
+      onUpdateQuantity(quantity, cartItemId); // Keep this item checked
+      setCounterError(); // Clear any previous errors
 
       console.log(response.data);
-      // Call the parent component's callback to update quantity in cartData
     } catch (error) {
       console.error("Error updating item quantity:", error);
-      setCounterError(error.response.data.message)
-      onUpdateQuantity(quantity, cartItemId, false); // Uncheck the item
+      setCount(1)
+
+      // If there is an error, uncheck only the affected item
+      onUpdateQuantity(1, cartItemId); // Uncheck this item
+      setCounterError(error.response?.data?.message || "Stock issue detected");
     } finally {
       setLoading(false);
     }
   };
+
 
   const debouncedUpdateAPI = useCallback(debounce(updateAPI, 1000), []);
 
@@ -73,27 +100,45 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
 
   return (
     <div className="c_counter">
-      Qty
-      <button
-        className="counter-btn"
-        onClick={decrement}
-        disabled={count === 0 || loading}
-      >
-        -
-      </button>
-      <input
-        type="number"
-        value={count}
-        className="counter-display"
-        onChange={handleChange}
-      />
-      <button className="counter-btn" onClick={increment} disabled={loading}>
-        +
-      </button>
-      {/* <span>{price}</span> */}
-      {loading && <span className="loading-indicator">Updating...</span>}
+      <div className="counter_inner">
+        Qty
+        <button
+          className="counter-btn"
+          onClick={decrement}
+          disabled={count === 0 || loading}
+        >
+          -
+        </button>
+        <input
+          type="number"
+          value={count}
+          className="counter-display"
+          onChange={handleChange}
+        />
+        <button className="counter-btn" onClick={increment} disabled={loading}>
+          +
+        </button>
+      </div>
 
-      {conterError && <span className="text-danger">{conterError}</span>}
+      <div className="counter_status">
+        {loading && <div className="spinner-border " style={{ color: 'oragne' }} role="status">
+          <span className="sr-only"></span>
+        </div>}
+      </div>
+      <div className="counter_error">
+        {
+          conterError &&
+          <div className="alert alert-warning alert-dismissible fade show" role="alert">
+            {conterError}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        }
+
+        {/* {conterError && <span className="text-danger">{conterError}</span>} */}
+      </div>
+
+      {/* <span>{price}</span> */}
+
     </div>
   );
 };
