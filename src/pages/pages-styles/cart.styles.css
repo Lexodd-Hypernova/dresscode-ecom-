@@ -129,6 +129,11 @@
     border-bottom-right-radius: 4px;
 }
 
+.cart_total button:hover {
+    background-color: #20248A;
+    color: #fff;
+}
+
 
 @media screen and (max-width: 1600px) {
     .cart_screen {

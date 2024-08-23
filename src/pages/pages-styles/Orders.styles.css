@@ -1,29 +1,40 @@
 .orders-container {
-  text-align: center;
-  font-family: Arial, sans-serif;
+  padding: 0 140px;
 }
 
-.navbar {
+.order_navbar {
   display: flex;
   justify-content: center;
-  background-color: white;
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+  align-items: center;
+  padding: 20px 0;
+  gap: 70px;
 }
 
-.nav-item {
-  margin: 0 15px;
-  padding: 10px 20px;
+.order_head {
+  font-family: 'Inter';
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 34px;
+  letter-spacing: 0.2px;
+  margin: 30px 0;
+}
+
+.ord_nav-item {
+  font-family: Inter;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 54px;
+  letter-spacing: 0.2px;
   cursor: pointer;
   position: relative;
-  font-weight: bold;
+  color: #606060;
 }
 
-.nav-item.selected {
+.ord_nav-item.selected {
   color: black;
 }
 
-.nav-item.selected::after {
+.ord_nav-item.selected::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -46,15 +57,332 @@
   }
 }
 
-.content {
-  padding: 20px;
-  font-size: 18px;
+.order_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
 }
 
-/* button {
-  width: 203.526px;
-  height: 53.934px;
-  flex-shrink: 0;
-  border-radius: 5.088px;
-  border: 1.018px solid #3C3B3B;
-} */
+.order_single {
+  border: 1px solid #000;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.order_Ttl {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 80px;
+  align-items: center;
+  border-bottom: 1px solid #000;
+}
+
+.ord_plcd,
+.ord_id {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 34px;
+}
+
+.order_outer {
+  padding: 40px 80px;
+}
+
+.dt_delivery {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 34px;
+  margin-bottom: 25px;
+}
+
+.order_item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ord_img {
+  width: 180px;
+}
+
+.ord_desc {
+  display: flex;
+  gap: 25px;
+}
+
+.prd_name {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 34px;
+  color: #20248A;
+}
+
+.pr_price,
+.pr_size,
+.pr_color,
+.pr_lg-place {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 38px;
+  margin: 0;
+}
+
+.pr_action button {
+  font-family: 'Inter';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  background: none;
+  padding: 16px 40px;
+  color: #3C3B3B;
+  border: 1px solid #3C3B3B;
+  border-radius: 5px;
+}
+
+.pr_action {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.pr-logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Inter';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  margin: 0;
+}
+
+.pr_lg_det {
+  width: 90px;
+}
+
+
+.raise_cmng {
+  padding: 20px 80px;
+  border: 1px solid #000;
+  border-radius: 15px;
+  font-size: 24px;
+  font-family: Inter;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 1600px) {
+  .orders-container {
+    padding: 0 60px;
+  }
+
+  .order_navbar {
+    gap: 50px;
+  }
+
+  .ord_nav-item {
+    font-size: 26px;
+    line-height: 46px;
+  }
+
+  .order_head {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+
+  .order_content {
+    gap: 40px;
+  }
+
+  .order_Ttl {
+    padding: 15px 50px;
+  }
+
+  .ord_plcd,
+  .ord_id {
+    font-size: 20px;
+    line-height: 32px;
+  }
+
+  .order_outer {
+    padding: 30px 50px;
+  }
+
+  .dt_delivery {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .ord_desc {
+    gap: 20px;
+  }
+
+  .ord_img {
+    width: 130px;
+  }
+
+  .prd_name {
+    font-size: 19px;
+    line-height: 30px;
+  }
+
+  .pr_price,
+  .pr_size,
+  .pr_color,
+  .pr_lg-place {
+    font-size: 19px;
+    line-height: 30px;
+  }
+
+  .pr_action button {
+    font-size: 14px;
+    padding: 12px 30px;
+  }
+
+  .pr-logo {
+    gap: 15px;
+    font-size: 14px;
+  }
+
+  .pr_action {
+    gap: 20px;
+  }
+
+  .pr_lg_det {
+    width: 60px;
+  }
+}
+
+
+@media screen and (max-width: 991px) {
+  .orders-container {
+    padding: 0 20px;
+  }
+
+  .ord_nav-item {
+    font-size: 20px;
+    line-height: 34px;
+  }
+
+  .order_navbar {
+    gap: 40px;
+  }
+
+  .order_head {
+    font-size: 16px;
+    margin: 16px 0;
+  }
+
+  .order_Ttl {
+    padding: 15px 30px;
+  }
+
+  .ord_plcd,
+  .ord_id {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .order_outer {
+    padding: 20px 30px;
+  }
+
+  .dt_delivery {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .prd_name {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .pr_price,
+  .pr_size,
+  .pr_color,
+  .pr_lg-place {
+    font-size: 16px;
+    line-height: 25px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .ord_nav-item {
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .ord_nav-item.selected::after {
+    height: 1px;
+  }
+
+  .order_navbar {
+    gap: 30px;
+  }
+
+  .order_head {
+    font-size: 14px;
+    margin: 15px 0;
+    margin-top: 0;
+  }
+
+  .order_Ttl {
+    padding: 15px 20px;
+  }
+
+  .ord_plcd,
+  .ord_id {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .order_content {
+    gap: 30px;
+  }
+
+  .order_outer {
+    padding: 20px 20px;
+  }
+
+  .dt_delivery {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .order_item {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .prd_name {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .pr_price,
+  .pr_size,
+  .pr_color,
+  .pr_lg-place {
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  .ord_img {
+    width: 100px;
+  }
+
+  .pr_action button {
+    font-size: 14px;
+    padding: 10px 25px;
+  }
+
+  .order_outer {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+}

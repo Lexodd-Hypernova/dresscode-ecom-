@@ -54,9 +54,13 @@ export const shoppingInfoApis = {
   addCartData: (userId) => `${baseUrl}/user/${userId}/addProductToCart`,
   handleItemsCount: (userId, productId) =>
     `${baseUrl}/user/${userId}/updateCartItemQuantity/${productId}`,
+  // updateCartItemQuantity: (userId, productId) =>
+  //   `${baseUrl}/user/${userId}/updateCartItemQuantity/${productId}`,
   deleteCartItem: (userId, productId) =>
     `${baseUrl}/user/${userId}/removeCartItem/${productId}`,
   getWhishList: (userId) => `${baseUrl}/user/${userId}/getWishlist`,
+  updateCartItemCheck: (userId, cartId) =>
+    `${baseUrl}/user/${userId}/updateCartItemCheck/${cartId}`,
   addWhishList: (userId) => `${baseUrl}/user/${userId}/addToWishlist`,
   removeCartItems: (userId) => `${baseUrl}/user/${userId}/removeCartItems`,
   removeFromWishList: (userId, productId) =>

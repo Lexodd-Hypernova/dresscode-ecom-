@@ -95,9 +95,47 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+
+  const handleCheckboxChange = async (cartItemId) => {
+    setLoading(true)
+    const updatedCart = cart.map((item) => {
+      if (item._id === cartItemId) {
+        // Only toggle checkbox if stock is present and no issues
+        return { ...item, checked: !item.checked };
+      }
+      return item;
+    });
+
+    const updatedItem = updatedCart.find((item) => item._id === cartItemId);
+
+    try {
+      // Call the API to update the checked state on the server
+
+      const res = await axios.patch(shoppingInfoApis.updateCartItemCheck(userId, cartItemId),
+        { checked: updatedItem.checked },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      setCart(updatedCart);
+      console.log("updatedCart in handleCheckboxChange", updatedCart)
+
+    } catch (error) {
+      console.error("Error updating checked state:", error);
+      // Optionally, handle error (e.g., show a notification)
+    }
+    finally {
+      setLoading(false)
+    }
+  };
+
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, loading, token, setCart, fetchCart }}
+      value={{ cart, addToCart, removeFromCart, loading, token, setCart, fetchCart, handleCheckboxChange }}
     >
       {children}
     </CartContext.Provider>
