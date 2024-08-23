@@ -36,8 +36,6 @@ const Billing = () => {
     setModalOpen(false);
   };
 
-
-
   const { token, id, addressData, addAddress } = useUserContext();
 
   const { fetchCart } = useCart();
@@ -49,15 +47,11 @@ const Billing = () => {
   const { totalAmount, cart: orderedItems, product, type } = state || {};
   console.log(orderedItems, "orderedItems");
 
-
   console.log(totalAmount, "totalAmount");
-
 
   console.log(type, "type");
 
   console.log(product, "product");
-
-
 
   useEffect(() => {
     calculateTotalPrice();
@@ -71,27 +65,27 @@ const Billing = () => {
   };
 
   const convertToCurrency = (num) => {
-    let convertedNumber = num.toLocaleString("en-US", { style: "currency", currency: "INR" })
+    let convertedNumber = num.toLocaleString("en-US", {
+      style: "currency",
+      currency: "INR",
+    });
     return convertedNumber;
-  }
-
+  };
 
   const removeCartItems = (productIds) => {
-
-
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", `Bearer ${token}`);
 
     const raw = JSON.stringify({
-      "cartItemIds": productIds
+      cartItemIds: productIds,
     });
 
     const requestOptions = {
       method: "DELETE",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
     };
 
     fetch(shoppingInfoApis.removeCartItems(id), requestOptions)
@@ -101,14 +95,11 @@ const Billing = () => {
         fetchCart();
       })
       .catch((error) => console.log(error));
-
-  }
-
-
+  };
 
   const handlePayment = async () => {
     try {
-      const amountInPaise = TotalPriceAfterDiscount ; // Example amount in paise (i.e., 1000 paise = 10 INR)
+      const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
       if (amountInPaise < 100) {
         alert("Amount should be at least 100 paise.");
@@ -153,18 +144,15 @@ const Billing = () => {
             razorpay_signature: response.razorpay_signature,
           };
 
-
           const responseData = await axios.post(
             DressCodeApi.verifyPayment.url,
             verifyPayload,
             { headers }
           );
 
-
           // const verifyData = await responseData.json();
 
           const verifyData = await responseData.data;
-
 
           console.log("Payment verification response:", verifyData);
 
@@ -173,25 +161,23 @@ const Billing = () => {
             // var raw = "";
 
             if (type === "cart") {
-              const raw = JSON.stringify(
-                {
-                  paymentId: verifyData.paymentId,
+              const raw = JSON.stringify({
+                paymentId: verifyData.paymentId,
 
-                  products: orderedItems.map((item) => ({
-                    group: item.group,
-                    productId: item.productId,
-                    color: item.color.name,
-                    size: item.size,
-                    quantityOrdered: item.quantityRequired,
-                    price: item.productDetails.price,
-                    logoUrl: item.logoUrl,
-                    logoPosition: item.logoPosition,
-                  })),
-                  deliveryCharges: deliveryCharges,
-                  discountPercentage: discountPercentage,
-                  TotalPriceAfterDiscount: TotalPriceAfterDiscount,
-                }
-              )
+                products: orderedItems.map((item) => ({
+                  group: item.group,
+                  productId: item.productId,
+                  color: item.color.name,
+                  size: item.size,
+                  quantityOrdered: item.quantityRequired,
+                  price: item.productDetails.price,
+                  logoUrl: item.logoUrl,
+                  logoPosition: item.logoPosition,
+                })),
+                deliveryCharges: deliveryCharges,
+                discountPercentage: discountPercentage,
+                TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+              });
               console.log("Creating order with data:", raw);
 
               const finalResponse = await axios.post(
@@ -202,41 +188,43 @@ const Billing = () => {
 
               if (finalResponse.status === 201) {
                 console.log("Order creation response:", finalResponse.data);
-                const productIds = orderedItems.map((item) => item._id)
+                const productIds = orderedItems.map((item) => item._id);
                 console.log("productIds of cart", productIds);
 
                 removeCartItems(productIds);
 
-                navigate("/success");
+                navigate("/success", {
+                  state: { orderId: finalResponse?.data?.order?.orderId },
+                });
               }
-            }
-            else if (type === "buyNow") {
-              const raw = JSON.stringify(
-                {
-                  paymentId: verifyData.paymentId,
+            } else if (type === "buyNow") {
+              const raw = JSON.stringify({
+                paymentId: verifyData.paymentId,
 
-                  products: product.map((item) => ({
-                    group: item.group,
-                    productId: item.productId,
-                    color: item.color,
-                    size: item.size,
-                    quantityOrdered: item.quantityRequired,
-                    price: item.price,
-                    logoUrl: item.logoUrl,
-                    logoPosition: item.logoPosition,
-                  })),
-                  deliveryCharges: deliveryCharges,
-                  discountPercentage: discountPercentage,
-                  TotalPriceAfterDiscount: TotalPriceAfterDiscount,
-                }
-              )
+                products: product.map((item) => ({
+                  group: item.group,
+                  productId: item.productId,
+                  color: item.color,
+                  size: item.size,
+                  quantityOrdered: item.quantityRequired,
+                  price: item.price,
+                  logoUrl: item.logoUrl,
+                  logoPosition: item.logoPosition,
+                })),
+                deliveryCharges: deliveryCharges,
+                discountPercentage: discountPercentage,
+                TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+              });
               const finalResponse = await axios.post(
                 `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
                 raw,
                 { headers }
               );
               const result = await finalResponse.data;
-              console.log(result)
+              console.log(result);
+              navigate("/success", {
+                state: { orderId: result?.order?.orderId },
+              });
             }
 
             // if (result.response.status = "200") {
@@ -244,7 +232,6 @@ const Billing = () => {
             //   alert("Order created successfully!");
             //   navigate("/success");
             // }
-
           } else {
             alert("Payment verification failed!");
           }
@@ -279,7 +266,6 @@ const Billing = () => {
   const handleAddressClick = (addressId) => {
     setActiveAddressId(addressId);
   };
-
 
   const showCartItems = (orderedItems) => {
     if (orderedItems) {
@@ -317,10 +303,9 @@ const Billing = () => {
             </div>
           </div>
         </div>
-      ))
+      ));
     }
-  }
-
+  };
 
   const showBuyNowProduct = (product) => {
     if (product) {
@@ -347,19 +332,16 @@ const Billing = () => {
             </div>
             <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
               <div className="fs-4 fw-medium">{item.color}</div>
-              <div className="fs-4 fw-normal">
-                {item.group}
-              </div>
+              <div className="fs-4 fw-normal">{item.group}</div>
               <div className="fs-4 fw-normal">
                 {`Quantity: ${item.quantityRequired}`}
               </div>
             </div>
           </div>
-        )
-
-      })
+        );
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -379,8 +361,9 @@ const Billing = () => {
               {addressData.map((address) => (
                 <div
                   key={address._id}
-                  className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? "active" : ""
-                    }`}
+                  className={`mb-4 d-flex align-items-center gap-5 ${
+                    address._id === activeAddressId ? "active" : ""
+                  }`}
                   onClick={() => handleAddressClick(address._id)}
                   style={{ cursor: "pointer" }}
                 >
@@ -390,8 +373,9 @@ const Billing = () => {
                       {address.markAsDefault === false ? "" : "Default"}
                     </div>
                     <div className="fs-4">
-                      {address.address},&nbsp; {address.city},&nbsp;{address.pinCode},&nbsp;{address.state},
-                      &nbsp;{address.country}
+                      {address.address},&nbsp; {address.city},&nbsp;
+                      {address.pinCode},&nbsp;{address.state}, &nbsp;
+                      {address.country}
                     </div>
                     <div className="fs-4">
                       Phone: <span className="fw-medium">{address.phone}</span>
@@ -437,12 +421,25 @@ const Billing = () => {
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     Bag total
                     {/* <span>{convertToCurrency(totalAmount)}</span> */}
-                    <span>{Number(totalAmount).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
-
+                    <span>
+                      {Number(totalAmount).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      })}
+                    </span>
                   </p>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     {`Bag Discount ${discountPercentage}%`}
-                    <span>(-){((discountPercentage * totalAmount) / 100).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
+                    <span>
+                      (-)
+                      {(
+                        (discountPercentage * totalAmount) /
+                        100
+                      ).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      })}
+                    </span>
                   </p>
                   <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                     Delivery Fee
@@ -459,8 +456,9 @@ const Billing = () => {
                     backgroundColor: "#20248A",
                     width: "100%",
                   }}
-                  className={`btn  ${activeAddressId === null ? "disabled" : ""
-                    } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
+                  className={`btn  ${
+                    activeAddressId === null ? "disabled" : ""
+                  } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
                   onClick={handlePayment}
                 >
                   Proceed to payment
@@ -483,15 +481,10 @@ const Billing = () => {
                 gap: "16px",
               }}
             >
-              {
-                showBuyNowProduct(product)
-              }
+              {showBuyNowProduct(product)}
 
-              {
-                showCartItems(orderedItems)
-              }
+              {showCartItems(orderedItems)}
             </div>
-
           </div>
         </div>
         <div className=""></div>
@@ -508,4 +501,3 @@ const Billing = () => {
 };
 
 export default Billing;
-
