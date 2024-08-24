@@ -28,28 +28,6 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
     };
   };
 
-  // const updateAPI = async (quantity) => {
-  //   setLoading(true);
-  //   console.log("hitting in counter");
-  //   try {
-  //     const response = await axios.patch(
-  //       shoppingInfoApis.handleItemsCount(userId, cartItemId),
-  //       { quantityNeedToChange: quantity },
-  //       config
-  //     );
-  //     onUpdateQuantity(quantity, cartItemId, true); // Keep the item checked
-  //     setCounterError()
-
-  //     console.log(response.data);
-  //     // Call the parent component's callback to update quantity in cartData
-  //   } catch (error) {
-  //     console.error("Error updating item quantity:", error);
-  //     setCounterError(error.response.data.message)
-  //     onUpdateQuantity(quantity, cartItemId, false); // Uncheck the item
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const updateAPI = async (quantity) => {
     setLoading(true);

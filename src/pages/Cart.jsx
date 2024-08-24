@@ -117,7 +117,7 @@ const Cart = () => {
   };
 
 
-  const handleWishList = (item) => {
+  const handleWishList = async (item) => {
 
     const itemToAdd = {
       group: item.group,
@@ -128,9 +128,9 @@ const Cart = () => {
       logoPosition: item.logoPosition,
       productDetails: null
     };
-    addToWishList(itemToAdd);
+    await addToWishList(itemToAdd);
 
-    removeFromCart(item._id)
+    await removeFromCart(item._id)
 
     // console.log("item", item)
   }

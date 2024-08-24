@@ -4,7 +4,7 @@ import DressCodeApi from '../common';
 
 import { useCart } from '../context/CartContext';
 
-const LogoUploader = ({ selectType, cartItem, buyItem }) => {
+const LogoUploader = ({ selectType, cartItem, buyItem, isSizeSelected }) => {
 
     const { addToCart } = useCart();
     const [product, setProduct] = useState([]);
@@ -193,59 +193,66 @@ const LogoUploader = ({ selectType, cartItem, buyItem }) => {
     return (
 
         <>
-            <div className="modal fade" id="logoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">We are excited to see your brand logo</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <div
-                                onDrop={handleDrop}
-                                onDragOver={handleDragOver}
-                                style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center', cursor: 'pointer' }}
-                            >
-                                <input
-                                    type="file"
-                                    style={{ display: 'none' }}
-                                    onChange={(e) => handleDrop(e)}
-                                    accept="image/*"
-                                    id="fileInput"
-                                />
-                                <label htmlFor="fileInput">
-                                    {uploading ? (
-                                        <p>Uploading image...</p>
-                                    ) : imageUrl ? (
-                                        <img src={imageUrl} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '300px' }} />
-                                    ) : (
-                                        <p>Drag & drop your image here, or click to select</p>
-                                    )}
-                                </label>
+            {
+                isSizeSelected && (
+                    <div className="modal fade" id="logoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h1 className="modal-title fs-5" id="exampleModalLabel">We are excited to see your brand logo</h1>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    <div
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
+                                        style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center', cursor: 'pointer' }}
+                                    >
+                                        <input
+                                            type="file"
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => handleDrop(e)}
+                                            accept="image/*"
+                                            id="fileInput"
+                                        />
+                                        <label htmlFor="fileInput">
+                                            {uploading ? (
+                                                <p>Uploading image...</p>
+                                            ) : imageUrl ? (
+                                                <img src={imageUrl} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                                            ) : (
+                                                <p>Drag & drop your image here, or click to select</p>
+                                            )}
+                                        </label>
+                                    </div>
+                                    <div className="mt-3">
+                                        <label htmlFor="logoPlacement" className="form-label">Select Logo Placement:</label>
+                                        <select
+                                            id="logoPlacement"
+                                            className="form-select"
+                                            value={logoPlacement}
+                                            onChange={handlePlacementChange}
+                                        >
+                                            <option value="">Logo placement</option>
+                                            <option value="onPockets">On Pockets</option>
+                                            <option value="backside">Backside</option>
+                                            <option value="shoulder">Shoulder</option>
+                                            <option value="frontside">Frontside</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleSkip}>Skip</button>
+                                    <button type="button" className="btn btn-primary" data-bs-dismiss={`${imageUrl ? "modal" : ""}`} onClick={handleSave}>Save</button>
+                                </div>
                             </div>
-                            <div className="mt-3">
-                                <label htmlFor="logoPlacement" className="form-label">Select Logo Placement:</label>
-                                <select
-                                    id="logoPlacement"
-                                    className="form-select"
-                                    value={logoPlacement}
-                                    onChange={handlePlacementChange}
-                                >
-                                    <option value="">Logo placement</option>
-                                    <option value="onPockets">On Pockets</option>
-                                    <option value="backside">Backside</option>
-                                    <option value="shoulder">Shoulder</option>
-                                    <option value="frontside">Frontside</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleSkip}>Skip</button>
-                            <button type="button" className="btn btn-primary" data-bs-dismiss={`${imageUrl ? "modal" : ""}`} onClick={handleSave}>Save</button>
                         </div>
                     </div>
-                </div>
-            </div>
+                )
+            }
+
+
+
 
         </>
     )
