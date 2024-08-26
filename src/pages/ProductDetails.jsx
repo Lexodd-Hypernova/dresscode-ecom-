@@ -316,17 +316,17 @@ const ProductDetails = () => {
       setPriceLoading(true);
       console.log("hitting in productDetails counter");
       try {
-        const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("id");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
+        // const token = localStorage.getItem("token");
+        // const userId = localStorage.getItem("id");
+        // const config = {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // };
 
         const response = await axios.get(
-          shoppingInfoApis.checkProductQuantity(userId, groupName, productId, activeColor, activeSize, quantity),
-          config
+          shoppingInfoApis.checkProductQuantity(groupName, productId, activeColor, activeSize, quantity),
+          // config
         );
 
         updateTotalPrice(quantity);
@@ -452,7 +452,7 @@ const ProductDetails = () => {
             ) : (
               <>
                 {data.allColors && data.allColors.length > 0 && (
-                  <div className="mt-2 d-flex list-group-horizontal gap-2 list-group">
+                  <div className="mt-2 d-flex flex-wrap list-group-horizontal gap-2 list-group">
                     {data.allColors.map((color, index) => {
                       const normalizedColorName = normalizeName(color.name);
                       const isAvailable =

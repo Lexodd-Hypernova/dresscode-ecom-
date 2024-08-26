@@ -67,8 +67,8 @@ export const shoppingInfoApis = {
     `${baseUrl}/user/${userId}/removeWishlistItem/${productId}`,
   addReview: (group, productId) => `${baseUrl}/user/${group}/${productId}/writeReview`,
   getReviews: (group, productId) => `${baseUrl}/user/${group}/${productId}/getProductReviews`,
-  checkProductQuantity: (userId, group, productId, color, size, quantity) =>
-    `${baseUrl}/user/${userId}/checkProductQuantity?group=${group}&productId=${productId}&color=${color}&size=${size}&quantityRequired=${quantity}`,
+  checkProductQuantity: (group, productId, color, size, quantity) =>
+    `${baseUrl}/user/checkProductQuantity?group=${group}&productId=${productId}&color=${color}&size=${size}&quantityRequired=${quantity}`,
 };
 export const S3imageApis = {
   uploadImage: `${baseUrl}/image/generateImgUrl`,
