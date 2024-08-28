@@ -21,6 +21,8 @@ import PaymentSuccess from "../pages/PaymentSuccess";
 import GetQuote from "../pages/GetQuote";
 import ProtectedRoute from "./ProtectedRoute";
 import ComingSoon from "../components/ComingSoon";
+import Login from "../components/auth/Login";
+import Register from "../components/auth/Register";
 
 const router = createBrowserRouter([
   {
@@ -157,6 +159,26 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/login",
+    element: <AuthMain />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      }
+    ],
+  },
+  {
+    path: "/register",
+    element: <AuthMain />,
+    children: [
+      {
+        path: "/register",
+        element: <Register />,
+      }
+    ],
+  }
 ]);
 
 export default router;

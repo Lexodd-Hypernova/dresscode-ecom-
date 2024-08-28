@@ -225,7 +225,8 @@ const ProductDetails = () => {
 
   const handleButtonClick = () => {
     const currentPath = window.location.pathname;
-    nav(`/auth?redirect=${currentPath}`);
+    // nav(`/auth?redirect=${currentPath}`);
+    nav(`/login?redirect=${currentPath}`);
   };
 
 

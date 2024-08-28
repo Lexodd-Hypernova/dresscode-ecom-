@@ -50,7 +50,8 @@ const YourAccount = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('id');
     localStorage.removeItem('userName');
-    history('/auth')
+    // history('/auth')
+    history('/login')
 
   }
 
