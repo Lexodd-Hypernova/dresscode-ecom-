@@ -7,6 +7,8 @@ import { useCart } from "../../context/CartContext";
 import { useWhishList } from "../../context/WishListContext";
 import { Tag } from "primereact/tag";
 
+import scrollTop from "../../helpers/scrollTop";
+
 const Header = () => {
   const { cart } = useCart();
   const { wishList } = useWhishList();
@@ -17,6 +19,7 @@ const Header = () => {
   const nav = useNavigate();
   const goToWishlist = () => {
     nav("/wishlist");
+    scrollTop();
   };
   // const goToCart = () => {
   //     nav('/cart')
@@ -28,7 +31,7 @@ const Header = () => {
         <div className="container-fluid">
           <div className="nav-sec">
             <div className="nv__Left">
-              <Link to="/" className="logo">
+              <Link to="/" className="logo" onClick={scrollTop}>
                 <img src={Logo} alt="DressCode logo" />
               </Link>
             </div>
@@ -52,13 +55,13 @@ const Header = () => {
                 <i className="fa-regular fa-heart"><span className="m-2">{wishListCount}</span></i>
               </div>
               {/* onClick={goToCart} */}
-              <Link className="nav__Cart" to="/cart">
+              <Link className="nav__Cart" to="/cart" onClick={scrollTop}>
                 <i className="fa-solid fa-bag-shopping"></i>
                 <div className="cart-braces">
                   <span>({itemCount})</span>
                 </div>
               </Link>
-              <Link to="/account-info" className="ham-menu">
+              <Link to="/account-info" className="ham-menu" onClick={scrollTop}>
                 <i className="fa-solid fa-user"></i>
               </Link>
             </div>

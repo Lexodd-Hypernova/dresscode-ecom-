@@ -1,0 +1,18 @@
+.wishlist_screen {
+    padding: 80px 100px;
+}
+
+.wish_item-con {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.wish_Item {
+    text-align: center;
+    position: relative;
+}
+
+.w_item-img {
+    width: 400px;
+}
