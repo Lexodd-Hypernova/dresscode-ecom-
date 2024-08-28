@@ -1,8 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import InvoiceDownload from "../components/InvoiceDownload";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import InvoiceGenerate from "../components/InvoiceGenerate";
 
 const PaymentSuccess = () => {
+  const location = useLocation();
+  const orderId = location?.state?.orderId;
+  const BaseURL = "https://dresscode-updated.onrender.com";
+  const [orderDetails, setOrderDetails] = useState({});
+
+  useEffect(() => {
+    getOrderDetails();
+  }, []);
+
+  //API to get order details using order id
+  const getOrderDetails = async () => {
+    console.log(orderId);
+    //on orderId undefined show msg to user
+    if (orderId == undefined) {
+      console.log("order ID is undefined show proper message to user");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await axios.get(
+        `${BaseURL}/dashboard/getOrderDetails/${orderId}`,
+        config
+      );
+      setOrderDetails(response?.data?.orderDetails);
+    } catch (error) {
+      console.error("Error fetching account info:", error);
+    }
+  };
+
   return (
     <div className="w-100vw h-100vh d-flex flex-column justify-content-center align-items-center">
       <h1 className="fs-2 mt-5 mb-5 text-center">
@@ -23,12 +62,9 @@ const PaymentSuccess = () => {
         >
           Home page
         </Link>
-        <div
-          className="btn fs-4 text-white"
-          style={{ backgroundColor: "#F47458" }}
-        >
-          <InvoiceDownload />
-        </div>
+        {Object.keys(orderDetails).length > 0 && (
+          <InvoiceGenerate data={orderDetails} />
+        )}
       </div>
     </div>
   );
