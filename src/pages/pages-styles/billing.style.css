@@ -1,0 +1,14 @@
+.order__bill {
+  width: 470px;
+}
+
+.billing {
+  margin-top: 60px;
+  padding: 0 100px;
+}
+
+@media only screen and (max-width: 1600px) {
+  .billing {
+    padding: 0 40px;
+  }
+}

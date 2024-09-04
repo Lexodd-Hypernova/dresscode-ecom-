@@ -4,6 +4,7 @@ import DressCodeApi from '../common';
 import s1 from "../../public/images/s1.png";
 import FilterApi from '../components/filters/FilterApi';
 import scrollTop from '../helpers/scrollTop';
+import "./pages-styles/products.style.css";
 
 const Products = () => {
     const { groupName, category, subCategory, productType, gender } = useParams();

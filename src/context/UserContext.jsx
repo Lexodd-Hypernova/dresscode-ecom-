@@ -11,6 +11,8 @@ export const UserContextProvider = ({ children }) => {
 
     const [addressData, setAddressData] = useState([]);
 
+    const [loading, setLoading] = useState(false)
+
     // const [modalOpen, setModalOpen] = useState(false);
 
 
@@ -27,7 +29,7 @@ export const UserContextProvider = ({ children }) => {
                 "Content-Type": "application/json",
             },
         };
-
+        setLoading(true)
         try {
             const response = await fetch(
                 accountInfoApis.getAddress(id),
@@ -41,6 +43,8 @@ export const UserContextProvider = ({ children }) => {
             console.log(result.data)
         } catch (error) {
             console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -53,7 +57,7 @@ export const UserContextProvider = ({ children }) => {
                 Authorization: `Bearer ${token}`,
             },
         };
-
+        setLoading(true)
         try {
             const response = await axios.post(
                 accountInfoApis.addAddress(id),
@@ -66,6 +70,8 @@ export const UserContextProvider = ({ children }) => {
             // handleCloseModal();
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -79,7 +85,7 @@ export const UserContextProvider = ({ children }) => {
 
 
     return (
-        <userContext.Provider value={{ addressData, setAddressData, addAddress, token, id }}>
+        <userContext.Provider value={{ addressData, setAddressData, addAddress, token, id, loading, setLoading }}>
             {children}
         </userContext.Provider>
     )

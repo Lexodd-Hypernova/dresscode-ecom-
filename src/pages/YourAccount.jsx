@@ -6,36 +6,14 @@ import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
 const YourAccount = () => {
   // const [showModal, setShowModal] = useState(false);
-  const [userData, setUserData] = useState(null); // State to hold user data
 
 
-  const getUserData = async () => {
-    const userId = localStorage.getItem("id");
-    const token = localStorage.getItem("token"); // Replace with your actual token key
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
 
-    try {
-      const response = await axios.get(accountInfoApis.getAccountInfo(userId), config);
-      console.log(response.data);
-      setUserData(response.data.userDetails
-      );
-      return response.data;
-
-    } catch (error) {
-      console.error('Error fetching account info:', error);
-      throw error; // Handle errors or propagate them as needed
-    }
-  };
   const goToUserInfo = () => {
-    // router.navigate(`/get-user-info/${localStorage.getItem("id")}`);
+    history(`/get-user-info/${localStorage.getItem("id")}`);
     // setShowModal(true);
-    getUserData()
-
+    // getUserData()
   }
   const history = useNavigate();
   const goToAddress = () => {
@@ -50,6 +28,8 @@ const YourAccount = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('id');
     localStorage.removeItem('userName');
+    localStorage.removeItem('email');
+    localStorage.removeItem('phoneNumber');
     // history('/auth')
     history('/login')
 
@@ -64,8 +44,7 @@ const YourAccount = () => {
         <span className="your-account">Your Account</span>
         <div className="row" style={{ display: 'flex', alignContent: 'center', justifyContent: 'space-between' }}>
           <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div className=" info-card" onClick={goToUserInfo} data-bs-toggle="modal"
-              data-bs-target="#infoModal">
+            <div className="info-card" onClick={goToUserInfo}>
               <div className="acc-icons">
                 <img src="/images/accountInfo/boy-icon 1.png" alt="" />
               </div>
@@ -113,8 +92,7 @@ const YourAccount = () => {
           <button type="btn" className="btn btn-danger fs-3" onClick={handleLogOut}>Log out</button>
         </div>
         {/* showModal={showModal} setShowModal={setShowModal} */}
-        <EditPersonalinfo userData={userData}// Set user data in state
-        />
+        {/* <EditPersonalinfo userData={userData} /> */}
 
       </div>
     </div>

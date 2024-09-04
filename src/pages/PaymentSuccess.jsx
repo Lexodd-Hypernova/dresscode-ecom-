@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import InvoiceGenerate from "../components/InvoiceGenerate";
+import { shoppingInfoApis } from "../common";
 
 const PaymentSuccess = () => {
   const location = useLocation();
   const orderId = location?.state?.orderId;
-  const BaseURL = "https://dresscode-updated.onrender.com";
+  // const BaseURL = "https://dresscode-updated.onrender.com";
   const [orderDetails, setOrderDetails] = useState({});
 
   useEffect(() => {
@@ -33,7 +34,8 @@ const PaymentSuccess = () => {
 
     try {
       const response = await axios.get(
-        `${BaseURL}/dashboard/getOrderDetails/${orderId}`,
+        // `${BaseURL}/dashboard/getOrderDetails/${orderId}`,
+        shoppingInfoApis.getOrderDetails(orderId),
         config
       );
       setOrderDetails(response?.data?.orderDetails);

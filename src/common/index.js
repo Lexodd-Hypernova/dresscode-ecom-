@@ -1,4 +1,6 @@
 const baseUrl = "https://dresscode-updated.onrender.com";
+// const baseUrl = "https://dresscode-unique.onrender.com";
+
 const DressCodeApi = {
   getGroups: {
     url: `${baseUrl}/e-com/getGroups`,
@@ -36,11 +38,13 @@ export default DressCodeApi;
 export const authUrls = {
   login: `${baseUrl}/user/login`,
   signup: `${baseUrl}/user/createUser`,
+  signInWithGoogle: `${baseUrl}/oAuth/login`
 };
 export const accountInfoApis = {
   getAccountInfo: (userId) => `${baseUrl}/user/${userId}/getUserDetails`,
   updateAccountInfo: (userId) => `${baseUrl}/user/${userId}/updateUserDetails`,
   getOrders: (userId) => `${baseUrl}/user/${userId}/getOrders`,
+  getQuotes: (userId) => `${baseUrl}/user/${userId}/getQuotes`,
   updateAddress: (userId, addressId) =>
     `${baseUrl}/user/${userId}/address/${addressId}/updateAddress`,
   addAddress: (userId) => `${baseUrl}/user/${userId}/addAddress`,
@@ -71,6 +75,10 @@ export const shoppingInfoApis = {
   getReviews: (group, productId) => `${baseUrl}/user/${group}/${productId}/getProductReviews`,
   checkProductQuantity: (group, productId, color, size, quantity) =>
     `${baseUrl}/user/checkProductQuantity?group=${group}&productId=${productId}&color=${color}&size=${size}&quantityRequired=${quantity}`,
+  createOrder: (userId, activeAddressId) => `${baseUrl}/order/createOrder/user/${userId}/address/${activeAddressId}`,
+  getOrderDetails: (orderId) => `${baseUrl}/dashboard/getOrderDetails/${orderId}`,
+  createQuote: (userId) => `${baseUrl}/order/createQuote/user/${userId}`,
+
 
 };
 export const S3imageApis = {

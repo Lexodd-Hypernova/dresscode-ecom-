@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import DressCodeApi from '../common';
 import s1 from "../../public/images/s1.png";
 import scrollTop from '../helpers/scrollTop';
+import "./pages-styles/category.style.css";
 
 const ProductTypes = () => {
 

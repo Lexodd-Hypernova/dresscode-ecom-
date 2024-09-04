@@ -18,11 +18,12 @@ import WishList from "../pages/WishList";
 import GroupReview from "../pages/GroupReview";
 import CustomerReviews from "../pages/CustomerReviews";
 import PaymentSuccess from "../pages/PaymentSuccess";
-import GetQuote from "../pages/GetQuote";
 import ProtectedRoute from "./ProtectedRoute";
 import ComingSoon from "../components/ComingSoon";
 import Login from "../components/auth/Login";
 import Register from "../components/auth/Register";
+import RaiseQuote from "../pages/RaiseQuote";
+import QuoteSuccess from "../pages/QuoteSuccess";
 
 const router = createBrowserRouter([
   {
@@ -66,11 +67,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/getquote",
+        path: "/raise-quote",
         element:
           (
             <ProtectedRoute>
-              < GetQuote />
+              < RaiseQuote />
             </ProtectedRoute>
           )
       },
@@ -80,6 +81,15 @@ const router = createBrowserRouter([
           (
             <ProtectedRoute>
               < PaymentSuccess />
+            </ProtectedRoute>
+          )
+      },
+      {
+        path: "/quote-success",
+        element:
+          (
+            <ProtectedRoute>
+              <QuoteSuccess />
             </ProtectedRoute>
           )
       },

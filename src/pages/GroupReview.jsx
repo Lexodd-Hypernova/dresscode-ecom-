@@ -10,13 +10,13 @@ const GroupReview = () => {
   const [comment, setComment] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const paramas = useParams(); // Assuming groupName is obtained correctly
-  const navigate=useNavigate()
-console.log(paramas,"paramns id")
+  const navigate = useNavigate()
+  console.log(paramas, "paramns id")
   const handleRatingChange = (value) => {
     setRating(value);
   };
-  const goToReviews=()=>{
-    navigate("/customer-review/"+paramas.group+"/"+paramas.productId)
+  const goToReviews = () => {
+    navigate("/customer-review/" + paramas.group + "/" + paramas.productId)
   }
   const handleCommentChange = (e) => {
     setComment(e.target.value);
@@ -25,14 +25,14 @@ console.log(paramas,"paramns id")
   const onDrop = async (images) => {
     try {
       const formData = new FormData();
-      formData.append('image', images[0]); 
-  
+      formData.append('image', images[0]);
+
       const response = await axios.post(S3imageApis.uploadImage, formData);
       const imgUrl = response.data.imgURL;
-  
+
       setSelectedImages([...selectedImages, imgUrl]);
       console.log(selectedImages);
-  
+
     } catch (error) {
       console.error(error);
     }
@@ -46,24 +46,24 @@ console.log(paramas,"paramns id")
   };
   const handleSaveReview = async () => {
     try {
-      const res=await axios.post(shoppingInfoApis.addReview(paramas.group,paramas.productId), {
-        username:"demo2",
-          rating,
-          comment,
-          imgUrl:selectedImages
-      },config)    
+      const res = await axios.post(shoppingInfoApis.addReview(paramas.group, paramas.productId), {
+        username: localStorage.getItem("userName"),
+        rating,
+        comment,
+        imgUrl: selectedImages
+      }, config)
       console.log(res)
-      if(res.data.message){
+      if (res.data.message) {
         goToReviews()
       }
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     console.log(selectedImages)
-  },[selectedImages])
-  
+  }, [selectedImages])
+
   return (
     <div style={{ textAlign: "center" }} className="">
       <h2>Create Review</h2>

@@ -4,7 +4,7 @@ import DressCodeApi from '../common';
 
 import { useCart } from '../context/CartContext';
 
-const LogoUploader = ({ selectType, cartItem, buyItem, isSizeSelected }) => {
+const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected }) => {
 
     const { addToCart } = useCart();
     const [product, setProduct] = useState([]);
@@ -38,6 +38,18 @@ const LogoUploader = ({ selectType, cartItem, buyItem, isSizeSelected }) => {
     })
 
 
+    const [quoteItemToAdd, setQuoteItemToAdd] = useState({
+        group: "",
+        productId: "",
+        color: "",
+        size: "",
+        price: "",
+        totalPrice: "",
+        quantityRequired: "",
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement
+    })
+
     useEffect(() => {
         if (cartItem) {
             setCartItemToAdd({
@@ -67,8 +79,22 @@ const LogoUploader = ({ selectType, cartItem, buyItem, isSizeSelected }) => {
             })
         }
 
+        if (quoteItem) {
+            setQuoteItemToAdd({
+                group: quoteItem.group,
+                productId: quoteItem.productId,
+                color: quoteItem.color,
+                size: quoteItem.size,
+                price: quoteItem.price,
+                totalPrice: quoteItem.totalPrice,
+                quantityRequired: quoteItem.quantityRequired,
+                logoUrl: imageUrl,      // Reset or keep existing logoUrl
+                logoPosition: logoPlacement // Reset or keep existing logoPosition
+            })
+        }
 
-    }, [cartItem, buyItem]);
+
+    }, [cartItem, buyItem, quoteItem]);
 
 
     // const [areaLabel, setAreaLabel] = useState("");
@@ -103,6 +129,25 @@ const LogoUploader = ({ selectType, cartItem, buyItem, isSizeSelected }) => {
                         product: [...product, updatedBuyItem],
                         totalAmount: buyItem.totalPrice,
                         type: "buyNow",
+                    },
+                });
+            }, 100);
+        } else if (selectType === "quoteType") {
+            const updatedQuoteItem = {
+                ...quoteItemToAdd,
+                logoUrl: imageUrl,
+                logoPosition: logoPlacement
+            }
+
+            setQuoteItemToAdd(updatedQuoteItem);
+            setProduct((prevItem) => [...prevItem, updatedBuyItem]);
+
+            // Delay navigation until state is set
+            setTimeout(() => {
+                navigate("/raise-quote", {
+                    state: {
+                        product: [...product, updatedQuoteItem],
+                        totalAmount: quoteItem.totalPrice,
                     },
                 });
             }, 100);

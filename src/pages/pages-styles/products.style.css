@@ -1,0 +1,22 @@
+.filters {
+    margin-top: 100px;
+    margin-bottom: 150px;
+    background-color: #F3F3F3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter__Inner {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+@media only screen and (max-width: 1600px) {
+    .filters {
+        margin-top: 50px;
+        margin-bottom: 100px;
+    }
+}

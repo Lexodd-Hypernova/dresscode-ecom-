@@ -6,18 +6,23 @@ import AddressModal from "../components/addressModal/AddressModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { shoppingInfoApis } from "../common";
 import { useCart } from "../context/CartContext";
+import LoadingComponent from "../common/components/LoadingComponent";
+import "./pages-styles/billing.style.css";
 
-const BASE_URL = "https://dresscode-updated.onrender.com";
 
 const Billing = () => {
   const navigate = useNavigate();
-  const [deliveryCharges, setDeliveryCharges] = useState(20);
-  const [discountPercentage, setDiscountPercentage] = useState(10);
+  const [deliveryCharges, setDeliveryCharges] = useState(0);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
   const [TotalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(0);
+
+  const [loading, setLoading] = useState(false);
 
   const [activeAddressId, setActiveAddressId] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
+
+
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -98,6 +103,7 @@ const Billing = () => {
   };
 
   const handlePayment = async () => {
+
     try {
       const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
@@ -130,7 +136,14 @@ const Billing = () => {
 
       // Step 2: Initialize Razorpay
       const options = {
-        key: "rzp_test_xMaFmOwuo05QVV", // Replace with your actual Razorpay key
+        // key: "rzp_test_xMaFmOwuo05QVV",
+
+        key: "rzp_test_0PMwuUiWHNgJdU",
+
+        
+        // key: "rzp_live_YZAblE0DYussOv",  
+
+
         amount: orderData.order.amount.toString(),
         currency: "INR",
         name: "Dress Code ",
@@ -159,7 +172,7 @@ const Billing = () => {
           if (verifyData.success) {
             // Step 4: Create the order on your server
             // var raw = "";
-
+            setLoading(true)
             if (type === "cart") {
               const raw = JSON.stringify({
                 paymentId: verifyData.paymentId,
@@ -181,12 +194,19 @@ const Billing = () => {
               console.log("Creating order with data:", raw);
 
               const finalResponse = await axios.post(
-                `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+                shoppingInfoApis.createOrder(id, activeAddressId),
                 raw,
                 { headers }
               );
 
+              // const finalResponse = await axios.post(
+              //   `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+              //   raw,
+              //   { headers }
+              // );
+
               if (finalResponse.status === 201) {
+                setLoading(false)
                 console.log("Order creation response:", finalResponse.data);
                 const productIds = orderedItems.map((item) => item._id);
                 console.log("productIds of cart", productIds);
@@ -215,16 +235,28 @@ const Billing = () => {
                 discountPercentage: discountPercentage,
                 TotalPriceAfterDiscount: TotalPriceAfterDiscount,
               });
+
               const finalResponse = await axios.post(
-                `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+                shoppingInfoApis.createOrder(id, activeAddressId),
                 raw,
                 { headers }
               );
-              const result = await finalResponse.data;
-              console.log(result);
-              navigate("/success", {
-                state: { orderId: result?.order?.orderId },
-              });
+
+              if (finalResponse.status === 201) {
+                setLoading(false)
+                const result = await finalResponse.data;
+                console.log(result);
+                navigate("/success", {
+                  state: { orderId: result?.order?.orderId },
+                });
+              }
+
+              // const finalResponse = await axios.post(
+              //   `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
+              //   raw,
+              //   { headers }
+              // );
+
             }
 
             // if (result.response.status = "200") {
@@ -237,12 +269,12 @@ const Billing = () => {
           }
         },
         prefill: {
-          name: "John Doe",
-          email: "john.doe@example.com",
-          contact: "9999999999",
+          name: localStorage.getItem('userName'),
+          email: localStorage.getItem('email'),
+          contact: localStorage.getItem('phoneNumber'),
         },
         notes: {
-          address: "Razorpay Corporate Office",
+          address: "Razorpay address",
         },
         theme: {
           color: "#F37254",
@@ -345,152 +377,158 @@ const Billing = () => {
 
   return (
     <>
-      <section className="billing mt-5 ms-5">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-6">
-              <div>
-                <h5 className="fs-3 fw-medium">Delivery Address</h5>
-                <p className="fs-4 fw-medium lh-1 mb-3">
-                  We will deliver your order to this address
-                </p>
-              </div>
 
-              {/* show address data */}
-
-              {addressData.map((address) => (
-                <div
-                  key={address._id}
-                  className={`mb-4 d-flex align-items-center gap-5 ${
-                    address._id === activeAddressId ? "active" : ""
-                  }`}
-                  onClick={() => handleAddressClick(address._id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div style={{ width: "40%" }}>
-                    <div className="fs-4 fw-medium">{address.name}</div>
-                    <div className="fs-4" style={{ color: "#A56528" }}>
-                      {address.markAsDefault === false ? "" : "Default"}
-                    </div>
-                    <div className="fs-4">
-                      {address.address},&nbsp; {address.city},&nbsp;
-                      {address.pinCode},&nbsp;{address.state}, &nbsp;
-                      {address.country}
-                    </div>
-                    <div className="fs-4">
-                      Phone: <span className="fw-medium">{address.phone}</span>
-                    </div>
-                  </div>
+      {
+        loading ? (
+          <LoadingComponent />
+        ) : (
+          <section className="billing mt-5 ms-5">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-lg-6">
                   <div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input fs-4"
-                        type="radio"
-                        name="flexRadioDefault"
-                        checked={address._id === activeAddressId}
-                        readOnly
-                      />
+                    <h5 className="fs-3 fw-medium">Delivery Address</h5>
+                    <p className="fs-4 fw-medium lh-1 mb-3">
+                      We will deliver your order to this address
+                    </p>
+                  </div>
+
+                  {/* show address data */}
+
+                  {addressData.map((address) => (
+                    <div
+                      key={address._id}
+                      className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? "active" : ""
+                        }`}
+                      onClick={() => handleAddressClick(address._id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div>
+                        <div className="fs-4 fw-medium">{address.firstName} {address.lastName}</div>
+                        <div className="fs-4" style={{ color: "#A56528" }}>
+                          {address.markAsDefault === false ? "" : "Default"}
+                        </div>
+                        <div className="fs-4">
+                          {address.address},&nbsp; {address.city},&nbsp;
+                          {address.pinCode},&nbsp;{address.state}, &nbsp;
+                          {address.country}
+                        </div>
+                        <div className="fs-4">
+                          Phone: <span className="fw-medium">{address.phone}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="form-check">
+                          <input
+                            className="form-check-input fs-4"
+                            type="radio"
+                            name="flexRadioDefault"
+                            checked={address._id === activeAddressId}
+                            readOnly
+                          />
+                        </div>
+                      </div>
                     </div>
+                  ))}
+
+                  {/* add address button */}
+
+                  <div className="mt-5">
+                    <button
+                      type="button"
+                      onClick={() => setModalOpen(true)}
+                      className="fs-4 fw-medium text-capitalize border-0 text-primary"
+                      style={{ background: "none" }}
+                    >
+                      Add new Address
+                    </button>
+                  </div>
+
+                  <hr className="w-100 mt-4" />
+                </div>
+
+                {/* --------------Order details----------- */}
+                <div className="col-lg-6">
+                  <div className="order__bill">
+                    <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
+                      <h5 className="fs-4 fw-medium text-capitalize mb-3">
+                        Order details
+                      </h5>
+                      <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
+                        Bag total
+                        {/* <span>{convertToCurrency(totalAmount)}</span> */}
+                        <span>
+                          {Number(totalAmount).toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "INR",
+                          })}
+                        </span>
+                      </p>
+                      <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
+                        {`Bag Discount ${discountPercentage}%`}
+                        <span>
+                          (-)
+                          {(
+                            (discountPercentage * totalAmount) /
+                            100
+                          ).toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "INR",
+                          })}
+                        </span>
+                      </p>
+                      <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
+                        Delivery Fee
+                        <span>(+){convertToCurrency(deliveryCharges)}</span>
+                      </p>
+                      <p className="fs-5 fw-medium lh-1 d-flex justify-content-between align-items-center">
+                        Order total
+                        <span>{convertToCurrency(TotalPriceAfterDiscount)}</span>
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      style={{
+                        backgroundColor: "#20248A",
+                        width: "100%",
+                      }}
+                      className={`btn  ${activeAddressId === null ? "disabled" : ""
+                        } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
+                      onClick={handlePayment}
+                    >
+                      Proceed to payment
+                    </button>
                   </div>
                 </div>
-              ))}
-
-              {/* add address button */}
-
-              <div className="mt-5">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(true)}
-                  className="fs-4 fw-medium text-capitalize border-0 text-primary"
-                  style={{ background: "none" }}
-                >
-                  Add new Address
-                </button>
               </div>
+              <div className="row mt-5">
+                <h5 className="fs-3 fw-medium">Expected Delivery</h5>
+                <p className="fs-4 fw-medium">
+                  Estimated delivery dates for your order
+                </p>
 
-              <hr className="w-100 mt-4" />
-            </div>
+                {/* --------------order items------------ */}
 
-            {/* --------------Order details----------- */}
-            <div className="col-lg-6">
-              <div className="order__bill">
-                <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
-                  <h5 className="fs-4 fw-medium text-capitalize mb-3">
-                    Order details
-                  </h5>
-                  <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
-                    Bag total
-                    {/* <span>{convertToCurrency(totalAmount)}</span> */}
-                    <span>
-                      {Number(totalAmount).toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "INR",
-                      })}
-                    </span>
-                  </p>
-                  <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
-                    {`Bag Discount ${discountPercentage}%`}
-                    <span>
-                      (-)
-                      {(
-                        (discountPercentage * totalAmount) /
-                        100
-                      ).toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "INR",
-                      })}
-                    </span>
-                  </p>
-                  <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
-                    Delivery Fee
-                    <span>(+){convertToCurrency(deliveryCharges)}</span>
-                  </p>
-                  <p className="fs-5 fw-medium lh-1 d-flex justify-content-between align-items-center">
-                    Order total
-                    <span>{convertToCurrency(TotalPriceAfterDiscount)}</span>
-                  </p>
-                </div>
-                <button
-                  type="button"
+                <div
                   style={{
-                    backgroundColor: "#20248A",
-                    width: "100%",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "16px",
                   }}
-                  className={`btn  ${
-                    activeAddressId === null ? "disabled" : ""
-                  } text-white fs-4 rounded-top-0 rounded-bottom-1 fw-medium  mt-0 text-capitalize`}
-                  onClick={handlePayment}
                 >
-                  Proceed to payment
-                </button>
+                  {showBuyNowProduct(product)}
+
+                  {showCartItems(orderedItems)}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="row mt-5">
-            <h5 className="fs-3 fw-medium">Expected Delivery</h5>
-            <p className="fs-4 fw-medium">
-              Estimated delivery dates for your order
-            </p>
+            <div className=""></div>
+          </section>
+        )
+      }
 
-            {/* --------------order items------------ */}
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "16px",
-              }}
-            >
-              {showBuyNowProduct(product)}
-
-              {showCartItems(orderedItems)}
-            </div>
-          </div>
-        </div>
-        <div className=""></div>
-      </section>
       <AddressModal
-        onSubmit={handleSubmit}
+        FormOnSubmit={handleSubmit}
         formData={formData}
         setFormData={setFormData}
         modalOpen={modalOpen}

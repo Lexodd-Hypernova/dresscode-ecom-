@@ -4,6 +4,7 @@ import DressCodeApi from '../common';
 import TextMove from '../components/InfiniteTextMove/TextMove';
 import { Link } from 'react-router-dom';
 import DisplaySubCategory from '../components/DisplaySubCategory';
+import "./pages-styles/category.style.css";
 
 const SubCategories = () => {
 

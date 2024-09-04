@@ -9,6 +9,14 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import { auth, googleProvider } from "../../firebase";
+import { signInWithPopup } from "firebase/auth";
+
+// import { authUrls } from '../../common';
+
+
+// const BaseURL = "https://dresscode-updated.onrender.com";
+
 
 const SignInSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -21,8 +29,66 @@ const Login = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const redirectPath = queryParams.get('redirect') || '/account-info';
+
+
+
     const [loading, setLoading] = useState(false);
 
+
+    const handleGoogleSignIn = async () => {
+        setLoading(true);
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            console.log(result);
+            const token = await result.user.getIdToken();
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `${token}`
+                }
+            };
+
+
+            const response = await fetch(authUrls.signInWithGoogle, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token,
+                },
+            });
+
+            const userData = await response.json();
+
+
+            // const response = await axios.post(authUrls.signInWithGoogle, config);
+
+            if (userData.message === "Success") {
+                console.log("User Data:", userData);
+                localStorage.setItem("token", userData.data.accessToken)
+                localStorage.setItem("id", userData.data.userId)
+                localStorage.setItem("userName", result.user.displayName)
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Logged in successfully',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                const googleAuthRedirectPath = queryParams.get('redirect') || `/get-user-info/${localStorage.getItem("id")}`;
+                // router.navigate("/account-info")
+                navigate(googleAuthRedirectPath);
+
+            }
+
+
+
+        } catch (error) {
+            console.error("Error during sign-in:", error);
+        } finally {
+            setLoading(false)
+        }
+    };
 
 
     return (
@@ -36,7 +102,6 @@ const Login = () => {
                     <p className="welcome-back">Welcome back !!!</p>
                     <h3 className="sign-in">Sign in</h3>
                     <div>
-
                         <Formik
                             initialValues={{ email: '', password: '' }}
                             validationSchema={SignInSchema}
@@ -51,7 +116,9 @@ const Login = () => {
                                     if (response.data.message === "Success") {
                                         localStorage.setItem("token", response.data.data.accessToken)
                                         localStorage.setItem("id", response.data.data.userId)
-                                        localStorage.setItem("userName", response.data.data.firstName)
+                                        localStorage.setItem("userName", response.data.data.name)
+                                        localStorage.setItem("phoneNumber", response.data.data.phoneNumber)
+                                        localStorage.setItem("email", response.data.data.email)
                                         Swal.fire({
                                             title: 'Success!',
                                             text: 'Logged in successfully',
@@ -130,6 +197,9 @@ const Login = () => {
                             )}
                         </Formik>
                     </div>
+                </div>
+                <div className='auth_third-party'>
+                    <button className='' onClick={handleGoogleSignIn}>Sign in with Google</button>
                 </div>
             </div>
 

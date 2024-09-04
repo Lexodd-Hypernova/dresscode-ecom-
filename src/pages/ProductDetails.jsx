@@ -37,6 +37,8 @@ const ProductDetails = () => {
 
   const [buyItem, setBuyItem] = useState();
 
+  const [quoteItem, setQuoteItem] = useState();
+
   const [totalPrice, setTotalPrice] = useState();
 
 
@@ -191,12 +193,6 @@ const ProductDetails = () => {
       console.log("availableSizes Set:", availableSizeSet);
     }
   }, [data]);
-
-  // useEffect(() => {
-  //   if (activeColor && activeSize) {
-  //     debouncedUpdateAPI(count);
-  //   }
-  // }, [activeColor, activeSize, count]);
 
   const handleFilter = (fType, value) => {
     let filterUrl =
@@ -408,7 +404,23 @@ const ProductDetails = () => {
   };
 
 
-
+  const handleRaiseQuote = (e) => {
+    if (activeSize) {
+      e.preventDefault();
+      setQuoteItem({
+        group: groupName,
+        productId: productId,
+        color: activeColor,
+        size: activeSize,
+        price: price,
+        totalPrice: totalPrice,
+        quantityRequired: count
+      })
+      setSelectType("quoteType")
+    } else {
+      setSizeError(true)
+    }
+  }
 
 
   return (
@@ -658,7 +670,45 @@ const ProductDetails = () => {
               </button> */}
             </div>
             <div className="d-grid col-6">
-              {isLoggedIn ? (
+
+              {/* count > 35 */}
+              <button
+                className={`btn ${count > 35 ? "btn-warning" : "btn-primary"} fs-5 fw-normal text-capitalize w-100 ${count <= 35 && stockError ? "disabled" : ""}`}
+                type="button"
+                data-bs-toggle={isLoggedIn ? "modal" : ""}
+                data-bs-target="#logoModal"
+                onClick={isLoggedIn ? (count > 35 ? handleRaiseQuote : handleBuyNow) : handleButtonClick}
+              >
+                {count > 35 ? "Raise Quote" : "Buy Now"}
+              </button>
+
+
+
+              {/* ${stockError ? "disabled" : "" */}
+
+              {/* {counterValue > 35 ? (
+                <button
+                  className={`btn btn-warning fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
+                  type="button"
+                  onClick={isLoggedIn ? handleRaiseQuote : handleButtonClick}
+                >
+                  Raise Quote
+                </button>
+              ) : (
+                <button
+                  className={`btn btn-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
+                  type="button"
+                  data-bs-toggle={isLoggedIn ? "modal" : ""}
+                  data-bs-target={isLoggedIn ? "#logoModal" : ""}
+                  onClick={isLoggedIn ? handleBuyNow : handleButtonClick}
+                >
+                  Buy Now
+                </button>
+              )} */}
+
+
+
+              {/* {isLoggedIn ? (
                 <button
                   className={`btn btn-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
                   type="button"
@@ -676,7 +726,7 @@ const ProductDetails = () => {
                 >
                   Buy Now
                 </button>
-              )}
+              )} */}
 
             </div>
             <div className="d-grid col-6">
@@ -725,7 +775,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </section>
-      <LogoUploader cartItem={cartItem} buyItem={buyItem} selectType={selectType} isSizeSelected={activeSize}></LogoUploader>
+      <LogoUploader cartItem={cartItem} buyItem={buyItem} quoteItem={quoteItem} selectType={selectType} isSizeSelected={activeSize}></LogoUploader>
 
       {/* <!-- Modal --> */}
     </>

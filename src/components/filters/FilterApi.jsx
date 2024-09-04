@@ -185,6 +185,78 @@ const FilterApi = ({ variantsPerColor }) => {
                                 </div>
                             </div>
                         )}
+
+
+                        {filters.cuff && filters.cuff.length > 0 && (
+                            <div className='fabric__Filter filter'>
+                                <div className="dropdown-center d-flex justify-content-center">
+                                    <button type="button" className="btn btn-light dropdown-toggle py-3" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                        Cuff
+                                    </button>
+                                    <form className="dropdown-menu p-4">
+                                        <div className='row row-gap-3'>
+                                            {filters.cuff.map((item, index) => (
+                                                <div className='col-12' key={index}>
+                                                    <div className='form-check'>
+                                                        <input className="form-check-input" type="checkbox" id={`cuff${item}`} value={item} aria-label="..." onChange={(e) => handleChange(e, 'cuff')} />
+                                                        <label className="form-check-label" htmlFor={`fabric${item}`}>{item}</label>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
+
+
+                        {filters.material && filters.material.length > 0 && (
+                            <div className='fabric__Filter filter'>
+                                <div className="dropdown-center d-flex justify-content-center">
+                                    <button type="button" className="btn btn-light dropdown-toggle py-3" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                        Material
+                                    </button>
+                                    <form className="dropdown-menu p-4">
+                                        <div className='row row-gap-3'>
+                                            {filters.material.map((item, index) => (
+                                                <div className='col-12' key={index}>
+                                                    <div className='form-check'>
+                                                        <input className="form-check-input" type="checkbox" id={`material${item}`} value={item} aria-label="..." onChange={(e) => handleChange(e, 'material')} />
+                                                        <label className="form-check-label" htmlFor={`material${item}`}>{item}</label>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
+
+                        {filters.pattern && filters.pattern.length > 0 && (
+                            <div className='fabric__Filter filter'>
+                                <div className="dropdown-center d-flex justify-content-center">
+                                    <button type="button" className="btn btn-light dropdown-toggle py-3" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                        Pattern
+                                    </button>
+                                    <form className="dropdown-menu p-4">
+                                        <div className='row row-gap-3'>
+                                            {filters.pattern.map((item, index) => (
+                                                <div className='col-12' key={index}>
+                                                    <div className='form-check'>
+                                                        <input className="form-check-input" type="checkbox" id={`pattern${item}`} value={item} aria-label="..." onChange={(e) => handleChange(e, 'pattern')} />
+                                                        <label className="form-check-label" htmlFor={`pattern${item}`}>{item}</label>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
+
                     </div>
                 )}
             </section>
