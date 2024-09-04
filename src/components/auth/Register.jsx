@@ -13,8 +13,7 @@ import * as Yup from 'yup';
 
 
 const SignupSchema = Yup.object().shape({
-    firstName: Yup.string().required('Required'),
-    lastName: Yup.string().required('Required'),
+    name: Yup.string().required('Required'),
     email: Yup.string().email('Invalid email').required('Required'),
     phoneNumber: Yup.string().required('Required').matches(/^\d{10}$/, 'Phone number is not valid'),
     password: Yup.string().min(8, 'Too Short! must be 8 or more than 8 char.').required('Required'),
@@ -41,8 +40,7 @@ const Register = () => {
                     <Formik
                         initialValues={
                             {
-                                firstName: '',
-                                lastName: '',
+                                name: '',
                                 email: '',
                                 gender: '',
                                 phoneNumber: '',
@@ -56,8 +54,7 @@ const Register = () => {
                             setLoading(true)
                             try {
                                 const response = await axios.post(authUrls.signup, {
-                                    firstName: values.firstName,
-                                    lastName: values.lastName,
+                                    name: values.name,
                                     email: values.email,
                                     gender: values.gender,
                                     phoneNumber: values.phoneNumber,
@@ -79,13 +76,24 @@ const Register = () => {
                                 }
 
                             } catch (error) {
-                                Swal.fire({
-                                    title: 'Register Failed!',
-                                    text: error.response.data.message,
-                                    icon: 'error',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
+                                if (error.response.status === 409) {
+                                    Swal.fire({
+                                        title: 'Register Failed!',
+                                        text: "Email or Phone number is already used",
+                                        icon: 'error',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                } else if (error.response.status === 500) {
+                                    Swal.fire({
+                                        title: 'Register Failed!',
+                                        text: "Something went wrong, please try later",
+                                        icon: 'error',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                }
+
                                 console.error('Error signing up:', error.response.data);
                             } finally {
                                 setLoading(false)
@@ -105,21 +113,21 @@ const Register = () => {
                             <form onSubmit={handleSubmit}>
                                 <div>
                                     <div className="">
-                                        <label htmlFor="firstName" className="form-label form-labels">First Name</label>
+                                        <label htmlFor="name" className="form-label form-labels">Name</label>
                                         <input
                                             type="text"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.firstName}
+                                            value={values.name}
                                             className="auth-input form-control form-control-sm"
-                                            id="firstName"
-                                            name='firstName'
-                                            aria-describedby="firstNameHelp" />
-                                        {touched.firstName && errors.firstName ? (
-                                            <p className='text-danger'>{errors.firstName}</p>
+                                            id="name"
+                                            name='name'
+                                            aria-describedby="NameHelp" />
+                                        {touched.name && errors.name ? (
+                                            <p className='text-danger'>{errors.name}</p>
                                         ) : null}
                                     </div>
-                                    <div className="">
+                                    {/* <div className="">
                                         <label htmlFor="lastName" className="form-label form-labels">Last Name</label>
                                         <input
                                             type="text"
@@ -133,7 +141,7 @@ const Register = () => {
                                         {touched.lastName && errors.lastName ? (
                                             <p className='text-danger'>{errors.lastName}</p>
                                         ) : null}
-                                    </div>
+                                    </div> */}
                                     <div className="">
                                         <label htmlFor="email" className="form-label form-labels">Email address</label>
                                         <input
@@ -235,7 +243,7 @@ const Register = () => {
                     <img src="/images/auth/home-page-men.png" alt="" />
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

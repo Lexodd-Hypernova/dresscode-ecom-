@@ -21,6 +21,7 @@ import './pages-styles/yourAddress.styles.css';
 import { useUserContext } from "../context/UserContext";
 
 import AddressModal from "../components/addressModal/AddressModal";
+import LoadingComponent from "../common/components/LoadingComponent";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,23 +48,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const YourAddress = () => {
-  const { addressData, setAddressData, addAddress } = useUserContext();
+  const { addressData, setAddressData, addAddress, loading, setLoading } = useUserContext();
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState(false);
-  // const [addressData, setAddressData] = useState([]);
-
 
 
   const [formData, setFormData] = useState({
-    name: "",
-    mobile: "",
-    flatNumber: "",
-    locality: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
     pinCode: "",
-    landmark: "",
-    districtCity: "",
+    city: "",
     state: "",
-    addressType: "Home", // Default value
+    country: "",
     markAsDefault: false,
   });
 
@@ -73,71 +72,7 @@ const YourAddress = () => {
   }, [])
 
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [name]: value,
-  //   }));
-  // };
 
-  // const handleCheckboxChange = (e) => {
-  //   const { name, checked } = e.target;
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [name]: checked,
-  //   }));
-  // };
-
-  // const getAddressData = async () => {
-  //   const token = localStorage.getItem("token");
-  //   const id = localStorage.getItem("id");
-
-  //   const requestOptions = {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await fetch(
-  //       accountInfoApis.getAddress(id),
-  //       requestOptions
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     const result = await response.json();
-  //     setAddressData(result.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // const addAddress = async() => {
-  //   const token = localStorage.getItem("token");
-
-  //   const config = {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await axios.post(
-  //       accountInfoApis.addAddress(localStorage.getItem("id")),
-  //       formData,
-  //       config
-  //     );
-  //     console.log(response.data);
-  //     setAddressData([...addressData, response.data]);
-  //     handleCloseModal();
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const editAddress = async (id) => {
     const addressToEdit = addressData.find(address => address._id === id);
@@ -151,6 +86,7 @@ const YourAddress = () => {
   };
 
   const deleteAddress1 = async (id) => {
+    setLoading(true)
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -172,16 +108,19 @@ const YourAddress = () => {
       if (response) {
         setAddressData(addressData.filter(address => address._id !== id));
         console.log("Address deleted successfully:", response.data);
-        window.location.reload()
+        // window.location.reload()
       } else {
         console.error("Failed to delete address:", response.statusText);
       }
     } catch (error) {
       console.error('Error deleting address:', error);
+    } finally {
+      setLoading(false)
     }
   };
 
   const setAsDefaultAddress = async (id) => {
+    setLoading(true)
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
@@ -199,17 +138,16 @@ const YourAddress = () => {
           markAsDefault: address._id === id,
         }));
         setAddressData(updatedAddresses);
-        window.location.reload()
+        // window.location.reload()
 
       }
     } catch (error) {
       console.error('Error setting default address:', error);
+    } finally {
+      setLoading(false)
     }
   };
 
-  // useEffect(() => {
-  //   getAddressData();
-  // }, []);
 
   const handleAddAddress = () => {
     setFormData({
@@ -231,19 +169,18 @@ const YourAddress = () => {
     setModalOpen(false);
   };
 
-  const handleSubmit = () => {
-    // e.preventDefault();
-    if (formData._id) {
-      updateAddress(formData._id);
 
+  const handleSubmit = (values) => {
+    if (values._id) {
+      updateAddress(values._id, values); // Pass the form data
     } else {
-      addAddress(formData);
+      addAddress(values);
       handleCloseModal();
-
     }
   };
 
-  const updateAddress = async (id) => {
+
+  const updateAddress = async (id, formData) => {
     const token = localStorage.getItem("token");
 
     const config = {
@@ -251,31 +188,64 @@ const YourAddress = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-
+    setLoading(true)
     try {
       const response = await axios.patch(
         accountInfoApis.updateAddress(localStorage.getItem("id"), id),
-        formData,
+        formData, // Use formData from Formik
         config
       );
       console.log(response.data);
-      // Update the address list after editing an address
+
       const updatedAddresses = addressData.map(address =>
         address._id === formData._id ? formData : address
       );
       setAddressData(updatedAddresses);
       handleCloseModal();
-      window.location.reload()
 
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false)
     }
   };
+
+
+
+  // const updateAddress = async (id) => {
+  //   const token = localStorage.getItem("token");
+
+  //   const config = {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await axios.patch(
+  //       accountInfoApis.updateAddress(localStorage.getItem("id"), id),
+  //       formData,
+  //       config
+  //     );
+  //     console.log(response.data);
+  //     // Update the address list after editing an address
+  //     const updatedAddresses = addressData.map(address =>
+  //       address._id === formData._id ? formData : address
+  //     );
+  //     setAddressData(updatedAddresses);
+  //     handleCloseModal();
+  //     // window.location.reload()
+
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
 
 
     <>
+
 
       <div className="address-screen">
         <div>
@@ -293,82 +263,87 @@ const YourAddress = () => {
             Your Address
           </div>
         </div>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="address-card rounded">
-                <IconButton
-                  className="add-address-icon"
-                  onClick={handleAddAddress}
 
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  <h4
-                    className="add-address-label"
-                    style={{ textAlign: "center" }}
-                  >
-                    Add Address
-                  </h4>
-                </IconButton>
-              </div>
-            </div>
-            {addressData.length > 0 ? (
-              addressData.map((val) => (
-                <div className="col-lg-4 col-md-6 mb-4" key={val._id}>
-                  <div className="address-card rounded">
-                    <p>{val.markAsDefault ? "Default" : ""}</p>
-                    <hr style={{ width: '100%', borderTop: '1px solid black' }} />
-                    <h5>{val.firstName}&nbsp;{val.lastName}</h5>
-                    <p>
-                      {val.address}
-                    </p>
-                    <p>{val.city}&nbsp;{val.pinCode}</p>
-                    <p>
-                      {val.state}
-                    </p>
-                    <p>{val.country}</p>
-                    <div style={{ color: 'brown' }}>
-                      <span onClick={() => editAddress(val._id)} style={{ cursor: 'pointer' }}>
-                        Edit
-                      </span>{" | "}
-                      <span onClick={() => deleteAddress1(val._id)} style={{ cursor: 'pointer' }}>
-                        Remove
-                      </span>{" | "}
-                      {!val.markAsDefault && (
-                        <span onClick={() => setAsDefaultAddress(val._id)} style={{ cursor: 'pointer' }}>
-                          Set as Default
-                        </span>
-                      )}
+        {
+
+          loading ? (
+            <LoadingComponent></LoadingComponent>
+          ) : (
+            <>
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-lg-4 col-md-6 mb-4">
+                    <div className="address-card rounded">
+                      <IconButton
+                        className="add-address-icon"
+                        onClick={handleAddAddress}
+
+                      >
+                        <FontAwesomeIcon icon={faPlus} />
+                        <h4
+                          className="add-address-label"
+                          style={{ textAlign: "center" }}
+                        >
+                          Add Address
+                        </h4>
+                      </IconButton>
                     </div>
                   </div>
+                  {addressData.length > 0 ? (
+                    addressData.map((val) => (
+                      <div className="col-lg-4 col-md-6 mb-4" key={val._id}>
+                        <div className="address-card rounded">
+                          <p>{val.markAsDefault ? "Default" : ""}</p>
+                          <hr style={{ width: '100%', borderTop: '1px solid black' }} />
+                          <h5>{val.firstName}&nbsp;{val.lastName}</h5>
+                          <p>
+                            {val.address}
+                          </p>
+                          <p>{val.city}&nbsp;{val.pinCode}</p>
+                          <p>
+                            {val.state}
+                          </p>
+                          <p>{val.country}</p>
+                          <div style={{ color: 'brown' }}>
+                            <span onClick={() => editAddress(val._id)} style={{ cursor: 'pointer' }}>
+                              Edit
+                            </span>{" | "}
+                            <span onClick={() => deleteAddress1(val._id)} style={{ cursor: 'pointer' }}>
+                              Remove
+                            </span>{" | "}
+                            {!val.markAsDefault && (
+                              <span onClick={() => setAsDefaultAddress(val._id)} style={{ cursor: 'pointer' }}>
+                                Set as Default
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <h5 className="fs-4">You do not have any address! Please add an address</h5>
+                  )}
                 </div>
-              ))
-            ) : (
-              <div>Loading...</div>
-            )}
-          </div>
-        </div>
+              </div>
 
+              <IconButton
+                className={classes.addButton}
+                onClick={handleAddAddress}
+                color="primary"
+              >
+                <FontAwesomeIcon icon={faPlus} size="2x" />
+              </IconButton>
 
+            </>
+          )
 
-
+        }
         <AddressModal
           formData={formData}
           setFormData={setFormData}
-          onSubmit={handleSubmit}
+          FormOnSubmit={handleSubmit}
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}></AddressModal>
-
-
-
-
-        <IconButton
-          className={classes.addButton}
-          onClick={handleAddAddress}
-          color="primary"
-        >
-          <FontAwesomeIcon icon={faPlus} size="2x" />
-        </IconButton>
       </div >
     </>
 

@@ -4,6 +4,7 @@ import DressCodeApi from '../common';
 import TextMove from '../components/InfiniteTextMove/TextMove';
 import { Link } from 'react-router-dom';
 import DisplayCategory from '../components/DisplayCategory';
+import "./pages-styles/category.style.css";
 
 const Categories = () => {
 

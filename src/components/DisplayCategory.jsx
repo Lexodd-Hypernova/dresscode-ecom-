@@ -1,5 +1,5 @@
 import React from 'react';
-import "./displayCategory.css";
+// import "./displayCategory.css";
 import s1 from "../../public/images/s1.png";
 import { Link } from 'react-router-dom';
 import scrollTop from '../helpers/scrollTop';

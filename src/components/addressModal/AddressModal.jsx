@@ -15,6 +15,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons"; // Add necessary icons
 
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,13 +45,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData }) => {
+const AddressModal = ({ FormOnSubmit, modalOpen, setModalOpen, formData, setFormData }) => {
     const classes = useStyles();
-
-    // const [modalOpen, setModalOpen] = useState(false);
-
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -66,25 +64,53 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
         }));
     };
 
-
-
-    useEffect(() => {
-
-        console.log(modalOpen)
-
-
-    }, [])
-
-
     const handleCloseModal = () => {
         setModalOpen(false);
     };
 
-
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formData)
+        FormOnSubmit(formData);  // Call the parent component's submit function
     }
+
+
+    const validationSchema = Yup.object().shape({
+        firstName: Yup.string().required('Required'),
+        lastName: Yup.string().required('Required'),
+        email: Yup.string().email('Invalid email').required('Required'),
+        phone: Yup.string().required('Required').matches(/^\d{10}$/, 'Phone number is not valid'),
+        address: Yup.string().required('Required'),
+        city: Yup.string().required('Required'),
+        pinCode: Yup.string().required('Required'),
+        state: Yup.string().required('Required'),
+        country: Yup.string().required('Required'),
+    });
+
+
+    // const formik = useFormik({
+    //     initialValues: formData,
+    //     validationSchema,
+    //     onSubmit: (values) => {
+    //         FormOnSubmit(values);
+    //     },
+    //     enableReinitialize: true,
+    // });
+
+    const formik = useFormik({
+        initialValues: formData,
+        validationSchema,
+        onSubmit: (values) => {
+            console.log('Submitting form with values:', values); // Debugging output
+            FormOnSubmit(values);
+            setModalOpen(false);
+        },
+        enableReinitialize: true,
+    });
+
+    useEffect(() => {
+        formik.setValues(formData);
+    }, [formData]);
+
 
     return (
         <>
@@ -98,46 +124,61 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
             >
                 <Card className={classes.card}>
                     <h2 id="add-address-modal-title">{formData._id ? "Edit Address" : "Add New Address"}</h2>
-                    <form onSubmit={handleFormSubmit}>
+                    <form onSubmit={formik.handleSubmit}>
                         <TextField
                             label="First Name"
                             name="firstName"
                             fullWidth
                             margin="normal"
-                            value={formData.name}
-                            onChange={handleChange}
+                            value={formik.values.firstName}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                            helperText={formik.touched.firstName && formik.errors.firstName}
                         />
                         <TextField
                             label="Last Name"
                             name="lastName"
                             fullWidth
                             margin="normal"
-                            value={formData.name}
-                            onChange={handleChange}
+                            value={formik.values.lastName}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                            helperText={formik.touched.lastName && formik.errors.lastName}
                         />
                         <TextField
                             label="Phone No"
                             name="phone"
                             fullWidth
                             margin="normal"
-                            value={formData.mobile}
-                            onChange={handleChange}
+                            value={formik.values.phone}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.phone && Boolean(formik.errors.phone)}
+                            helperText={formik.touched.phone && formik.errors.phone}
                         />
                         <TextField
                             label="Email"
                             name="email"
                             fullWidth
                             margin="normal"
-                            value={formData.mobile}
-                            onChange={handleChange}
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
                         />
                         <TextField
                             label="Address"
                             name="address"
                             fullWidth
                             margin="normal"
-                            value={formData.flatNumber}
-                            onChange={handleChange}
+                            value={formik.values.address}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.address && Boolean(formik.errors.address)}
+                            helperText={formik.touched.address && formik.errors.address}
                         />
 
                         <TextField
@@ -145,32 +186,44 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
                             name="city"
                             fullWidth
                             margin="normal"
-                            value={formData.districtCity}
-                            onChange={handleChange}
+                            value={formik.values.city}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.city && Boolean(formik.errors.city)}
+                            helperText={formik.touched.city && formik.errors.city}
                         />
                         <TextField
                             label="Pin code"
                             name="pinCode"
                             fullWidth
                             margin="normal"
-                            value={formData.pinCode}
-                            onChange={handleChange}
+                            value={formik.values.pinCode}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.pinCode && Boolean(formik.errors.pinCode)}
+                            helperText={formik.touched.pinCode && formik.errors.pinCode}
                         />
                         <TextField
                             label="State"
                             name="state"
                             fullWidth
                             margin="normal"
-                            value={formData.state}
-                            onChange={handleChange}
+                            value={formik.values.state}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.state && Boolean(formik.errors.state)}
+                            helperText={formik.touched.state && formik.errors.state}
                         />
                         <TextField
                             label="Country"
                             name="country"
                             fullWidth
                             margin="normal"
-                            value={formData.locality}
-                            onChange={handleChange}
+                            value={formik.values.country}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.country && Boolean(formik.errors.country)}
+                            helperText={formik.touched.country && formik.errors.country}
                         />
                         {/* <FormLabel component="legend">Address Type</FormLabel>
                         <RadioGroup
@@ -199,8 +252,8 @@ const AddressModal = ({ onSubmit, modalOpen, setModalOpen, formData, setFormData
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={formData.markAsDefault}
-                                    onChange={handleCheckboxChange}
+                                    checked={formik.values.markAsDefault}
+                                    onChange={formik.handleChange}
                                     name="markAsDefault"
                                     color="primary"
                                 />
