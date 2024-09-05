@@ -1,4 +1,4 @@
-.text__Move-main{
+.text__Move-main {
     position: relative;
     display: flex;
     margin-top: 70px;
@@ -33,4 +33,42 @@
     position: absolute;
     left: 100%;
     top: 0;
+}
+
+
+@media only screen and (max-width: 1680px) {
+
+    .text__Move-main {
+        margin-top: 40px;
+        height: 160px;
+    }
+
+    .text__Slider p {
+        font-size: 140px;
+        line-height: 140px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .text__Move-main {
+        margin-top: 40px;
+        height: 120px;
+    }
+
+    .text__Slider p {
+        font-size: 100px;
+        line-height: 100px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .text__Move-main {
+        margin-top: 30px;
+        height: 80px;
+    }
+
+    .text__Slider p {
+        font-size: 60px;
+        line-height: 60px;
+    }
 }
