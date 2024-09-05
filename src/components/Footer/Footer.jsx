@@ -47,8 +47,8 @@ const Footer = () => {
                             <h4 className='ft-card-ttl'>
                                 Contact
                             </h4>
-                            <a href="tel:+" className='ft-cn'>9632587410</a>
-                            <a href="mailto:" className='ft-cn'>contact@dresscode.com</a>
+                            <a href="tel:+917447444481" className='ft-cn'>+91 74474 44481</a>
+                            <a href="mailto:info@dress-code.in" className='ft-cn'>info@dress-code.in</a>
                         </div>
                     </div>
                     <div className='ft-card-row'>
@@ -80,6 +80,11 @@ const Footer = () => {
                                 <li>
                                     <a href="">
                                         Accessories
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://dress-code.in/">
+                                        About us
                                     </a>
                                 </li>
                             </ul>

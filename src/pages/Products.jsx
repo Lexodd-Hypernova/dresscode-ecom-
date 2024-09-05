@@ -61,7 +61,6 @@ const Products = () => {
     return (
         <>
             <FilterApi variantsPerColor={(data) => { setDataPerFilter(data); }} />
-
             <section className='categories'>
                 {loading ? (
                     <div className='container-fluid'>
@@ -83,8 +82,8 @@ const Products = () => {
                         <div className="row row-gap-5">
                             {variants.map((item, index) => (
                                 <Link to={`/${productId}/${item.color.name}/${productType}/${subCategory}/${category}/${groupName}`} className="col-lg-3" key={index} onClick={scrollTop}>
-                                    <img src={s1} alt="" className="w-100" />
-                                    <h5 className='srt__Name'>{item.variantId}</h5>
+                                    <img src={item.imageUrls[0]} alt="" className="w-100" />
+                                    <h5 className='srt__Name'>{item.color.name}&nbsp;{data.productType.type}</h5>
                                 </Link>
                             ))}
                         </div>

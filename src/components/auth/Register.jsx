@@ -63,7 +63,7 @@ const Register = () => {
                                 // console.log(response.data);
 
 
-                                if (response.data.message === "Success") {
+                                if (response.status === 201) {
                                     Swal.fire({
                                         title: 'Success!',
                                         text: 'Registered successfully',
@@ -76,7 +76,7 @@ const Register = () => {
                                 }
 
                             } catch (error) {
-                                if (error.response.status === 409) {
+                                if (error.response.status === 400) {
                                     Swal.fire({
                                         title: 'Register Failed!',
                                         text: "Email or Phone number is already used",
@@ -93,6 +93,7 @@ const Register = () => {
                                         timer: 1500
                                     })
                                 }
+                                console.error('Error signing up:', error);
 
                                 console.error('Error signing up:', error.response.data);
                             } finally {

@@ -24,7 +24,7 @@ const DressCodeApi = {
     url: `${baseUrl}/e-com/getProductDetailsWithSpecificVariant`,
   },
   generateImageURL: {
-    url: `${baseUrl}/image/generateImgUrl`,
+    url: `${baseUrl}/uploadToS3/generateImgUrl`,
   },
   checkout: {
     url: `${baseUrl}/payment/checkout`,

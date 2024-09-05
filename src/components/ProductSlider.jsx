@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactImageMagnify from 'react-image-magnify';
 
-const productImages = [
-    "/images/s1.png", "/images/s2.png",
-    "/images/s3.png", "/images/s4.png"
-]
+const ProductSlider = ({ productData }) => {
+    const [productImages, setProductImages] = useState([]);
 
-const ProductSlider = () => {
+    useEffect(() => {
+        if (productData && productData.productDetails && productData.productDetails.variants && productData.productDetails.variants.length > 0) {
+            console.log("coming from products", productData);
+            setProductImages(productData.productDetails.variants[0].imageUrls);
+        }
+    }, [productData]);
 
     const [activeImage, setActiveImage] = useState(productImages[0]);
     const [startIndex, setStartIndex] = useState(0);
 
+    useEffect(() => {
+        if (productImages.length > 0) {
+            setActiveImage(productImages[0]);
+        }
+    }, [productImages]);
+
     const handleMouseEnterProduct = (imageURL) => {
-        setActiveImage(imageURL)
-    }
+        setActiveImage(imageURL);
+    };
 
     const handleNext = () => {
         setStartIndex((prevIndex) => (prevIndex + 1) % productImages.length);
@@ -30,7 +39,6 @@ const ProductSlider = () => {
 
     return (
         <div className="productImage">
-
             <div className="pr__thumbs">
                 <div className='pr_nav pr_nav-prev'>
                     <button onClick={handlePrev}>
@@ -50,37 +58,33 @@ const ProductSlider = () => {
                         </div>
                     ))}
                 </div>
+
                 <div className='pr_nav pr_nav-nxt'>
                     <button onClick={handleNext}>
                         <i className="fa-solid fa-chevron-down"></i>
                     </button>
                 </div>
-
             </div>
 
             <div className='main_Image'>
-
                 <ReactImageMagnify
                     style={{ zIndex: "9" }}
                     smallImage={{
                         alt: '',
                         isFluidWidth: true,
-                        src: `${activeImage}`,
-                        // srcSet: srcSet,
-                        // sizes: '(min-width: 800px) 33.5vw, (min-width: 415px) 50vw, 100vw',
+                        src: activeImage,
                     }}
                     largeImage={{
                         alt: '',
-                        src: `${activeImage}`,
+                        src: activeImage,
                         width: 1200,
                         height: 1800,
                     }}
                     isHintEnabled={true}
                 />
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default ProductSlider
+export default ProductSlider;

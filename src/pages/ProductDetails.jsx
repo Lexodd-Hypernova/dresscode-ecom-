@@ -99,26 +99,6 @@ const ProductDetails = () => {
 
   };
 
-  // const increment = () => {
-  //   setCount((prevCount) => {
-  //     const newQuantity = prevCount + 1;
-  //     updateTotalPrice(newQuantity);
-  //     return newQuantity;
-  //   });
-  // };
-
-  // const decrement = () => {
-  //   setCount((prevCount) => {
-  //     const newCount = Math.max(1, prevCount - 1);
-  //     updateTotalPrice(newCount);
-  //     return newCount;
-  //   });
-  // };
-
-
-
-
-
   const handleBlur = () => {
     // Reset count to 1 if input is empty when input loses focus
     if (count === "") {
@@ -257,50 +237,6 @@ const ProductDetails = () => {
   };
 
 
-  // const updateAPI = async (quantity) => {
-  //   console.log(sizeError)
-  //   console.log(activeSize)
-  //   if (!sizeError) {
-  //     setLoading(true);
-  //     console.log("hitting in productDetails counter");
-  //     try {
-  //       const token = localStorage.getItem("token");
-  //       const userId = localStorage.getItem("id");
-  //       const config = {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       };
-
-  //       const response = await axios.get(
-  //         shoppingInfoApis.checkProductQuantity(userId, groupName, productId, activeColor, activeSize, quantity),
-  //         config
-  //       );
-
-  //       updateTotalPrice(quantity);
-  //       // If the API call is successful, keep the item checked
-  //       // onUpdateQuantity(quantity, cartItemId); // Keep this item checked
-  //       // setCounterError(); // Clear any previous errors
-
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error("Error updating item quantity:", error);
-  //       setCount(1)
-  //       updateTotalPrice(1)
-
-  //       // If there is an error, uncheck only the affected item
-  //       // onUpdateQuantity(1, cartItemId); // Uncheck this item
-  //       // setCounterError(error.response?.data?.message || "Stock issue detected");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   else {
-  //     setSizeError(true)
-  //   }
-  // };
-
-
 
 
   const updateAPI = async (quantity) => {
@@ -313,13 +249,6 @@ const ProductDetails = () => {
       setPriceLoading(true);
       console.log("hitting in productDetails counter");
       try {
-        // const token = localStorage.getItem("token");
-        // const userId = localStorage.getItem("id");
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // };
 
         const response = await axios.get(
           shoppingInfoApis.checkProductQuantity(groupName, productId, activeColor, activeSize, quantity),
@@ -333,9 +262,6 @@ const ProductDetails = () => {
         console.error("Error updating item quantity:", error);
         setStockError(error.response?.data?.message || "Stock issue detected");
         updateTotalPrice(quantity);
-
-        // setCount(1);
-        // updateTotalPrice(1);
 
       }
       finally {
@@ -376,11 +302,6 @@ const ProductDetails = () => {
     debouncedUpdateAPI(newCount);
   };
 
-  // const handleChange = (e) => {
-  //   const value = parseInt(e.target.value, 10);
-  //   setCount(value);
-  //   debouncedUpdateAPI(value);
-  // };
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -426,10 +347,10 @@ const ProductDetails = () => {
   return (
     <>
       <section className="product__Details">
-        <ProductSlider />
+        <ProductSlider productData={data} />
 
         <div className="productContent">
-          <h2 className="pr_name">Product Name</h2>
+          <h2 className="pr_name">{data?.productDetails?.productType?.type}</h2>
           <div className="pr_rating">
             <button type="button" className="btn btn-success text-white">
               4.5<i className="fa-solid fa-star"></i>
@@ -633,13 +554,12 @@ const ProductDetails = () => {
               </div>}
             </div>
           </div>
-          {
-            stockError &&
+
+          {count <= 35 && stockError && (
             <div className="alert alert-warning alert-dismissible mt-2 fade show" role="alert">
               {stockError}
-              {/* <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> */}
             </div>
-          }
+          )}
           <div className="row row-gap-4 mt-5">
             <div className="d-grid col-6">
               {isLoggedIn ? (
@@ -765,12 +685,7 @@ const ProductDetails = () => {
               Product Details
             </h3>
             <p className="fs-5 fw-normal mt-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur.
+              {data?.productDetails?.productDescription}
             </p>
           </div>
         </div>
