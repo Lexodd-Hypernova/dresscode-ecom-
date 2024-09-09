@@ -3,50 +3,83 @@ import DressCodeApi from "../../common";
 import { Link, useNavigate } from "react-router-dom";
 import "./cards.css";
 
+const groups = [
+  {
+    name: "ELITE",
+    src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+  },
+  {
+    name: "HEAL",
+    src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+  },
+  {
+    name: "TOGS",
+    src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+  },
+
+]
+
 const Cards = () => {
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const loadingList = new Array(6).fill(null);
+  // const [groups, setGroups] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const loadingList = new Array(3).fill(null);
 
   const navigate = useNavigate();
 
-  const fetchData = async () => {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
+  // const fetchData = async () => {
+  //   const requestOptions = {
+  //     method: "GET",
+  //     redirect: "follow",
+  //   };
 
-    try {
-      setLoading(true);
-      const response = await fetch(DressCodeApi.getGroups.url, requestOptions);
-      const result = await response.json();
-      setLoading(false);
-      setGroups(result);
-      console.log("Fetched result of Cards:", result); // Log fetched data
-    } catch (error) {
-      setLoading(false);
-      console.error("Error fetching data:", error);
-    }
-  };
+  //   try {
+  //     setLoading(true);
+  //     const response = await fetch(DressCodeApi.getGroups.url, requestOptions);
+  //     const result = await response.json();
+  //     setLoading(false);
+  //     setGroups(result);
+  //     console.log("Fetched result of Cards:", result); // Log fetched data
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
 
-  const handleClick = (groupName) => {
-    console.log(groupName);
-    if (groupName === "ELITE") {
-      navigate("/ELITE")
-    } else {
+  const handleClick = (name) => {
+    console.log(name);
+    if (name === "TOGS") {
       navigate("/coming-soon")
+    } else {
+      navigate(`/products/${name}`)
     }
   }
 
 
   return (
     <section className="card-section">
-      {
+
+      <div className="container-fluid">
+        <div className="row row-gap-4">
+          {groups.map((group, index) => (
+            <div className="col-lg-4" role="button" key={index} onClick={() => handleClick(group.name)}>
+              <img
+                src={group.src}
+                className="w-100 rounded"
+                alt={group.name || "Card image"}
+              />
+              <h3 className="card-title mt-2">{group.name}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+      {/* {
         loading ? (
           <div className='container-fluid'>
             <div className='row row-gap-5'>{
@@ -71,7 +104,7 @@ const Cards = () => {
               {groups.map((group, index) => (
                 <div className="col-lg-4" role="button" key={index} onClick={() => handleClick(group.groupName)}>
                   <img
-                    src="https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+                    src=
                     className="w-100 rounded"
                     alt={group.groupName || "Card image"}
                   />
@@ -81,7 +114,7 @@ const Cards = () => {
             </div>
           </div>
         )
-      }
+      } */}
     </section>
   )
 

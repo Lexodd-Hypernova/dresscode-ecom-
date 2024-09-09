@@ -24,6 +24,7 @@ import Login from "../components/auth/Login";
 import Register from "../components/auth/Register";
 import RaiseQuote from "../pages/RaiseQuote";
 import QuoteSuccess from "../pages/QuoteSuccess";
+import ProductListWithFilters from "../pages/ProductListWithFilters";
 
 const router = createBrowserRouter([
   {
@@ -50,10 +51,17 @@ const router = createBrowserRouter([
         path: "/:groupName/:category/:subCategory",
         element: <ProductTypes />,
       },
+      // {
+      //   path: "/:groupName/:category/:subCategory/:productType/:gender",
+      //   element: <Products />,
+      // },
+
       {
-        path: "/:groupName/:category/:subCategory/:productType/:gender",
-        element: <Products />,
+        path: "/products/:groupName",
+        element: <ProductListWithFilters />,
       },
+
+
       {
         path: "/:productId/:color/:productType/:subCategory/:category/:groupName",
         element: <ProductDetails />,

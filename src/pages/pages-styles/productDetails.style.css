@@ -2,7 +2,7 @@
     display: flex;
     width: 45%;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .pr__thumbs {

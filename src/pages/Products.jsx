@@ -61,9 +61,16 @@ const Products = () => {
     return (
         <>
             <FilterApi variantsPerColor={(data) => { setDataPerFilter(data); }} />
+            <div className="hm_ct-ttl">
+
+            </div>
             <section className='categories'>
                 {loading ? (
                     <div className='container-fluid'>
+                        {/* <Link className='back_link mb-3' to="/">
+                            <img src="/images/back.png" alt="" />
+                            <span>Back</span> 
+                        </Link> */}
                         <div className='row row-gap-5'>
                             {loadingList.map((item, index) => (
                                 <div className="col-lg-4" key={index}>
@@ -79,6 +86,10 @@ const Products = () => {
                     </div>
                 ) : (
                     <div className="container-fluid text-center">
+                        <Link className='back_link mb-3' to="/">
+                            <img src="/images/back.png" alt="" />
+                            <span>Back</span>
+                        </Link>
                         <div className="row row-gap-5">
                             {variants.map((item, index) => (
                                 <Link to={`/${productId}/${item.color.name}/${productType}/${subCategory}/${category}/${groupName}`} className="col-lg-3" key={index} onClick={scrollTop}>

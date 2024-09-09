@@ -122,7 +122,6 @@ const Billing = () => {
 
       // Step 1: Create a payment order on your server
       const { data: orderData } = await axios.post(
-        // `${BASE_URL}/payment/checkout`,
         DressCodeApi.checkout.url,
         { amount: amountInPaise }, // Amount in paise
         { headers }
@@ -140,7 +139,7 @@ const Billing = () => {
 
         key: "rzp_test_0PMwuUiWHNgJdU",
 
-        
+
         // key: "rzp_live_YZAblE0DYussOv",  
 
 
@@ -171,7 +170,6 @@ const Billing = () => {
 
           if (verifyData.success) {
             // Step 4: Create the order on your server
-            // var raw = "";
             setLoading(true)
             if (type === "cart") {
               const raw = JSON.stringify({
@@ -186,9 +184,11 @@ const Billing = () => {
                   price: item.productDetails.price,
                   logoUrl: item.logoUrl,
                   logoPosition: item.logoPosition,
+                  discountPercentage: 0,
+                  discountAmount: 0
                 })),
-                deliveryCharges: deliveryCharges,
-                discountPercentage: discountPercentage,
+                deliveryCharges: 0,
+                TotalDiscountAmount: 0,  //(add all the discount amounts)
                 TotalPriceAfterDiscount: TotalPriceAfterDiscount,
               });
               console.log("Creating order with data:", raw);
@@ -198,12 +198,6 @@ const Billing = () => {
                 raw,
                 { headers }
               );
-
-              // const finalResponse = await axios.post(
-              //   `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-              //   raw,
-              //   { headers }
-              // );
 
               if (finalResponse.status === 201) {
                 setLoading(false)
@@ -230,9 +224,11 @@ const Billing = () => {
                   price: item.price,
                   logoUrl: item.logoUrl,
                   logoPosition: item.logoPosition,
+                  discountPercentage: 0,
+                  discountAmount: 0
                 })),
-                deliveryCharges: deliveryCharges,
-                discountPercentage: discountPercentage,
+                deliveryCharges: 0,
+                TotalDiscountAmount: 0,  //(add all the discount amounts)
                 TotalPriceAfterDiscount: TotalPriceAfterDiscount,
               });
 
@@ -250,20 +246,7 @@ const Billing = () => {
                   state: { orderId: result?.order?.orderId },
                 });
               }
-
-              // const finalResponse = await axios.post(
-              //   `${BASE_URL}/order/createOrder/user/${id}/address/${activeAddressId}`,
-              //   raw,
-              //   { headers }
-              // );
-
             }
-
-            // if (result.response.status = "200") {
-            //   console.log("Order creation response:", result);
-            //   alert("Order created successfully!");
-            //   navigate("/success");
-            // }
           } else {
             alert("Payment verification failed!");
           }

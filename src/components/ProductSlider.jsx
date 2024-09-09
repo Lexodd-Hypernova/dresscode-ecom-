@@ -3,22 +3,17 @@ import ReactImageMagnify from 'react-image-magnify';
 
 const ProductSlider = ({ productData }) => {
     const [productImages, setProductImages] = useState([]);
+    const [activeImage, setActiveImage] = useState(null); // Initialize to null
 
     useEffect(() => {
-        if (productData && productData.productDetails && productData.productDetails.variants && productData.productDetails.variants.length > 0) {
-            console.log("coming from products", productData);
-            setProductImages(productData.productDetails.variants[0].imageUrls);
+        if (productData?.productDetails?.variants?.length > 0) {
+            const images = productData.productDetails.variants[0].imageUrls;
+            setProductImages(images);
+            setActiveImage(images[0]); // Set active image at the same time
         }
     }, [productData]);
 
-    const [activeImage, setActiveImage] = useState(productImages[0]);
     const [startIndex, setStartIndex] = useState(0);
-
-    useEffect(() => {
-        if (productImages.length > 0) {
-            setActiveImage(productImages[0]);
-        }
-    }, [productImages]);
 
     const handleMouseEnterProduct = (imageURL) => {
         setActiveImage(imageURL);
@@ -47,8 +42,8 @@ const ProductSlider = ({ productData }) => {
                 </div>
 
                 <div className="pr__thumbs-inner">
-                    {displayedImages.map((imgURL, index) => (
-                        <div className="thumb_item" key={imgURL}>
+                    {displayedImages.map((imgURL,index) => (
+                        <div className="thumb_item" key={index}>
                             <img
                                 src={imgURL}
                                 className=""
@@ -67,21 +62,23 @@ const ProductSlider = ({ productData }) => {
             </div>
 
             <div className='main_Image'>
-                <ReactImageMagnify
-                    style={{ zIndex: "9" }}
-                    smallImage={{
-                        alt: '',
-                        isFluidWidth: true,
-                        src: activeImage,
-                    }}
-                    largeImage={{
-                        alt: '',
-                        src: activeImage,
-                        width: 1200,
-                        height: 1800,
-                    }}
-                    isHintEnabled={true}
-                />
+                {activeImage && (
+                    <ReactImageMagnify
+                        style={{ zIndex: "9" }}
+                        smallImage={{
+                            alt: '',
+                            isFluidWidth: true,
+                            src: activeImage,
+                        }}
+                        largeImage={{
+                            alt: '',
+                            src: activeImage,
+                            width: 1200,
+                            height: 1800,
+                        }}
+                        isHintEnabled={true}
+                    />
+                )}
             </div>
         </div>
     );
