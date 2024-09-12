@@ -122,24 +122,69 @@ const Orders = () => {
     return formattedDate;
   }
 
+  // const handleTrackPackage = async (awbCode, orderId) => {
+  //   if (!awbCode) {
+  //     // Show popup only for the specific order
+  //     setShowPopup(prev => ({
+  //       ...prev,
+  //       [orderId]: true,
+  //     }));
+
+  //     // Hide popup after 3 seconds
+  //     setTimeout(() => {
+  //       setShowPopup(prev => ({
+  //         ...prev,
+  //         [orderId]: false,
+  //       }));
+  //     }, 1500);
+  //   } else {
+  //     try {
+  //       const response = await axios.get(shoppingInfoApis.trackPackage(awbCode));
+
+  //       const trackUrl = response.data.tracking_data.track_url;
+
+  //       if (trackUrl) {
+  //         window.location.href = trackUrl;
+  //       } else {
+  //         alert("Tracking URL not available");
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching tracking data:', error);
+  //       alert("Failed to track package. Please try again later.");
+  //     }
+  //   }
+  // };
+
+
   const handleTrackPackage = async (awbCode, orderId) => {
     if (!awbCode) {
       // Show popup only for the specific order
-      setShowPopup(prev => ({
+      setShowPopup((prev) => ({
         ...prev,
         [orderId]: true,
       }));
 
       // Hide popup after 3 seconds
       setTimeout(() => {
-        setShowPopup(prev => ({
+        setShowPopup((prev) => ({
           ...prev,
           [orderId]: false,
         }));
       }, 1500);
     } else {
       try {
-        const response = await axios.get(shoppingInfoApis.trackPackage(awbCode));
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUwODg1OTcsInNvdXJjZSI6InNyLWF1dGgtaW50IiwiZXhwIjoxNzI2OTg1ODE0LCJqdGkiOiJIU1hRSTRGVTF5MGI1d2Z0IiwiaWF0IjoxNzI2MTIxODE0LCJpc3MiOiJodHRwczovL3NyLWF1dGguc2hpcHJvY2tldC5pbi9hdXRob3JpemUvdXNlciIsIm5iZiI6MTcyNjEyMTgxNCwiY2lkIjo0ODczNDg1LCJ0YyI6MzYwLCJ2ZXJib3NlIjpmYWxzZSwidmVuZG9yX2lkIjowLCJ2ZW5kb3JfY29kZSI6IiJ9.RVZKAqT2eVr5mllvMB2tCy0ykqwWQgi3OCWqup9pE8M";
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`, // Use the provided token
+          },
+        };
+
+        const response = await axios.get(
+          shoppingInfoApis.trackPackage(awbCode),
+          config
+        );
 
         const trackUrl = response.data.tracking_data.track_url;
 
@@ -149,11 +194,15 @@ const Orders = () => {
           alert("Tracking URL not available");
         }
       } catch (error) {
-        console.error('Error fetching tracking data:', error);
+        console.error("Error fetching tracking data:", error);
         alert("Failed to track package. Please try again later.");
       }
     }
   };
+
+
+
+
 
   return (
     <div className="orders-container">
