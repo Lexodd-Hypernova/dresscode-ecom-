@@ -34,11 +34,11 @@ const WishList = () => {
                                             <i className="fa-solid fa-x fa-beat-fade fs-4" style={{ position: 'absolute', top: '-10px', right: '0px', cursor: 'pointer' }} onClick={() => deleteWishList(item._id)}></i>
 
                                             <div className="w_item-img">
-                                                <img className="card-img-top w-100" src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg" alt="Card image cap" />
+                                                <img className="card-img-top w-100" src={item.imgUrl} alt="Card image cap" />
                                             </div>
 
                                             <div className="w-item_des">
-                                                <p className="">{item.color.name} {item.group} </p>
+                                                <p className="">{item.color.name} {item.productDetails.productType} </p>
                                                 {/* <p className="card-text">{item.productDetails.fit} {item.productDetails.neckline}</p> */}
                                                 {/* <p className="card-text">${item.productDetails.price}</p> */}
                                             </div>

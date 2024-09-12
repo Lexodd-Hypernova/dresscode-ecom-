@@ -3,12 +3,14 @@ import "./pages-styles/Orders.styles.css";
 import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../common/components/LoadingComponent";
+import { shoppingInfoApis } from "../common";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
   const [quotes, setQuotes] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState({}); // store popups by orderId
   const fileInputRef = useRef(null);
   const nav = useNavigate()
   const goToReview = (group, productId) => {
@@ -120,6 +122,39 @@ const Orders = () => {
     return formattedDate;
   }
 
+  const handleTrackPackage = async (awbCode, orderId) => {
+    if (!awbCode) {
+      // Show popup only for the specific order
+      setShowPopup(prev => ({
+        ...prev,
+        [orderId]: true,
+      }));
+
+      // Hide popup after 3 seconds
+      setTimeout(() => {
+        setShowPopup(prev => ({
+          ...prev,
+          [orderId]: false,
+        }));
+      }, 1500);
+    } else {
+      try {
+        const response = await axios.get(shoppingInfoApis.trackPackage(awbCode));
+
+        const trackUrl = response.data.tracking_data.track_url;
+
+        if (trackUrl) {
+          window.location.href = trackUrl;
+        } else {
+          alert("Tracking URL not available");
+        }
+      } catch (error) {
+        console.error('Error fetching tracking data:', error);
+        alert("Failed to track package. Please try again later.");
+      }
+    }
+  };
+
   return (
     <div className="orders-container">
       <div className="order_navbar">
@@ -171,9 +206,7 @@ const Orders = () => {
                                     <div className="ord_desc">
                                       <div className="ord_img">
                                         <img
-                                          src={
-                                            "https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-                                          }
+                                          src={product.imgUrl}
                                           alt=""
                                           className="w-100"
                                         />
@@ -185,20 +218,40 @@ const Orders = () => {
                                         <p className="pr_price">MRP : &#8377;{product.price}</p>
                                         <p className="pr_size">Size : {product.size}</p>
                                         <p className="pr_color">Color : {product.color.name}</p>
-                                        <p className="pr_lg-place">Logo Position : {product.logoPosition}</p>
+                                        {
+                                          product.logoPosition !== "" && (
+                                            <p className="pr_lg-place">Logo Position : {product.logoPosition}</p>
+                                          )
+                                        }
                                       </div>
                                     </div>
                                     <div className="pr_action">
+
                                       <div className="pr_track">
-                                        <button className="order-button">Track Package</button>
+                                        <button className="order-button" onClick={() => handleTrackPackage(val.shiprocket_awb_code, val.orderId)}>
+                                          Track Package
+                                        </button>
+
+                                        {/* Show popup only for the specific order */}
+                                        {showPopup[val.orderId] && (
+                                          <div className="popup">
+                                            Shipping is not assigned
+                                          </div>
+                                        )}
                                       </div>
+
                                       <div className="pr_review">
                                         <button className="order-button" onClick={() => goToReview(product.group, product.productId)}>Write A Product Review</button>
                                       </div>
-                                      <div className="pr-logo">
-                                        Logo :
-                                        <div className="pr_lg_det"><img src={product.logoUrl} alt="" className="w-100" /></div>
-                                      </div>
+                                      {
+                                        product.logoUrl !== null && (
+                                          <div className="pr-logo">
+                                            Logo :
+                                            <div className="pr_lg_det"><img src={product.logoUrl} alt="" className="w-100" /></div>
+                                          </div>
+                                        )
+                                      }
+
                                     </div>
                                   </div>
 

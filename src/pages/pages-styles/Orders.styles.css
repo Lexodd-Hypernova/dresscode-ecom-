@@ -175,6 +175,24 @@
   font-weight: 400;
 }
 
+.pr_track {
+  position: relative;
+}
+
+.popup {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #f5c6cb;
+  font-size: 14px;
+  font-family: Inter;
+  z-index: 1000;
+}
+
 @media screen and (max-width: 1600px) {
   .orders-container {
     padding: 0 60px;

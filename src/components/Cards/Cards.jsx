@@ -4,6 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "./cards.css";
 
 const groups = [
+  //  {
+  //   name: "ELITE",
+  //   src: "https://i.imgur.com/E8sD0n1.png"
+  // },
   {
     name: "ELITE",
     src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"

@@ -103,7 +103,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
           <span className="sr-only"></span>
         </div>}
       </div>
-      <div className="counter_error">
+      {/* <div className="counter_error">
         {
           conterError &&
           <div className="alert alert-warning alert-dismissible fade show" role="alert">
@@ -111,9 +111,19 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         }
+      </div> */}
 
-        {/* {conterError && <span className="text-danger">{conterError}</span>} */}
+
+      <div className="counter_error">
+        {conterError && (
+          <div className="alert alert-warning alert-dismissible" role="alert">
+            {conterError}
+            <button type="button" className="btn-close" onClick={() => setCounterError(null)} aria-label="Close"></button>
+          </div>
+        )}
       </div>
+
+
 
       {/* <span>{price}</span> */}
 

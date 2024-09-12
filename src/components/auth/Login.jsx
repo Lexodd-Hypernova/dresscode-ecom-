@@ -85,6 +85,13 @@ const Login = () => {
 
         } catch (error) {
             console.error("Error during sign-in:", error);
+            Swal.fire({
+                title: 'Login Failed!',
+                text: 'Something went wrong',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 1500
+            })
         } finally {
             setLoading(false)
         }

@@ -60,7 +60,9 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
                 price: cartItem.price,
                 quantityRequired: cartItem.quantityRequired,
                 logoUrl: imageUrl,      // Reset or keep existing logoUrl
-                logoPosition: logoPlacement // Reset or keep existing logoPosition
+                logoPosition: logoPlacement, // Reset or keep existing logoPosition
+                imgUrl: cartItem.imgUrl,
+
             });
         }
 
@@ -72,10 +74,16 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
                 color: buyItem.color,
                 size: buyItem.size,
                 price: buyItem.price,
-                totalPrice: buyItem.totalPrice,
+                totalPriceWithDiscount: buyItem.totalPriceWithDiscount,
+                totalPriceWithoutDiscount: buyItem.totalPriceWithoutDiscount,
+                discountPercentage: buyItem.discountPercentage,
+                discountAmount: buyItem.discountAmount,
+                // totalPrice: buyItem.totalPrice,
                 quantityRequired: buyItem.quantityRequired,
                 logoUrl: imageUrl,      // Reset or keep existing logoUrl
-                logoPosition: logoPlacement // Reset or keep existing logoPosition
+                logoPosition: logoPlacement, // Reset or keep existing logoPosition
+                imgUrl: buyItem.imgUrl,
+                productType: buyItem.productType,
             })
         }
 
@@ -127,7 +135,8 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
                 navigate("/billing", {
                     state: {
                         product: [...product, updatedBuyItem],
-                        totalAmount: buyItem.totalPrice,
+                        totalCartAmountWithoutDiscount: buyItem.totalPriceWithoutDiscount,
+                        totalDiscount: buyItem.discountAmount,
                         type: "buyNow",
                     },
                 });
@@ -226,8 +235,28 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
                     navigate("/billing", {
                         state: {
                             product: [...product, updatedBuyItem],
-                            totalAmount: buyItem.totalPrice,
+                            totalCartAmountWithoutDiscount: buyItem.totalPriceWithoutDiscount,
+                            totalDiscount: buyItem.discountAmount,
                             type: "buyNow",
+                        },
+                    });
+                }, 100);
+            } else if (selectType === "quoteType") {
+                const updatedQuoteItem = {
+                    ...quoteItemToAdd,
+                    logoUrl: imageUrl,
+                    logoPosition: logoPlacement
+                }
+
+                setQuoteItemToAdd(updatedQuoteItem);
+                setProduct((prevItem) => [...prevItem, updatedBuyItem]);
+
+                // Delay navigation until state is set
+                setTimeout(() => {
+                    navigate("/raise-quote", {
+                        state: {
+                            product: [...product, updatedQuoteItem],
+                            totalAmount: quoteItem.totalPrice,
                         },
                     });
                 }, 100);

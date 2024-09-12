@@ -14,5 +14,23 @@
 }
 
 .w_item-img {
-    width: 400px;
+    width: 360px;
+}
+
+@media only screen and (max-width: 1600px) {
+    .w_item-img {
+        width: 250px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .w_item-img {
+        width: 200px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .w_item-img {
+        width: 150px;
+    }
 }

@@ -78,7 +78,7 @@ export const shoppingInfoApis = {
   createOrder: (userId, activeAddressId) => `${baseUrl}/order/createOrder/user/${userId}/address/${activeAddressId}`,
   getOrderDetails: (orderId) => `${baseUrl}/dashboard/getOrderDetails/${orderId}`,
   createQuote: (userId) => `${baseUrl}/order/createQuote/user/${userId}`,
-
+  trackPackage: (awbCode) => `${baseUrl}/dashboard/track/awb/${awbCode}`,
 
 };
 export const S3imageApis = {

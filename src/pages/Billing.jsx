@@ -8,12 +8,13 @@ import { shoppingInfoApis } from "../common";
 import { useCart } from "../context/CartContext";
 import LoadingComponent from "../common/components/LoadingComponent";
 import "./pages-styles/billing.style.css";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 
 const Billing = () => {
   const navigate = useNavigate();
   const [deliveryCharges, setDeliveryCharges] = useState(0);
-  const [discountPercentage, setDiscountPercentage] = useState(0);
+  // const [discountPercentage, setDiscountPercentage] = useState(0);
   const [TotalPriceAfterDiscount, setTotalPriceAfterDiscount] = useState(0);
 
   const [loading, setLoading] = useState(false);
@@ -49,10 +50,10 @@ const Billing = () => {
   const location = useLocation();
   const { state } = location;
 
-  const { totalAmount, cart: orderedItems, product, type } = state || {};
+  const { totalCartAmountWithoutDiscount, totalDiscount, cart: orderedItems, product, type } = state || {};
   console.log(orderedItems, "orderedItems");
 
-  console.log(totalAmount, "totalAmount");
+  // console.log(totalAmount, "totalAmount");
 
   console.log(type, "type");
 
@@ -60,11 +61,10 @@ const Billing = () => {
 
   useEffect(() => {
     calculateTotalPrice();
-  }, [totalAmount, discountPercentage, deliveryCharges]);
+  }, [totalDiscount, totalCartAmountWithoutDiscount, deliveryCharges]);
 
   const calculateTotalPrice = () => {
-    const discountAmount = (discountPercentage * totalAmount) / 100;
-    const totalAfterDiscount = totalAmount - discountAmount;
+    const totalAfterDiscount = totalCartAmountWithoutDiscount - totalDiscount;
     const totalPrice = totalAfterDiscount + deliveryCharges;
     setTotalPriceAfterDiscount(totalPrice);
   };
@@ -103,7 +103,7 @@ const Billing = () => {
   };
 
   const handlePayment = async () => {
-
+    setLoading(true)
     try {
       const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
@@ -130,6 +130,13 @@ const Billing = () => {
       console.log("Order data received:", orderData);
 
       if (!orderData.success) {
+        Swal.fire({
+          title: 'Order creation failed!',
+          text: 'Something went wrong in order creation',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 1500
+        })
         throw new Error("Order creation failed");
       }
 
@@ -169,8 +176,15 @@ const Billing = () => {
           console.log("Payment verification response:", verifyData);
 
           if (verifyData.success) {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Payment verification successful! please do not refresh while creating order',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500
+            })
             // Step 4: Create the order on your server
-            setLoading(true)
+            // setLoading(true)
             if (type === "cart") {
               const raw = JSON.stringify({
                 paymentId: verifyData.paymentId,
@@ -184,11 +198,13 @@ const Billing = () => {
                   price: item.productDetails.price,
                   logoUrl: item.logoUrl,
                   logoPosition: item.logoPosition,
-                  discountPercentage: 0,
-                  discountAmount: 0
+                  discountPercentage: item.discountPercentage,
+                  discountAmount: item.discountAmount,
+                  imgUrl: item.imgUrl,
                 })),
                 deliveryCharges: 0,
-                TotalDiscountAmount: 0,  //(add all the discount amounts)
+                TotalAmount: totalCartAmountWithoutDiscount,
+                TotalDiscountAmount: totalDiscount,  //(add all the discount amounts)
                 TotalPriceAfterDiscount: TotalPriceAfterDiscount,
               });
               console.log("Creating order with data:", raw);
@@ -224,11 +240,13 @@ const Billing = () => {
                   price: item.price,
                   logoUrl: item.logoUrl,
                   logoPosition: item.logoPosition,
-                  discountPercentage: 0,
-                  discountAmount: 0
+                  discountPercentage: item.discountPercentage,
+                  discountAmount: item.discountAmount,
+                  imgUrl: item.imgUrl,
                 })),
                 deliveryCharges: 0,
-                TotalDiscountAmount: 0,  //(add all the discount amounts)
+                TotalAmount: totalCartAmountWithoutDiscount,
+                TotalDiscountAmount: totalDiscount,  //(add all the discount amounts)
                 TotalPriceAfterDiscount: TotalPriceAfterDiscount,
               });
 
@@ -239,7 +257,7 @@ const Billing = () => {
               );
 
               if (finalResponse.status === 201) {
-                setLoading(false)
+                // setLoading(false)
                 const result = await finalResponse.data;
                 console.log(result);
                 navigate("/success", {
@@ -248,7 +266,14 @@ const Billing = () => {
               }
             }
           } else {
-            alert("Payment verification failed!");
+            // alert("Payment verification failed!");
+            Swal.fire({
+              title: 'Failed!',
+              text: 'Payment verification failed!',
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
         },
         prefill: {
@@ -269,12 +294,30 @@ const Billing = () => {
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (response) {
         console.error("Payment failed:", response.error);
-        alert("Payment failed. Please try again.");
+        // alert("Payment failed. Please try again.");
+
+        Swal.fire({
+          title: 'Failed!',
+          text: 'Payment failed. Please try again.',
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 1500
+        })
+
       });
       rzp.open();
     } catch (error) {
       console.error("Error in payment process:", error);
-      alert("Payment process failed!");
+      // alert("Payment process failed!");
+      Swal.fire({
+        title: 'Failed!',
+        text: 'Payment process failed!',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -294,24 +337,18 @@ const Billing = () => {
             borderRadius: "8px",
           }}
         >
-          <div style={{ width: "180px", flexShrink: 0 }}>
+          <div style={{ width: "120px", flexShrink: 0 }}>
             <img
               // src={product.productDetails.productType.imageUrl}
-              src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-              alt={product.productDetails.productType.type}
-              width={180}
-              height={200}
-              style={{ display: "block", maxWidth: "100%" }}
+              src={product.imgUrl}
+              alt={product.group}
+              className="w-100"
             />
           </div>
           <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
             <div className="fs-4 fw-medium">{product.color.name}</div>
             <div className="fs-4 fw-normal">
-              {product.productDetails.group.name}
-            </div>
-            <div className="fs-4 fw-normal">
-              {product.productDetails.category.name} -{" "}
-              {product.productDetails.subCategory.name}
+              {product.productDetails.productType}
             </div>
             <div className="fs-4 fw-normal">
               {`Quantity: ${product.quantityRequired}`}
@@ -335,19 +372,17 @@ const Billing = () => {
               borderRadius: "8px",
             }}
           >
-            <div style={{ width: "180px", flexShrink: 0 }}>
+            <div style={{ width: "120px", flexShrink: 0 }}>
               <img
                 // src={product.productDetails.productType.imageUrl}
-                src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
+                src={item.imgUrl}
                 alt={item.group}
-                width={180}
-                height={200}
-                style={{ display: "block", maxWidth: "100%" }}
+                className="w-100"
               />
             </div>
             <div style={{ flex: "1 1 auto", minWidth: "200px" }}>
               <div className="fs-4 fw-medium">{item.color}</div>
-              <div className="fs-4 fw-normal">{item.group}</div>
+              <div className="fs-4 fw-normal">{item.productType}</div>
               <div className="fs-4 fw-normal">
                 {`Quantity: ${item.quantityRequired}`}
               </div>
@@ -441,23 +476,24 @@ const Billing = () => {
                         Bag total
                         {/* <span>{convertToCurrency(totalAmount)}</span> */}
                         <span>
-                          {Number(totalAmount).toLocaleString("en-US", {
+                          {Number(totalCartAmountWithoutDiscount).toLocaleString("en-US", {
                             style: "currency",
                             currency: "INR",
                           })}
                         </span>
                       </p>
                       <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
-                        {`Bag Discount ${discountPercentage}%`}
+                        {`Bag Discount`}
                         <span>
                           (-)
-                          {(
+                          {totalDiscount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                          {/* {(
                             (discountPercentage * totalAmount) /
                             100
                           ).toLocaleString("en-US", {
                             style: "currency",
                             currency: "INR",
-                          })}
+                          })} */}
                         </span>
                       </p>
                       <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
