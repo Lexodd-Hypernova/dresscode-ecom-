@@ -109,7 +109,13 @@ const Footer = () => {
                     </div>
                 </section>
             </footer>
-            <a href="https:/wa.me/+917036436370" target="_blank" class="whatsapp_float"><i class="fa-brands fa-whatsapp whatsapp-icon"></i></a>
+            {/* <a href="https:/wa.me/+917036436370" target="_blank" class="whatsapp_float"><i class="fa-brands fa-whatsapp whatsapp-icon"></i></a> */}
+
+            <a href="https://wa.me/+917036436370" target="_blank" class="whatsapp_float">
+                <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+            </a>
+
+
         </>
     )
 }

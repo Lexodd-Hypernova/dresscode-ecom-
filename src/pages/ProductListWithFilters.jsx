@@ -28,16 +28,50 @@ const ProductListWithFilters = () => {
     const navigate = useNavigate(); // Initialize navigate from react-router-dom
 
     // Fetch filters and all products initially
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         setLoading(true);
+    //         try {
+    //             // Fetch products
+    //             const productResponse = await axios.get(shoppingInfoApis.getProductsByGroup(groupName));
+    //             setAllProducts(productResponse.data); // Store all products
+    //             setFilteredProducts(productResponse.data); // Initially show all products
+
+    //             console.log("productResponse", productResponse.data);
+
+    //             // Fetch filters
+    //             const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup(groupName));
+    //             setFilterOptions(filterResponse.data); // Store filter options
+    //             console.log("filterResponse", filterResponse.data);
+    //         } catch (error) {
+    //             console.error("Error fetching data", error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     if (groupName) {
+    //         fetchData();
+    //     }
+    // }, [groupName]);
+
+
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
                 // Fetch products
                 const productResponse = await axios.get(shoppingInfoApis.getProductsByGroup(groupName));
-                setAllProducts(productResponse.data); // Store all products
-                setFilteredProducts(productResponse.data); // Initially show all products
+                // Filter products that have variants with variantSizes length greater than zero
+                const filteredProductData = productResponse.data.filter(product =>
+                    product.variants.some(variant => variant.variantSizes.length > 0)
+                );
 
-                console.log("productResponse", productResponse.data);
+                setAllProducts(filteredProductData); // Store filtered products
+                setFilteredProducts(filteredProductData); // Initially show filtered products
+
+                console.log("filteredProductData", filteredProductData);
 
                 // Fetch filters
                 const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup(groupName));
@@ -54,6 +88,9 @@ const ProductListWithFilters = () => {
             fetchData();
         }
     }, [groupName]);
+
+
+
 
     // Apply filters whenever the filter state changes
     useEffect(() => {

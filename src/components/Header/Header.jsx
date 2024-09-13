@@ -31,9 +31,12 @@ const Header = () => {
         <div className="container-fluid">
           <div className="nav-sec">
             <div className="nv__Left">
-              <a href="https://dress-code.in/" className="logo">
+              {/* <a href="https://dress-code.in/" className="logo">
                 <img src={Logo} alt="DressCode logo" />
-              </a>
+              </a> */}
+              <Link to="/" className="logo">
+                <img src={Logo} alt="DressCode logo" />
+              </Link>
             </div>
 
             <div className="nv__Right">
