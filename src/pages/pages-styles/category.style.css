@@ -3,6 +3,7 @@
 }
 
 .back_link {
+    width: fit-content;
     display: flex;
     text-decoration: none;
     align-items: center;

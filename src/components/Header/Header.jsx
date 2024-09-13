@@ -31,9 +31,9 @@ const Header = () => {
         <div className="container-fluid">
           <div className="nav-sec">
             <div className="nv__Left">
-              <Link to="/" className="logo" onClick={scrollTop}>
+              <a href="https://dress-code.in/" className="logo">
                 <img src={Logo} alt="DressCode logo" />
-              </Link>
+              </a>
             </div>
 
             <div className="nv__Right">

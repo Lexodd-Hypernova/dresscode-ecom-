@@ -125,7 +125,302 @@ const ProductListWithFilters = () => {
     return (
         <>
             <div className="product__Screen">
-                <div className="filter_container">
+
+                <div className="filter_btn-mobile">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        Filter
+                    </button>
+                </div>
+
+
+
+
+                <div className="mobile_filter-container">
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <form>
+
+                                <div className="filter-group">
+                                    <label>Group:</label>
+                                    <select name="group" value={groupName} onChange={handleGroupChange}>
+                                        <option value="ELITE">ELITE</option>
+                                        <option value="HEAL">HEAL</option>
+                                    </select>
+                                </div>
+
+                                {/* Category */}
+                                <div className="filter-group">
+                                    <label>Category:</label>
+                                    <select name="category" onChange={handleFilterChange}>
+                                        <option value="">All</option>
+                                        {
+                                            filterOptions.category ? (
+                                                <>
+                                                    {filterOptions.category.map((cat) => (
+                                                        <option key={cat} value={cat}>
+                                                            {cat}
+                                                        </option>
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                <></>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+
+                                {/* SubCategory */}
+                                {
+                                    filterOptions.subCategory && filterOptions.subCategory.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>SubCategory:</label>
+                                            <select name="subCategory" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {
+                                                    filterOptions.subCategory.map((subCat) => (
+                                                        <option key={subCat} value={subCat}>
+                                                            {subCat}
+                                                        </option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+                                {/* Gender */}
+
+                                {
+                                    filterOptions.gender && filterOptions.gender.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Gender:</label>
+                                            <select name="gender" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.gender.map((g) => (
+                                                    <option key={g} value={g}>
+                                                        {g}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+                                {/* Product Type */}
+
+                                {
+                                    filterOptions.productType && filterOptions.productType.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Product Type:</label>
+                                            <select name="productType" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.productType.map((type) => (
+                                                    <option key={type} value={type}>
+                                                        {type}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+                                {/* Fit */}
+
+
+                                {
+                                    filterOptions.fit && filterOptions.fit.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Fit:</label>
+                                            <select name="fit" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.fit.map((fit) => (
+                                                    <option key={fit} value={fit}>
+                                                        {fit}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+                                {/* Neckline */}
+
+                                {
+                                    filterOptions.neckline && filterOptions.neckline.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Neckline:</label>
+                                            <select name="neckline" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.neckline.map((neckline) => (
+                                                    <option key={neckline} value={neckline}>
+                                                        {neckline}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+                                {/* Pattern */}
+
+
+                                {
+                                    filterOptions.pattern && filterOptions.pattern.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Pattern:</label>
+                                            <select name="pattern" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.pattern.map((pattern) => (
+                                                    <option key={pattern} value={pattern}>
+                                                        {pattern}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+
+                                {/* Cuff */}
+
+                                {
+                                    filterOptions.cuff && filterOptions.cuff.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Cuff:</label>
+                                            <select name="cuff" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.cuff.map((cuff) => (
+                                                    <option key={cuff} value={cuff}>
+                                                        {cuff}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+                                {/* Sleeves */}
+
+
+                                {
+                                    filterOptions.sleeves && filterOptions.sleeves.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Sleeves:</label>
+                                            <select name="sleeves" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.sleeves.map((sleeve) => (
+                                                    <option key={sleeve} value={sleeve}>
+                                                        {sleeve}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+                                {/* Material */}
+
+
+                                {
+                                    filterOptions.material && filterOptions.material.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Material:</label>
+                                            <select name="material" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.material.map((material) => (
+                                                    <option key={material} value={material}>
+                                                        {material}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+                                {/* Color */}
+
+                                {
+                                    filterOptions.colors && filterOptions.colors.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Color:</label>
+                                            <select name="color" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.colors.map((color) => (
+                                                    <option key={color} value={color}>
+                                                        {color}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+
+
+
+                                {/* Size */}
+
+                                {
+                                    filterOptions.sizes && filterOptions.sizes.length > 0 ? (
+                                        <div className="filter-group">
+                                            <label>Size:</label>
+                                            <select name="size" onChange={handleFilterChange}>
+                                                <option value="">All</option>
+                                                {filterOptions.sizes.map((size) => (
+                                                    <option key={size} value={size}>
+                                                        {size}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div className="filter_container desktop_filter-container">
                     <form>
 
                         <div className="filter-group">

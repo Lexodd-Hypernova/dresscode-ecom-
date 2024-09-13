@@ -1,4 +1,4 @@
-.product__Screen{
+.product__Screen {
     display: flex;
     /* height: 100vh; */
     /* overflow: hidden; */
@@ -38,5 +38,36 @@
     width: 75%;
     /* margin-left: 25%; */
     padding: 20px;
-    
+
+}
+
+
+.filter_btn-mobile {
+    display: none;
+}
+
+.mobile_filter-container {
+    display: none;
+}
+
+.product__Screen {
+    position: relative;
+}
+
+@media only screen and (max-width: 768px) {
+    .filter_btn-mobile {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+
+    .mobile_filter-container {
+        display: block;
+    }
+
+    .desktop_filter-container {
+        display: none;
+    }
+
 }
