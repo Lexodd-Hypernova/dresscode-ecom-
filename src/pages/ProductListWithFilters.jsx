@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./pages-styles/ProductListWithFilters.style.css";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { shoppingInfoApis } from "../common";
 
 const ProductListWithFilters = () => {
     const [allProducts, setAllProducts] = useState([]); // To store all fetched products
@@ -32,14 +33,14 @@ const ProductListWithFilters = () => {
             setLoading(true);
             try {
                 // Fetch products
-                const productResponse = await axios.get(`https://dresscode-updated.onrender.com/e-com/getProductsByGroup?groupName=${groupName}`);
+                const productResponse = await axios.get(shoppingInfoApis.getProductsByGroup(groupName));
                 setAllProducts(productResponse.data); // Store all products
                 setFilteredProducts(productResponse.data); // Initially show all products
 
                 console.log("productResponse", productResponse.data);
 
                 // Fetch filters
-                const filterResponse = await axios.get(`https://dresscode-updated.onrender.com/e-com/getFiltersByGroup?groupName=${groupName}`);
+                const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup(groupName));
                 setFilterOptions(filterResponse.data); // Store filter options
                 console.log("filterResponse", filterResponse.data);
             } catch (error) {

@@ -82,6 +82,8 @@ export const shoppingInfoApis = {
   getOrderDetails: (orderId) => `${baseUrl}/dashboard/getOrderDetails/${orderId}`,
   createQuote: (userId) => `${baseUrl}/order/createQuote/user/${userId}`,
   trackPackage: (awbCode) => `${baseUrl}/dashboard/track/awb/${awbCode}`,
+  getFiltersByGroup: (groupName) => `${baseUrl}/e-com/getFiltersByGroup?groupName=${groupName}`,
+  getProductsByGroup: (groupName) => `${baseUrl}/e-com/getProductsByGroup?groupName=${groupName}`,
 
 };
 export const S3imageApis = {
