@@ -1,5 +1,6 @@
 import React from 'react';
 import "./footer.css";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -30,10 +31,14 @@ const Footer = () => {
                 <section className='ft__Row2'>
                     <div className='ft_thk'>
                         <h5 className='thank'>Thankyou</h5>
-                        <h4 className='visit'>Visit again</h4>
-                        <div className='ft_str'>
-                            <img src="images/store.png" alt="" />
+                        <div className='visit'>
+                            <h4>Visit again</h4>
+                            <i className="fa-solid fa-bag-shopping"></i>
                         </div>
+
+                        {/* <div className='ft_str'>
+                            <img src="images/store.png" alt="" />
+                        </div> */}
                     </div>
                     <div className='ft_card'>
                         <div className='ft-card-row'>
@@ -41,8 +46,14 @@ const Footer = () => {
                                 <h4 className='ft-card-ttl'>
                                     Location
                                 </h4>
-                                <address>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </address>
-                                <a href="" className='ft_dir'>Get Directions</a>
+                                <address>
+                                    DressCode ,
+                                    G Anupamanandh Vijay Kumar Building,
+                                    Opp RVR School of Photography,
+                                    Annapurna Studio Lane,
+                                    Rd No :2, LV Prasad Marg, Jubilee Hills, Hyderabad, Telangana 500033.
+                                </address>
+                                <a className='ft_dir'>Get Directions</a>
                             </div>
                             <div className='ft-card-contact'>
                                 <h4 className='ft-card-ttl'>
@@ -59,29 +70,29 @@ const Footer = () => {
                                 </h4>
                                 <ul>
                                     <li>
-                                        <a href="">
+                                        <Link to="/coming-soon">
                                             School Uniforms
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
-                                            Scrubs
-                                        </a>
+                                        <Link to="/products/ELITE">
+                                            Corporate Uniforms
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="/products/HEAL">
                                             Doctor Aprons
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="/coming-soon">
                                             Jersey’s
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <Link to="/coming-soon">
                                             Accessories
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
                                         <a href="https://dress-code.in/">
@@ -95,9 +106,9 @@ const Footer = () => {
                                     Stalk us
                                 </h4>
                                 <div className='social-links'>
-                                    <a href="" target="_blank">Instagram</a>
-                                    <a href="" target="_blank">Facebook</a>
-                                    <a href="" target="_blank">Twitter</a>
+                                    <a href="https://www.instagram.com/official_dress_code_/?igsh=MWJmaG9oZGh2aTVzMA%3D%3D" target="_blank">Instagram</a>
+                                    <a href="https://www.facebook.com/people/Dress-Code/61555326429338/?mibextid=LQQJ4d" target="_blank">Facebook</a>
+                                    <a href="https://www.linkedin.com/company/dress-codeuniforms/" target="_blank">LinkedIn</a>
                                 </div>
                             </div>
                         </div>
@@ -111,8 +122,8 @@ const Footer = () => {
             </footer>
             {/* <a href="https:/wa.me/+917036436370" target="_blank" class="whatsapp_float"><i class="fa-brands fa-whatsapp whatsapp-icon"></i></a> */}
 
-            <a href="https://wa.me/+917036436370" target="_blank" class="whatsapp_float">
-                <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+            <a href="https://wa.me/+917036436370" target="_blank" className="whatsapp_float">
+                <i className="fa-brands fa-whatsapp whatsapp-icon"></i>
             </a>
 
 

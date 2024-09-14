@@ -43,7 +43,7 @@ footer {
 .ft_thk {
     width: 55%;
     position: relative;
-    padding: 150px 120px 160px 70px;
+    padding: 170px 120px 170px 70px;
 }
 
 .ft_card {
@@ -62,7 +62,7 @@ footer {
     margin: 0;
 }
 
-.visit {
+.visit h4 {
     font-family: Poppins;
     font-size: 96px;
     font-weight: 400;
@@ -71,7 +71,17 @@ footer {
     color: #E08470;
     margin: 0;
     text-transform: uppercase;
+}
+
+.visit {
+    display: flex;
+    gap: 40px;
     margin-top: 33px;
+}
+
+.visit i {
+    font-size: 200px;
+    color: #E08470;
 }
 
 .ft_str {
@@ -87,24 +97,27 @@ footer {
 
 .ft-card-loc {
     width: 50%;
-    padding: 36px 0 0 36px;
+    padding: 20px 0 0 30px;
     border-right: 1px solid #fff;
 }
 
 .ft-card-contact {
     width: 50%;
-    padding: 36px 0 0 36px;
+    padding: 20px 0 0 30px;
+
 }
 
 .ft-card-links {
     width: 50%;
-    padding: 36px 0 0 36px;
+    padding: 20px 0 0 30px;
+
     border-right: 1px solid #fff;
 }
 
 .ft-card-stalk {
     width: 50%;
-    padding: 36px 0 0 36px;
+    padding: 20px 0 0 30px;
+
 }
 
 .ft-card-ttl {
@@ -123,7 +136,7 @@ footer {
     font-family: Inter;
     font-size: 16px;
     font-weight: 400;
-    line-height: 31px;
+    line-height: 27px;
     letter-spacing: 2px;
     text-align: left;
     color: #DE8A78;
@@ -144,7 +157,7 @@ footer {
     padding: 9px 40px;
     border: 1px solid #DE8A78;
     border-radius: 70px;
-    margin-top: 34px;
+    margin-top: 20px;
 }
 
 .ft-cn {
@@ -164,7 +177,7 @@ footer {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    /* gap: 4px; */
 }
 
 .ft-card-links li {
@@ -242,11 +255,19 @@ footer {
         letter-spacing: 2.6px;
     }
 
-    .visit {
+    .visit h4 {
         font-size: 55px;
         line-height: 70px;
         letter-spacing: 2.3px;
+
+    }
+
+    .visit {
         margin-top: 20px;
+    }
+
+    .visit i {
+        font-size: 150px;
     }
 
     .ft_str {
@@ -266,7 +287,7 @@ footer {
 
     .ft-card-loc address {
         font-size: 14px;
-        line-height: 26px;
+        line-height: 25px;
         letter-spacing: 1px;
         padding-right: 0%;
     }
@@ -308,19 +329,19 @@ footer {
     }
 
     .ft-card-loc {
-        padding: 26px 0 0 26px;
+        padding: 15px 0 0 20px;
     }
 
     .ft-card-contact {
-        padding: 26px 0 0 26px;
+        padding: 15px 0 0 20px;
     }
 
     .ft-card-links {
-        padding: 26px 0 0 26px;
+        padding: 15px 0 0 20px;
     }
 
     .ft-card-stalk {
-        padding: 26px 0 0 26px;
+        padding: 15px 0 0 20px;
     }
 }
 
@@ -341,10 +362,14 @@ footer {
         letter-spacing: 1.6px;
     }
 
-    .visit {
+    .visit h4 {
         font-size: 40px;
         line-height: 50px;
         letter-spacing: 1.3px;
+    }
+
+    .visit i {
+        font-size: 120px;
     }
 
     .ft_str {
@@ -382,7 +407,7 @@ footer {
         letter-spacing: 0.6px;
     }
 
-    .visit {
+    .visit h4 {
         font-size: 30px;
         line-height: 30px;
         letter-spacing: 0.3px;
@@ -425,6 +450,10 @@ footer {
         font-size: 11px;
         line-height: 19px;
         letter-spacing: 0px;
+    }
+
+    .ft_thk {
+        padding: 170px 50px 170px 50px;
     }
 }
 
@@ -495,9 +524,13 @@ footer {
         letter-spacing: 0.6px;
     }
 
-    .visit {
+    .visit h4 {
         font-size: 20px;
         line-height: 20px;
         letter-spacing: 0.3px;
+    }
+
+    .visit i {
+        font-size: 60px;
     }
 }
