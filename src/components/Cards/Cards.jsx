@@ -8,17 +8,29 @@ const groups = [
   //   name: "ELITE",
   //   src: "https://i.imgur.com/E8sD0n1.png"
   // },
+  // {
+  //   name: "ELITE",
+  //   src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+  // },
+  // {
+  //   name: "HEAL",
+  //   src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+  // },
+  // {
+  //   name: "TOGS",
+  //   src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+  // },
   {
     name: "ELITE",
-    src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+    src: "images/Elite.webp"
   },
   {
     name: "HEAL",
-    src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+    src: "images/Heal.webp"
   },
   {
     name: "TOGS",
-    src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
+    src: "images/Togs.webp"
   },
 
 ]

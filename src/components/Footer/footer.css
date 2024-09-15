@@ -57,7 +57,8 @@ footer {
     font-weight: 400;
     line-height: 141px;
     letter-spacing: 3.6px;
-    color: #E08470;
+    /* color: #E08470; */
+    color: #20248A;
     text-transform: uppercase;
     margin: 0;
 }
@@ -68,7 +69,8 @@ footer {
     font-weight: 400;
     line-height: 128px;
     letter-spacing: 3.3px;
-    color: #E08470;
+    /* color: #E08470; */
+    color: #20248A;
     margin: 0;
     text-transform: uppercase;
 }
@@ -81,7 +83,8 @@ footer {
 
 .visit i {
     font-size: 200px;
-    color: #E08470;
+    /* color: #E08470; */
+    color: #20248A;
 }
 
 .ft_str {
@@ -127,7 +130,7 @@ footer {
     line-height: 77px;
     letter-spacing: 2px;
     text-align: left;
-    color: #fff;
+    color: #20248A;
     margin: 0;
     text-transform: uppercase;
 }
@@ -139,7 +142,8 @@ footer {
     line-height: 27px;
     letter-spacing: 2px;
     text-align: left;
-    color: #DE8A78;
+    /* color: #DE8A78; */
+    color: #20248A;
     margin: 0;
     padding-right: 15%;
 }
@@ -152,10 +156,12 @@ footer {
     letter-spacing: 2px;
     text-align: left;
     display: inline-block;
-    color: #E08470;
+    /* color: #E08470; */
+    color: #20248A;
     text-decoration: none;
     padding: 9px 40px;
-    border: 1px solid #DE8A78;
+    /* border: 1px solid #DE8A78; */
+    border: 1px solid #20248A;
     border-radius: 70px;
     margin-top: 20px;
 }
@@ -167,7 +173,8 @@ footer {
     line-height: 31px;
     letter-spacing: 2px;
     text-align: left;
-    color: #DE8A78;
+    /* color: #DE8A78; */
+    color: #20248A;
     text-decoration: none;
     display: block;
 }
@@ -191,7 +198,8 @@ footer {
     line-height: 31px;
     letter-spacing: 2px;
     text-align: left;
-    color: #DE8A78;
+    /* color: #DE8A78; */
+    color: #20248A;
     text-decoration: none;
 }
 
@@ -208,7 +216,8 @@ footer {
     line-height: 31px;
     letter-spacing: 2px;
     text-align: left;
-    color: #DE8A78;
+    /* color: #DE8A78; */
+    color: #20248A;
     text-decoration: none;
 }
 
@@ -219,7 +228,7 @@ footer {
     line-height: 303px;
     letter-spacing: 0.2px;
     text-align: center;
-    color: #E0847033;
+    color: #20248a2b;
     text-transform: uppercase;
     position: absolute;
     top: 85px;
