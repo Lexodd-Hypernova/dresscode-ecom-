@@ -62,7 +62,7 @@ const Cart = () => {
     const discountPercentage = getDiscountPercentage(quantity);
 
     // Calculate total before discount
-    const totalBeforeDiscount = quantity * price;
+    const totalBeforeDiscount = Math.round(quantity * price);
 
     // Calculate discount amount
     const discountAmount = (totalBeforeDiscount * discountPercentage) / 100;

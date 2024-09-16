@@ -46,38 +46,88 @@ export const CartProvider = ({ children }) => {
 
 
 
-
-
-  const addToCart = async (item) => {
+  const addToCart = async (newItem) => {
     setLoading(true);
     try {
-      const response = await fetch(shoppingInfoApis.addCartData(userId), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify(item),
-      });
+      // Find if the item already exists in the cart
+      const existingItem = cart.find(
+        (item) =>
+          item.group === newItem.group &&
+          item.productId === newItem.productId &&
+          item.size === newItem.size &&
+          item.color === newItem.color // You can add more comparisons as needed
+      );
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      if (existingItem) {
+        existingItem.quanityRequired += newItem.quantityRequired
+
+        setCart(updatedCart);
+      } else {
+        // Add new item if it doesn't exist
+        const response = await fetch(shoppingInfoApis.addCartData(userId), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newItem),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const result = await response.json();
+        const updatedItem = result.cartItem;
+
+        // Add the new item to the cart
+        setCart((prevCart) => [...prevCart, updatedItem]);
       }
 
-      const newItem = await response.json();
-
-      const UpdatedItem = await newItem.cartItem;
-
-      // newItem = newItem.cartItem;
-      console.log(UpdatedItem);
-      setCart((prevCart) => [...prevCart, UpdatedItem]);
       nav("/cart");
+      window.location.reload()
+
     } catch (error) {
       console.error("Error adding item to cart:", error);
     } finally {
       setLoading(false);
     }
   };
+
+
+
+
+
+  // const addToCart = async (item) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(shoppingInfoApis.addCartData(userId), {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify(item),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+
+  //     const newItem = await response.json();
+
+  //     const UpdatedItem = await newItem.cartItem;
+
+  //     // newItem = newItem.cartItem;
+  //     console.log(UpdatedItem);
+  //     setCart((prevCart) => [...prevCart, UpdatedItem]);
+  //     nav("/cart");
+  //   } catch (error) {
+  //     console.error("Error adding item to cart:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const removeFromCart = async (productId) => {
     console.log("userId", userId);

@@ -121,13 +121,49 @@ const Billing = () => {
       console.log("Creating payment order with amount:", amountInPaise);
 
       // Step 1: Create a payment order on your server
+
+      var raw = {}
+
+      if (type === "cart") {
+        raw = JSON.stringify({
+          products: orderedItems.map((item) => ({
+            group: item.group,
+            productId: item.productId,
+            color: item.color.name,
+            size: item.size,
+            quantityOrdered: item.quantityRequired,
+            imgUrl: item.imgUrl,
+            logoUrl: item.logoUrl,
+            logoPosition: item.logoPosition,
+          })),
+        })
+        // return raw;
+      }
+      else if (type === "buyNow") {
+        raw = JSON.stringify({
+          products: product.map((item) => ({
+            group: item.group,
+            productId: item.productId,
+            color: item.color,
+            size: item.size,
+            quantityOrdered: item.quantityRequired,
+            imgUrl: item.imgUrl,
+            logoUrl: item.logoUrl,
+            logoPosition: item.logoPosition,
+          })),
+        })
+        // return raw;
+        // console.log("Order received:", data);
+      }
+
+
       const { data: orderData } = await axios.post(
-        DressCodeApi.checkout.url,
-        { amount: amountInPaise }, // Amount in paise
+        shoppingInfoApis.createOrder(id, activeAddressId),
+        raw,
         { headers }
       );
-
       console.log("Order data received:", orderData);
+
 
       if (!orderData.success) {
         Swal.fire({
@@ -140,6 +176,35 @@ const Billing = () => {
         throw new Error("Order creation failed");
       }
 
+
+
+
+
+
+
+
+
+
+
+      // const { data: orderData } = await axios.post(
+      //   DressCodeApi.checkout.url,
+      //   { amount: amountInPaise },
+      //   { headers }
+      // );
+
+      // console.log("Order data received:", orderData);
+
+      // if (!orderData.success) {
+      //   Swal.fire({
+      //     title: 'Order creation failed!',
+      //     text: 'Something went wrong in order creation',
+      //     icon: 'error',
+      //     showConfirmButton: false,
+      //     timer: 1500
+      //   })
+      //   throw new Error("Order creation failed");
+      // }
+
       // Step 2: Initialize Razorpay
       const options = {
         // key: "rzp_test_xMaFmOwuo05QVV",
@@ -150,131 +215,165 @@ const Billing = () => {
         // key: "rzp_live_YZAblE0DYussOv",  
 
 
-        amount: orderData.order.amount.toString(),
+        // amount: orderData.newOrderDetails.razorpay_checkout_order_amount.toString(),
         currency: "INR",
         name: "Dress Code ",
         description: "Test Transaction",
-        order_id: orderData.order.id, // This is the order ID created in the previous step
+        order_id: orderData.newOrderDetails.razorpay_checkout_order_id, // This is the order ID created in the previous step
         handler: async (response) => {
           console.log("Payment successful, verifying payment:", response);
           const verifyPayload = {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_order_id: response.razorpay_order_id,
             razorpay_signature: response.razorpay_signature,
+            orderId: orderData.newOrderDetails.orderId,
           };
 
-          const responseData = await axios.post(
-            DressCodeApi.verifyPayment.url,
-            verifyPayload,
-            { headers }
-          );
+          try {
+            setLoading(true)
+            const responseData = await axios.post(
+              DressCodeApi.verifyPayment.url,
+              verifyPayload,
+              { headers }
+            );
 
-          // const verifyData = await responseData.json();
+            const verifyData = await responseData.data;
 
-          const verifyData = await responseData.data;
+            console.log("Payment verification response:", verifyData);
 
-          console.log("Payment verification response:", verifyData);
 
-          if (verifyData.success) {
-            Swal.fire({
-              title: 'Success!',
-              text: 'Payment verification successful! please do not refresh while creating order',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500
-            })
-            // Step 4: Create the order on your server
-            // setLoading(true)
-            if (type === "cart") {
-              const raw = JSON.stringify({
-                paymentId: verifyData.paymentId,
-
-                products: orderedItems.map((item) => ({
-                  group: item.group,
-                  productId: item.productId,
-                  color: item.color.name,
-                  size: item.size,
-                  quantityOrdered: item.quantityRequired,
-                  price: item.productDetails.price,
-                  logoUrl: item.logoUrl,
-                  logoPosition: item.logoPosition,
-                  discountPercentage: item.discountPercentage,
-                  discountAmount: item.discountAmount,
-                  imgUrl: item.imgUrl,
-                })),
-                deliveryCharges: 0,
-                TotalAmount: totalCartAmountWithoutDiscount,
-                TotalDiscountAmount: totalDiscount,  //(add all the discount amounts)
-                TotalPriceAfterDiscount: TotalPriceAfterDiscount,
-              });
-              console.log("Creating order with data:", raw);
-
-              const finalResponse = await axios.post(
-                shoppingInfoApis.createOrder(id, activeAddressId),
-                raw,
-                { headers }
-              );
-
-              if (finalResponse.status === 201) {
-                setLoading(false)
-                console.log("Order creation response:", finalResponse.data);
+            if (verifyData.success) {
+              Swal.fire({
+                title: 'Success!',
+                text: 'Order created successfully',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              if (type === "cart") {
                 const productIds = orderedItems.map((item) => item._id);
                 console.log("productIds of cart", productIds);
 
                 removeCartItems(productIds);
 
-                navigate("/success", {
-                  state: { orderId: finalResponse?.data?.order?.orderId },
-                });
+                navigate("/success");
+
+                // navigate("/success", {
+                //   state: { orderId: finalResponse?.data?.order?.orderId },
+                // });
+              } else if (type === "buyNow") {
+                navigate("/success");
               }
-            } else if (type === "buyNow") {
-              const raw = JSON.stringify({
-                paymentId: verifyData.paymentId,
-
-                products: product.map((item) => ({
-                  group: item.group,
-                  productId: item.productId,
-                  color: item.color,
-                  size: item.size,
-                  quantityOrdered: item.quantityRequired,
-                  price: item.price,
-                  logoUrl: item.logoUrl,
-                  logoPosition: item.logoPosition,
-                  discountPercentage: item.discountPercentage,
-                  discountAmount: item.discountAmount,
-                  imgUrl: item.imgUrl,
-                })),
-                deliveryCharges: 0,
-                TotalAmount: totalCartAmountWithoutDiscount,
-                TotalDiscountAmount: totalDiscount,  //(add all the discount amounts)
-                TotalPriceAfterDiscount: TotalPriceAfterDiscount,
-              });
-
-              const finalResponse = await axios.post(
-                shoppingInfoApis.createOrder(id, activeAddressId),
-                raw,
-                { headers }
-              );
-
-              if (finalResponse.status === 201) {
-                // setLoading(false)
-                const result = await finalResponse.data;
-                console.log(result);
-                navigate("/success", {
-                  state: { orderId: result?.order?.orderId },
-                });
-              }
+            } else {
+              // alert("Payment verification failed!");
+              Swal.fire({
+                title: 'Failed!',
+                text: 'Payment verification failed!',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 1500
+              })
             }
-          } else {
-            // alert("Payment verification failed!");
-            Swal.fire({
-              title: 'Failed!',
-              text: 'Payment verification failed!',
-              icon: 'error',
-              showConfirmButton: false,
-              timer: 1500
-            })
+
+
+
+          } catch (error) {
+            console.log("error")
+          } finally {
+            setLoading(false)
           }
+
+
+
+          // const verifyData = await responseData.json();
+
+
+
+
+
+
+          // Step 4: Create the order on your server
+          // setLoading(true)
+          // if (type === "cart") {
+          //   const raw = JSON.stringify({
+          //     paymentId: verifyData.paymentId,
+
+          //     products: orderedItems.map((item) => ({
+          //       group: item.group,
+          //       productId: item.productId,
+          //       color: item.color.name,
+          //       size: item.size,
+          //       quantityOrdered: item.quantityRequired,
+          //       price: item.productDetails.price,
+          //       logoUrl: item.logoUrl,
+          //       logoPosition: item.logoPosition,
+          //       discountPercentage: item.discountPercentage,
+          //       discountAmount: item.discountAmount,
+          //       imgUrl: item.imgUrl,
+          //     })),
+          //     deliveryCharges: 0,
+          //     TotalAmount: totalCartAmountWithoutDiscount,
+          //     TotalDiscountAmount: totalDiscount,
+          //     TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+          //   });
+          //   console.log("Creating order with data:", raw);
+
+          //   const finalResponse = await axios.post(
+          //     shoppingInfoApis.createOrder(id, activeAddressId),
+          //     raw,
+          //     { headers }
+          //   );
+
+          //   if (finalResponse.status === 201) {
+          //     setLoading(false)
+          //     console.log("Order creation response:", finalResponse.data);
+          //     const productIds = orderedItems.map((item) => item._id);
+          //     console.log("productIds of cart", productIds);
+
+          //     removeCartItems(productIds);
+
+          //     navigate("/success", {
+          //       state: { orderId: finalResponse?.data?.order?.orderId },
+          //     });
+          //   }
+          // } else if (type === "buyNow") {
+          //   const raw = JSON.stringify({
+          //     paymentId: verifyData.paymentId,
+
+          //     products: product.map((item) => ({
+          //       group: item.group,
+          //       productId: item.productId,
+          //       color: item.color,
+          //       size: item.size,
+          //       quantityOrdered: item.quantityRequired,
+          //       price: item.price,
+          //       logoUrl: item.logoUrl,
+          //       logoPosition: item.logoPosition,
+          //       discountPercentage: item.discountPercentage,
+          //       discountAmount: item.discountAmount,
+          //       imgUrl: item.imgUrl,
+          //     })),
+          //     deliveryCharges: 0,
+          //     TotalAmount: totalCartAmountWithoutDiscount,
+          //     TotalDiscountAmount: totalDiscount,
+          //     TotalPriceAfterDiscount: TotalPriceAfterDiscount,
+          //   });
+
+          //   const finalResponse = await axios.post(
+          //     shoppingInfoApis.createOrder(id, activeAddressId),
+          //     raw,
+          //     { headers }
+          //   );
+
+          //   if (finalResponse.status === 201) {
+          //     // setLoading(false)
+          //     const result = await finalResponse.data;
+          //     console.log(result);
+          //     navigate("/success", {
+          //       state: { orderId: result?.order?.orderId },
+          //     });
+          //   }
+          // }
         },
         prefill: {
           name: localStorage.getItem('userName'),
