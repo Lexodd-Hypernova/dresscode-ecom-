@@ -209,10 +209,10 @@ const Billing = () => {
       const options = {
         // key: "rzp_test_xMaFmOwuo05QVV",
 
-        key: "rzp_test_0PMwuUiWHNgJdU",
+        // key: "rzp_test_0PMwuUiWHNgJdU",
 
 
-        // key: "rzp_live_YZAblE0DYussOv",  
+       key: "rzp_live_YZAblE0DYussOv",  
 
 
         // amount: orderData.newOrderDetails.razorpay_checkout_order_amount.toString(),
