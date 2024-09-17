@@ -65,9 +65,10 @@ const Login = () => {
 
             if (userData.message === "Success") {
                 console.log("User Data:", userData);
-                localStorage.setItem("token", userData.data.accessToken)
-                localStorage.setItem("id", userData.data.userId)
-                localStorage.setItem("userName", result.user.displayName)
+                localStorage.setItem("token", userData.data.accessToken);
+                localStorage.setItem("id", userData.data.userId);
+                localStorage.setItem("userName", result.user.displayName);
+                localStorage.setItem("email", result.user.email)
                 Swal.fire({
                     title: 'Success!',
                     text: 'Logged in successfully',
