@@ -107,10 +107,10 @@ const Billing = () => {
     try {
       const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
-      if (amountInPaise < 100) {
-        alert("Amount should be at least 100 paise.");
-        return;
-      }
+      // if (amountInPaise < 100) {
+      //   alert("Amount should be at least 100 paise.");
+      //   return;
+      // }
 
       // Define the headers including the Authorization token
       const headers = {
