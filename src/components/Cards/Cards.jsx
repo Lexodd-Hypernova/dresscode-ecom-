@@ -68,11 +68,12 @@ const Cards = () => {
 
   const handleClick = (name) => {
     console.log(name);
-    if (name === "TOGS") {
-      navigate("/coming-soon")
-    } else {
-      navigate(`/products/${name}`)
-    }
+    navigate(`/products/${name}`)
+    // if (name === "TOGS") {
+    //   navigate("/coming-soon")
+    // } else {
+    //   navigate(`/products/${name}`)
+    // }
   }
 
 

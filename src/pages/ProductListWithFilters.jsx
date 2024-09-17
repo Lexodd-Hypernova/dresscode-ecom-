@@ -466,6 +466,7 @@ const ProductListWithFilters = () => {
                             <select name="group" value={groupName} onChange={handleGroupChange}>
                                 <option value="ELITE">ELITE</option>
                                 <option value="HEAL">HEAL</option>
+                                <option value="TOGS">TOGS</option>
                             </select>
                         </div>
 
