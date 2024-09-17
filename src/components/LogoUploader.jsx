@@ -97,7 +97,8 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
                 totalPrice: quoteItem.totalPrice,
                 quantityRequired: quoteItem.quantityRequired,
                 logoUrl: imageUrl,      // Reset or keep existing logoUrl
-                logoPosition: logoPlacement // Reset or keep existing logoPosition
+                logoPosition: logoPlacement, // Reset or keep existing logoPosition
+                imgUrl: quoteItem.imgUrl,
             })
         }
 

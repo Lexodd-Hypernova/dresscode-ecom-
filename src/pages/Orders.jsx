@@ -220,7 +220,7 @@ const Orders = () => {
           Raised Quotes
         </div>
       </div>
-      <h2 className="order_head">Your Orders</h2>
+      {/* <h2 className="order_head">Your Orders</h2> */}
       <div className="order_content">
 
 
@@ -247,10 +247,10 @@ const Orders = () => {
                             val.products.map((product, index) => {
                               return (
                                 <div key={index} className="order_inner">
-                                  <h5 className="dt_delivery">
+                                  {/* <h5 className="dt_delivery">
                                     Estimated Delivery on{" "}
                                     {val.dateOfDelivery ? val.dateOfDelivery : "N/A"}
-                                  </h5>
+                                  </h5> */}
                                   <div className="order_item">
                                     <div className="ord_desc">
                                       <div className="ord_img">
@@ -328,7 +328,7 @@ const Orders = () => {
                         <div key={val.orderId} className="order_single">
                           <div className="order_Ttl">
                             <div className="ord_plcd">
-                              Order placed <br /> {convertDate(val.dateOfQuoteRecived)}
+                              Quote placed <br /> {convertDate(val.dateOfQuoteRecived)}
                             </div>
                             <div className="ord_id">Quote Id #{val.quoteId}</div>
                           </div>
@@ -338,17 +338,15 @@ const Orders = () => {
 
 
                             <div className="order_inner">
-                              <h5 className="dt_delivery">
+                              {/* <h5 className="dt_delivery">
                                 Estimated Delivery on{" "}
-                                {/* {val.dateOfDelivery ? val.dateOfDelivery : "N/A"} */}
-                              </h5>
+                                {val.dateOfDelivery ? val.dateOfDelivery : "N/A"}
+                              </h5> */}
                               <div className="order_item">
                                 <div className="ord_desc">
                                   <div className="ord_img">
                                     <img
-                                      src={
-                                        "https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
-                                      }
+                                      src={val.imgUrl}
                                       alt=""
                                       className="w-100"
                                     />
@@ -357,23 +355,36 @@ const Orders = () => {
                                     <p className="prd_name">
                                       {val.color.name} {val.neckline}
                                     </p>
-                                    <p className="pr_price">MRP : &#8377;{val.price}</p>
+                                    <p className="pr_price">MRP : &#8377;{val.productDetails.price}</p>
                                     <p className="pr_size">Size : {val.size}</p>
                                     <p className="pr_color">Color : {val.color.name}</p>
-                                    <p className="pr_lg-place">Logo Position : {val.logoPosition}</p>
+                                    {/* <p className="pr_lg-place">Logo Position : {val.logoPosition}</p> */}
+                                    {
+                                      val.logoPosition !== "" && (
+                                        <p className="pr_lg-place">Logo Position : {val.logoPosition}</p>
+                                      )
+                                    }
                                   </div>
                                 </div>
                                 <div className="pr_action">
-                                  <div className="pr_track">
+                                  {/* <div className="pr_track">
                                     <button className="order-button">Track Package</button>
-                                  </div>
+                                  </div> */}
                                   <div className="pr_review">
                                     <button className="order-button" onClick={() => goToReview(val.group, val.productId)}>Write A Product Review</button>
                                   </div>
-                                  <div className="pr-logo">
+                                  {
+                                    val.logoUrl !== null && (
+                                      <div className="pr-logo">
+                                        Logo :
+                                        <div className="pr_lg_det"><img src={val.logoUrl} alt="" className="w-100" /></div>
+                                      </div>
+                                    )
+                                  }
+                                  {/* <div className="pr-logo">
                                     Logo :
                                     <div className="pr_lg_det"><img src={val.logoUrl} alt="" className="w-100" /></div>
-                                  </div>
+                                  </div> */}
                                 </div>
                               </div>
 

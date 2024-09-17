@@ -386,7 +386,8 @@ const ProductDetails = () => {
         color: activeColor,
         size: activeSize,
         price: price,
-        totalPrice: totalPrice,
+        imgUrl: data?.productDetails?.variants[0]?.imageUrls[0] || "",
+        totalPrice: totalPriceWithoutDiscount,
         quantityRequired: count
       })
       setSelectType("quoteType")

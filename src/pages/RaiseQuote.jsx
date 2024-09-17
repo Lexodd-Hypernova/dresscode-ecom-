@@ -42,71 +42,6 @@ const RaiseQuote = () => {
     console.log(totalAmount, "totalAmount");
 
 
-    // const productDetails = sessionStorage.getItem("itemToAdd")
-
-    // useEffect(() => {
-
-    //     if (productDetails) {
-    //         const parseDetails = JSON.parse(productDetails)
-    //         console.log(parseDetails)
-    //     }
-
-
-
-
-    // }, [])
-
-
-
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [name]: value
-    //     });
-    // };
-
-    const handleSubmit = (e) => {
-
-        e.preventDefault();
-
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTk5OTAxNDYsImV4cCI6MTc1MTU0Nzc0NiwiYXVkIjoiNjY4NGVmZWI5NzViZmYwMDg4NzFmMDYxOkpvaG4iLCJpc3MiOiJEcmVzc0NvZGVBcHBsaWNhdGlvbiJ9.euKYW-LRW_0NJk7t3nPYnXhvsQrrvQ9j2V5bk7SNWF4");
-
-        const raw = JSON.stringify({
-            "group": "ELITE",
-            "productId": "6F698F",
-            "color": "RED",
-            "size": "L",
-            "quantityRequired": 200,
-            "logoUrl": "https://dummyimage.com/600x400/000/fff",
-            "logoPosition": "back",
-            "address": {
-                "name": `${formData.name}`,
-                "contactPhone": `${formData.contactPhone}`,
-                "email": `${formData.email}`,
-                "organizationName": `${formData.organizationName}`,
-                "street": `${formData.street}`,
-                "lane": `${formData.lane}`,
-                "postalCode": `${formData.postalCode}`
-            }
-        });
-
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-        };
-
-        fetch("https://dresscode-test.onrender.com/order/createQuote/user/6684efeb975bff008871f061", requestOptions)
-            .then((response) => response.json())
-            .then((result) => console.log(result))
-            .catch((error) => console.error(error));
-
-    }
-
 
 
     return (
@@ -158,6 +93,7 @@ const RaiseQuote = () => {
                                         quantityRequired: quoteItem.quantityRequired,
                                         logoUrl: quoteItem.logoUrl,
                                         logoPosition: quoteItem.logoPosition,
+                                        imgUrl: quoteItem.imgUrl,
                                         address: {
                                             name: values.name,
                                             contactPhone: values.contactPhone,
