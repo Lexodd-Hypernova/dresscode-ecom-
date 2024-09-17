@@ -769,7 +769,7 @@ const ProductListWithFilters = () => {
                                                     return (
                                                         <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="col-lg-3" key={index}>
                                                             <img src={variant.imageUrls[0]} alt="" className="w-100" />
-                                                            <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}</h5>
+                                                            <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}-{item.price}/-</h5>
                                                         </Link>
                                                     )
                                                 })
