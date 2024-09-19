@@ -542,4 +542,8 @@ footer {
     .visit i {
         font-size: 60px;
     }
+
+    footer {
+        margin-top: 60px;
+    }
 }
