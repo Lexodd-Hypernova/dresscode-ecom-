@@ -40,26 +40,11 @@ const router = createBrowserRouter([
         path: "*",
         element: < PageNotFound />,
       },
-      // {
-      //   path: "/:groupName",
-      //   element: <Categories />,
-      // },
+
       {
         path: "/coming-soon",
         element: <ComingSoon />,
       },
-      // {
-      //   path: "/:groupName/:category",
-      //   element: <SubCategories />,
-      // },
-      // {
-      //   path: "/:groupName/:category/:subCategory",
-      //   element: <ProductTypes />,
-      // },
-      // {
-      //   path: "/:groupName/:category/:subCategory/:productType/:gender",
-      //   element: <Products />,
-      // },
 
       {
         path: "/products/:groupName",

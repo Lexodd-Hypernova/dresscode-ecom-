@@ -4,6 +4,7 @@ import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../common/components/LoadingComponent";
 import { shoppingInfoApis } from "../common";
+import axiosInstance from "../common/axiosInstance";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
@@ -29,33 +30,22 @@ const Orders = () => {
   };
 
   const [data, setData] = useState([]);
+
+
   const fetchData = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem("token"); // Replace with your actual token key
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await fetch(
-        accountInfoApis.getOrders(localStorage.getItem("id")),
-        config
+      const response = await axiosInstance.get(accountInfoApis.getOrders(localStorage.getItem("id")),
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch orders");
-      }
-
-      else {
-        const data = await response.json();
-        console.log(data.orders);
-        setData(data.orders);
-        // setRaised(data.orders);
-      }
-
+      // const data = await response.json();
+      console.log(response.data);
+      setData(response.data.orders);
+      // setRaised(data.orders);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -68,30 +58,15 @@ const Orders = () => {
   const fetchQuote = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem("token"); // Replace with your actual token key
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await fetch(
-        accountInfoApis.getQuotes(localStorage.getItem("id")),
-        config
+      const response = await axiosInstance.get(accountInfoApis.getQuotes(localStorage.getItem("id")),
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch orders");
-      }
-
-      else {
-        const data = await response.json();
-        console.log("quote data", data);
-        // setData(data.orders);
-        setQuotes(data.quotes);
-      }
-
+      console.log("quote data", response.data);
+      // setData(data.orders);
+      setQuotes(response.data.quotes);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -122,39 +97,6 @@ const Orders = () => {
     return formattedDate;
   }
 
-  // const handleTrackPackage = async (awbCode, orderId) => {
-  //   if (!awbCode) {
-  //     // Show popup only for the specific order
-  //     setShowPopup(prev => ({
-  //       ...prev,
-  //       [orderId]: true,
-  //     }));
-
-  //     // Hide popup after 3 seconds
-  //     setTimeout(() => {
-  //       setShowPopup(prev => ({
-  //         ...prev,
-  //         [orderId]: false,
-  //       }));
-  //     }, 1500);
-  //   } else {
-  //     try {
-  //       const response = await axios.get(shoppingInfoApis.trackPackage(awbCode));
-
-  //       const trackUrl = response.data.tracking_data.track_url;
-
-  //       if (trackUrl) {
-  //         window.location.href = trackUrl;
-  //       } else {
-  //         alert("Tracking URL not available");
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching tracking data:', error);
-  //       alert("Failed to track package. Please try again later.");
-  //     }
-  //   }
-  // };
-
 
   const handleTrackPackage = async (awbCode, orderId) => {
     if (!awbCode) {
@@ -173,8 +115,7 @@ const Orders = () => {
       }, 1500);
     } else {
       try {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUwODg1OTcsInNvdXJjZSI6InNyLWF1dGgtaW50IiwiZXhwIjoxNzI2OTg1ODE0LCJqdGkiOiJIU1hRSTRGVTF5MGI1d2Z0IiwiaWF0IjoxNzI2MTIxODE0LCJpc3MiOiJodHRwczovL3NyLWF1dGguc2hpcHJvY2tldC5pbi9hdXRob3JpemUvdXNlciIsIm5iZiI6MTcyNjEyMTgxNCwiY2lkIjo0ODczNDg1LCJ0YyI6MzYwLCJ2ZXJib3NlIjpmYWxzZSwidmVuZG9yX2lkIjowLCJ2ZW5kb3JfY29kZSI6IiJ9.RVZKAqT2eVr5mllvMB2tCy0ykqwWQgi3OCWqup9pE8M";
-
+        const token = import.meta.env.VITE_TRACK_TOKEN
         const config = {
           headers: {
             Authorization: `Bearer ${token}`, // Use the provided token

@@ -1,7 +1,7 @@
-// const baseUrl = "https://dresscode-updated.onrender.com";
+const baseUrl = "https://dresscode-updated.onrender.com";
 // const baseUrl = "https://dresscode-unique.onrender.com";
 
-const baseUrl = "https://dresscode-bck.onrender.com";
+// const baseUrl = "https://dresscode-bck.onrender.com";
 
 //  const baseUrl = "https://9e25-2405-201-c404-293c-4ddf-adfe-1857-27bb.ngrok-free.app";
 
@@ -43,7 +43,8 @@ export default DressCodeApi;
 export const authUrls = {
   login: `${baseUrl}/user/login`,
   signup: `${baseUrl}/user/createUser`,
-  signInWithGoogle: `${baseUrl}/oAuth/login`
+  signInWithGoogle: `${baseUrl}/oAuth/login`,
+  generateAccessToken: `${baseUrl}/token/generateAccessToken`,
 };
 export const accountInfoApis = {
   getAccountInfo: (userId) => `${baseUrl}/user/${userId}/getUserDetails`,

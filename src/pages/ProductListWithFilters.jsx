@@ -7,6 +7,7 @@ import { shoppingInfoApis } from "../common";
 const ProductListWithFilters = () => {
     const [allProducts, setAllProducts] = useState([]); // To store all fetched products
     const [filteredProducts, setFilteredProducts] = useState([]); // To store filtered products
+
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(8).fill(null);
     const [filters, setFilters] = useState({
@@ -26,34 +27,6 @@ const ProductListWithFilters = () => {
     const [filterOptions, setFilterOptions] = useState({});
     const { groupName } = useParams(); // Get groupName from the URL
     const navigate = useNavigate(); // Initialize navigate from react-router-dom
-
-    // Fetch filters and all products initially
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         setLoading(true);
-    //         try {
-    //             // Fetch products
-    //             const productResponse = await axios.get(shoppingInfoApis.getProductsByGroup(groupName));
-    //             setAllProducts(productResponse.data); // Store all products
-    //             setFilteredProducts(productResponse.data); // Initially show all products
-
-    //             console.log("productResponse", productResponse.data);
-
-    //             // Fetch filters
-    //             const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup(groupName));
-    //             setFilterOptions(filterResponse.data); // Store filter options
-    //             console.log("filterResponse", filterResponse.data);
-    //         } catch (error) {
-    //             console.error("Error fetching data", error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     if (groupName) {
-    //         fetchData();
-    //     }
-    // }, [groupName]);
 
 
 
@@ -738,10 +711,6 @@ const ProductListWithFilters = () => {
                     {
                         loading ? (
                             <div className='container-fluid'>
-                                {/* <Link className='back_link mb-3' to="/">
-                            <img src="/images/back.png" alt="" />
-                            <span>Back</span> 
-                        </Link> */}
                                 <div className='row row-gap-5'>
                                     {loadingList.map((item, index) => (
                                         <div className="col-lg-4" key={index}>
@@ -791,19 +760,8 @@ const ProductListWithFilters = () => {
                             </div>
                         )
                     }
-                    {/* {filteredProducts.length > 0 ? (
-                        <ul>
-                            {filteredProducts.map((product) => (
-                                <li key={product._id}>
-                                    {product.productId} - {product.category} - {product.price}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No products found</p>
-                    )} */}
                 </div>
-            </div >
+            </div>
         </>
     );
 };

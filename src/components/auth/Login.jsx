@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// import axios from "../../common/axiosInstance";
 import axios from 'axios';
 import Logo from "../../assets/logo.svg";
 import "../Header/navbar.css";
@@ -12,10 +13,19 @@ import * as Yup from 'yup';
 import { auth, googleProvider } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 
-// import { authUrls } from '../../common';
-
-
-// const BaseURL = "https://dresscode-updated.onrender.com";
+// Refresh token function (called by Axios interceptor)
+export const refreshToken = async () => {
+    try {
+        const response = await axios.post(authUrls.generateAccessToken, {}, { withCredentials: true });
+        console.log("response from refreshToken func.", response)
+        const newAccessToken = response.data.accessToken;
+        localStorage.setItem('accessToken', newAccessToken);  // Update access token in localStorage
+        return newAccessToken;
+    } catch (error) {
+        console.error('Token refresh failed:', error);
+        return null;
+    }
+};
 
 
 const SignInSchema = Yup.object().shape({
@@ -42,12 +52,12 @@ const Login = () => {
             console.log(result);
             const token = await result.user.getIdToken();
 
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `${token}`
-                }
-            };
+            // const config = {
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `${token}`
+            //     }
+            // };
 
 
             const response = await fetch(authUrls.signInWithGoogle, {
@@ -65,7 +75,7 @@ const Login = () => {
 
             if (userData.message === "Success") {
                 console.log("User Data:", userData);
-                localStorage.setItem("token", userData.data.accessToken);
+                localStorage.setItem("accessToken", userData.data.accessToken);
                 localStorage.setItem("id", userData.data.userId);
                 localStorage.setItem("userName", result.user.displayName);
                 localStorage.setItem("email", result.user.email)
@@ -119,10 +129,10 @@ const Login = () => {
                                     const response = await axios.post(authUrls.login, {
                                         email: values.email,
                                         password: values.password
-                                    });
+                                    }, { withCredentials: true });
                                     console.log(response.data);
                                     if (response.data.message === "Success") {
-                                        localStorage.setItem("token", response.data.data.accessToken)
+                                        localStorage.setItem("accessToken", response.data.data.accessToken)
                                         localStorage.setItem("id", response.data.data.userId)
                                         localStorage.setItem("userName", response.data.data.name)
                                         localStorage.setItem("phoneNumber", response.data.data.phoneNumber)

@@ -4,7 +4,7 @@ import axios from "axios";
 import DressCodeApi from "../common";
 import ProductSlider from "../components/ProductSlider";
 import LogoUploader from "../components/LogoUploader";
-import { useCart } from "../context/CartContext";
+// import { useCart } from "../context/CartContext";
 import { useWhishList } from "../context/WishListContext";
 // import {useUserContext} from "../context/UserContext";
 import { shoppingInfoApis } from "../common";
@@ -53,12 +53,10 @@ const ProductDetails = () => {
   const [stockError, setStockError] = useState();
 
 
-  const { token } = useCart();
-
   const { addToWishList } = useWhishList();
 
 
-  const [isLoggedIn, setIsLoggedIn] = useState(token);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("accessToken"));
 
   const nav = useNavigate();
 
@@ -521,6 +519,7 @@ const ProductDetails = () => {
                             width: "32px",
                             height: "32px",
                             position: "relative",
+                            cursor: "pointer"
                           }}
                           key={index}
                         >
@@ -564,7 +563,7 @@ const ProductDetails = () => {
             ) : (
               <>
                 {data.allSizes && data.allSizes.length > 0 && (
-                  <div className="sizes mt-3 d-flex gap-2 list-group list-group-horizontal">
+                  <div className="sizes mt-3 d-flex flex-wrap gap-2 list-group list-group-horizontal">
                     {data.allSizes.map((size, index) => {
                       const isAvailable = availableSizes.has(size);
                       // console.log(`Checking size: "${size}" - Available: ${isAvailable}`);
@@ -575,7 +574,7 @@ const ProductDetails = () => {
                             }`}
                           id={`size${size}`}
                           key={index}
-                          style={{ position: "relative" }}
+                          style={{ position: "relative", cursor: "pointer" }}
                           onClick={() => handleSize(size)}
                         >
                           {size}
@@ -711,17 +710,9 @@ const ProductDetails = () => {
                   Add to bag
                 </button>
               )}
-              {/* <button
-                onClick={handleAddToCart}
-                className="btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100"
-                type="button"
-              >
-                Add to bag
-              </button> */}
             </div>
             <div className="d-grid col-6">
 
-              {/* count > 35 */}
               <button
                 className={`btn ${count > 35 ? "btn-warning" : "btn-primary"} fs-5 fw-normal text-capitalize w-100 ${count <= 35 && stockError ? "disabled" : ""}`}
                 type="button"
@@ -731,52 +722,6 @@ const ProductDetails = () => {
               >
                 {count > 35 ? "Raise Quote" : "Buy Now"}
               </button>
-
-
-
-              {/* ${stockError ? "disabled" : "" */}
-
-              {/* {counterValue > 35 ? (
-                <button
-                  className={`btn btn-warning fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
-                  type="button"
-                  onClick={isLoggedIn ? handleRaiseQuote : handleButtonClick}
-                >
-                  Raise Quote
-                </button>
-              ) : (
-                <button
-                  className={`btn btn-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
-                  type="button"
-                  data-bs-toggle={isLoggedIn ? "modal" : ""}
-                  data-bs-target={isLoggedIn ? "#logoModal" : ""}
-                  onClick={isLoggedIn ? handleBuyNow : handleButtonClick}
-                >
-                  Buy Now
-                </button>
-              )} */}
-
-
-
-              {/* {isLoggedIn ? (
-                <button
-                  className={`btn btn-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#logoModal"
-                  onClick={handleBuyNow}
-                >
-                  Buy Now
-                </button>
-              ) : (
-                <button
-                  className="btn btn-primary fs-5 fw-normal text-capitalize w-100"
-                  type="button"
-                  onClick={handleButtonClick}
-                >
-                  Buy Now
-                </button>
-              )} */}
 
             </div>
             <div className="d-grid col-6">

@@ -15,7 +15,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons"; // Add necessary icons
-import axios from "axios";
+// import axios from "axios";
+import axiosInstance from "../common/axiosInstance";
 import { accountInfoApis } from "../common";
 import './pages-styles/yourAddress.styles.css';
 import { useUserContext } from "../context/UserContext";
@@ -88,22 +89,12 @@ const YourAddress = () => {
   const deleteAddress1 = async (id) => {
     setLoading(true)
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found in localStorage.");
-      }
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const response = await axiosInstance.patch(accountInfoApis.deleteAddress(localStorage.getItem("id"), id),
+        {
+          withCredentials: true // Ensure cookies are sent with the request
         }
-      };
-
-      const url = accountInfoApis.deleteAddress(localStorage.getItem("id"), id);
-      console.log("DELETE URL:", url);
-      console.log("DELETE CONFIG:", config);
-
-      const response = await axios.patch(url, {}, config);
+      );
 
       if (response) {
         setAddressData(addressData.filter(address => address._id !== id));
@@ -122,16 +113,13 @@ const YourAddress = () => {
   const setAsDefaultAddress = async (id) => {
     setLoading(true)
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.patch(
-        accountInfoApis.setAsDefaultAddress(localStorage.getItem("id"), id),
-        {},
+
+      const response = await axiosInstance.patch(accountInfoApis.setAsDefaultAddress(localStorage.getItem("id"), id),
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true // Ensure cookies are sent with the request
         }
       );
+
       if (response) {
         const updatedAddresses = addressData.map(address => ({
           ...address,
@@ -181,20 +169,29 @@ const YourAddress = () => {
 
 
   const updateAddress = async (id, formData) => {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // };
     setLoading(true)
     try {
-      const response = await axios.patch(
-        accountInfoApis.updateAddress(localStorage.getItem("id"), id),
-        formData, // Use formData from Formik
-        config
+
+      const response = await axiosInstance.patch(accountInfoApis.updateAddress(localStorage.getItem("id"), id),
+        formData,
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
+
+
+      // const response = await axios.patch(
+      //   accountInfoApis.updateAddress(localStorage.getItem("id"), id),
+      //   formData, // Use formData from Formik
+      //   config
+      // );
       console.log(response.data);
 
       const updatedAddresses = addressData.map(address =>
@@ -210,36 +207,6 @@ const YourAddress = () => {
     }
   };
 
-
-
-  // const updateAddress = async (id) => {
-  //   const token = localStorage.getItem("token");
-
-  //   const config = {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await axios.patch(
-  //       accountInfoApis.updateAddress(localStorage.getItem("id"), id),
-  //       formData,
-  //       config
-  //     );
-  //     console.log(response.data);
-  //     // Update the address list after editing an address
-  //     const updatedAddresses = addressData.map(address =>
-  //       address._id === formData._id ? formData : address
-  //     );
-  //     setAddressData(updatedAddresses);
-  //     handleCloseModal();
-  //     // window.location.reload()
-
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   return (
 

@@ -4,11 +4,17 @@ import EditPersonalinfo from "./EditPersonalinfo";
 import axios from "axios";
 import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
+
+// import { useAuth } from "../context/AuthContext";
+
+import { logout } from "../common/axiosInstance";
+
+
 const YourAccount = () => {
   // const [showModal, setShowModal] = useState(false);
 
 
-
+  // const { setAuthenticationState } = useAuth();
 
   const goToUserInfo = () => {
     history(`/get-user-info/${localStorage.getItem("id")}`);
@@ -25,20 +31,27 @@ const YourAccount = () => {
   }
 
   const handleLogOut = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('id');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('email');
-    localStorage.removeItem('phoneNumber');
+    // localStorage.removeItem('accessToken');
+    // localStorage.removeItem('id');
+    // localStorage.removeItem('userName');
+    // localStorage.removeItem('email');
+    // localStorage.removeItem('phoneNumber');
+
+    // Clear refreshToken from cookies
+    // document.cookie = 'refreshToken=; Max-Age=0; path=/'; // Clears the cookie
+
+    // Call logout function to prevent token refresh
+    logout();
+
+    // Refresh the page
+    // history('/login')
+    // window.location.reload(); // Ensures the app reloads fresh
     // history('/auth')
-    history('/login')
 
   }
 
 
   return (
-
-
     <div className="your-account-screen">
       <div className="container-fluid">
         <span className="your-account">Your Account</span>

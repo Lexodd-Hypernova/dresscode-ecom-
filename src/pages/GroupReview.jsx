@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { S3imageApis, shoppingInfoApis } from "../common";
 import "./pages-styles/GroupReview.styles.css";
+import axiosInstance from "../common/axiosInstance";
 const GroupReview = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -37,21 +38,35 @@ const GroupReview = () => {
       console.error(error);
     }
   };
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  // const config = {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //   },
+  // };
   const handleSaveReview = async () => {
     try {
-      const res = await axios.post(shoppingInfoApis.addReview(paramas.group, paramas.productId), {
-        username: localStorage.getItem("userName"),
-        rating,
-        comment,
-        imgUrl: selectedImages
-      }, config)
+
+      const res = await axiosInstance.post(shoppingInfoApis.addReview(paramas.group, paramas.productId),
+        {
+          username: localStorage.getItem("userName"),
+          rating,
+          comment,
+          imgUrl: selectedImages
+        },
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
+      );
+
+
+      // const res = await axios.post(shoppingInfoApis.addReview(paramas.group, paramas.productId), {
+      //   username: localStorage.getItem("userName"),
+      //   rating,
+      //   comment,
+      //   imgUrl: selectedImages
+      // }, config)
       console.log(res)
       if (res.data.message) {
         goToReviews()
