@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 
 const axiosInstance = axios.create({
-    baseURL: 'https://dresscode-updated.onrender.com',
+    // baseURL: 'https://dresscode-updated.onrender.com',
+    baseURL: 'https://dresscode-bck.onrender.com',
+
     withCredentials: true, // Ensures cookies (refresh token) are sent with requests
 });
 
