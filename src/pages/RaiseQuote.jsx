@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useUserContext } from '../context/UserContext';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import axiosInstance from "../common/axiosInstance";
 
 const QuoteSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
@@ -18,7 +19,7 @@ const RaiseQuote = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const { token, id } = useUserContext();
+    const { id } = useUserContext();
 
     const [formData, setFormData] = useState({
         name: '',
@@ -79,13 +80,20 @@ const RaiseQuote = () => {
                             onSubmit={async (values) => {
                                 console.log(values);
 
-                                const headers = {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Bearer ${token}`,
-                                };
+                                // const headers = {
+                                //     "Content-Type": "application/json",
+                                //     Authorization: `Bearer ${token}`,
+                                // };
                                 setLoading(true)
                                 try {
-                                    const response = await axios.post(shoppingInfoApis.createQuote(id), {
+
+                                    // const response = await axiosInstance.get(accountInfoApis.getOrders(localStorage.getItem("id")),
+                                    //     {
+                                    //         withCredentials: true // Ensure cookies are sent with the request
+                                    //     }
+                                    // );
+
+                                    const response = await axiosInstance.post(shoppingInfoApis.createQuote(id), {
                                         group: quoteItem.group,
                                         productId: quoteItem.productId,
                                         color: quoteItem.color,
@@ -104,7 +112,12 @@ const RaiseQuote = () => {
                                             postalCode: values.postalCode,
                                         }
                                     },
-                                        { headers }
+                                        {
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            withCredentials: true // Ensure cookies are sent with the request
+                                        }
                                     );
                                     // console.log(response.data);
 
