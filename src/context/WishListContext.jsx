@@ -1,32 +1,27 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { shoppingInfoApis } from '../common';
-import axios from 'axios';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-
+import axiosInstance from "../common/axiosInstance";
 
 
 const WishListContext = createContext();
 export const WishListProvider = ({ children }) => {
 
-    const token = localStorage.getItem("token");
     const userId = localStorage.getItem("id");
     const [loading, setLoading] = useState(false);
 
     const [wishList, setWishList] = useState([])
 
-    // const [wishListCount, setWishListCount] = useState(0);
-
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
     const getWishList = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(shoppingInfoApis.getWhishList(userId), config)
+
+            const res = await axiosInstance.get(shoppingInfoApis.getWhishList(userId),
+                {
+                    withCredentials: true // Ensure cookies are sent with the request
+                }
+            );
+
             console.log(res.data.Wishlist);
             setWishList(res.data.Wishlist)
         } catch (error) {
@@ -38,7 +33,6 @@ export const WishListProvider = ({ children }) => {
     }
 
 
-
     useEffect(() => {
         getWishList();
     }, []);
@@ -48,13 +42,13 @@ export const WishListProvider = ({ children }) => {
         setLoading(true);
         try {
 
-            const res = await axios.post(shoppingInfoApis.addWhishList(userId), item, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
 
-            })
+            const res = await axiosInstance.post(shoppingInfoApis.addWhishList(userId),
+                item,
+                {
+                    withCredentials: true // Ensure cookies are sent with the request
+                }
+            );
             console.log(res);
             const data = await res.data.wishlistItem;
             setWishList((prevList) => [...prevList, data])
@@ -90,7 +84,13 @@ export const WishListProvider = ({ children }) => {
     const deleteWishList = async (productId) => {
         setLoading(true)
         try {
-            const res = await axios.delete(shoppingInfoApis.removeFromWishList(userId, productId), config);
+
+            const res = await axiosInstance.delete(shoppingInfoApis.removeFromWishList(userId, productId),
+                {
+                    withCredentials: true // Ensure cookies are sent with the request
+                }
+            );
+
             getWishList();
             console.log(res.data)
         } catch (error) {
@@ -100,8 +100,6 @@ export const WishListProvider = ({ children }) => {
         }
 
     }
-
-
 
     return (
         <WishListContext.Provider value={{ wishList, addToWishList, deleteWishList, getWishList, loading }}>

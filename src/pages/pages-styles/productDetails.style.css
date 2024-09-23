@@ -2,6 +2,9 @@
     display: flex;
     width: 45%;
     justify-content: space-between;
+    /* position: sticky;
+    top: 64px;
+    bottom: 0; */
     /* align-items: center; */
 }
 

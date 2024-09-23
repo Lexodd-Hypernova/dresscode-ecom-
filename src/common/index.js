@@ -43,7 +43,8 @@ export default DressCodeApi;
 export const authUrls = {
   login: `${baseUrl}/user/login`,
   signup: `${baseUrl}/user/createUser`,
-  signInWithGoogle: `${baseUrl}/oAuth/login`
+  signInWithGoogle: `${baseUrl}/oAuth/login`,
+  generateAccessToken: `${baseUrl}/token/generateAccessToken`,
 };
 export const accountInfoApis = {
   getAccountInfo: (userId) => `${baseUrl}/user/${userId}/getUserDetails`,

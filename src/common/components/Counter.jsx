@@ -1,20 +1,22 @@
 import { useState, useCallback, useEffect } from "react";
 import "./counter.styles.css";
-import axios from "axios";
+// import axios from "axios";
 import { shoppingInfoApis } from "..";
+
+import axiosInstance from "../axiosInstance";
 
 const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
   const [count, setCount] = useState(initialCount);
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
   const [conterError, setCounterError] = useState();
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  // const config = {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //   },
+  // };
 
   const userId = localStorage.getItem("id");
 
@@ -33,11 +35,20 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
     setLoading(true);
     console.log("hitting in counter");
     try {
-      const response = await axios.patch(
-        shoppingInfoApis.handleItemsCount(userId, cartItemId),
+
+      const response = await axiosInstance.patch(shoppingInfoApis.handleItemsCount(userId, cartItemId),
         { quantityNeedToChange: quantity },
-        config
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
+
+
+      // const response = await axios.patch(
+      //   shoppingInfoApis.handleItemsCount(userId, cartItemId),
+      //   { quantityNeedToChange: quantity },
+      //   config
+      // );
       // If the API call is successful, keep the item checked
       onUpdateQuantity(quantity, cartItemId); // Keep this item checked
       setCounterError(); // Clear any previous errors

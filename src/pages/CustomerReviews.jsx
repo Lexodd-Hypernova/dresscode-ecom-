@@ -6,6 +6,7 @@ import { PrimeReactProvider } from "primereact/api";
 import { Rating } from "primereact/rating";
 import "./pages-styles/CustomerReview.styles.css";
 import { ProgressBar } from "primereact/progressbar";
+import axiosInstance from "../common/axiosInstance";
 
 const CustomerReviews = () => {
   const params = useParams();
@@ -21,10 +22,18 @@ const CustomerReviews = () => {
 
   const getReviews = async () => {
     try {
-      const res = await axios.get(
-        shoppingInfoApis.getReviews(params.group, params.productId),
-        config
+
+      const res = await axiosInstance.get(shoppingInfoApis.getReviews(params.group, params.productId),
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
+
+
+      // const res = await axios.get(
+      //   shoppingInfoApis.getReviews(params.group, params.productId),
+      //   config
+      // );
       setData(res.data.reviews);
     } catch (error) {
       console.log(error);

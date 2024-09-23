@@ -10,6 +10,8 @@ import LoadingComponent from "../common/components/LoadingComponent";
 import "./pages-styles/billing.style.css";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
+import axiosInstance from "../common/axiosInstance";
+
 
 const Billing = () => {
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const Billing = () => {
     setModalOpen(false);
   };
 
-  const { token, id, addressData, addAddress } = useUserContext();
+  const { id, addressData, addAddress } = useUserContext();
 
   const { fetchCart } = useCart();
 
@@ -53,7 +55,7 @@ const Billing = () => {
   const { totalCartAmountWithoutDiscount, totalDiscount, cart: orderedItems, product, type } = state || {};
   console.log(orderedItems, "orderedItems");
 
-  // console.log(totalAmount, "totalAmount");
+
 
   console.log(type, "type");
 
@@ -77,30 +79,62 @@ const Billing = () => {
     return convertedNumber;
   };
 
-  const removeCartItems = (productIds) => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer ${token}`);
 
-    const raw = JSON.stringify({
-      cartItemIds: productIds,
-    });
 
-    const requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
 
-    fetch(shoppingInfoApis.removeCartItems(id), requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
-        fetchCart();
-      })
-      .catch((error) => console.log(error));
+  const removeCartItems = async (productIds) => {
+    try {
+      const raw = {
+        cartItemIds: productIds,
+      };
+  
+      const { data: result } = await axiosInstance.delete(
+        shoppingInfoApis.removeCartItems(id),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: raw, // Pass the body (payload) here for DELETE requests
+          withCredentials: true, // Ensure cookies are sent with the request
+        }
+      );
+      
+      console.log(result);
+      fetchCart(); 
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
+
+
+
+
+
+  // const removeCartItems = (productIds) => {
+  //   const myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+  //   myHeaders.append("Authorization", `Bearer ${token}`);
+
+  //   const raw = JSON.stringify({
+  //     cartItemIds: productIds,
+  //   });
+
+  //   const requestOptions = {
+  //     method: "DELETE",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(shoppingInfoApis.removeCartItems(id), requestOptions)
+  //     .then((response) => response.text())
+  //     .then((result) => {
+  //       console.log(result);
+  //       fetchCart();
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
 
   const handlePayment = async () => {
     setLoading(true)
@@ -113,10 +147,10 @@ const Billing = () => {
       // }
 
       // Define the headers including the Authorization token
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
+      // const headers = {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${token}`,
+      // };
 
       console.log("Creating payment order with amount:", amountInPaise);
 
@@ -137,7 +171,6 @@ const Billing = () => {
             logoPosition: item.logoPosition,
           })),
         })
-        // return raw;
       }
       else if (type === "buyNow") {
         raw = JSON.stringify({
@@ -152,16 +185,24 @@ const Billing = () => {
             logoPosition: item.logoPosition,
           })),
         })
-        // return raw;
-        // console.log("Order received:", data);
       }
 
-
-      const { data: orderData } = await axios.post(
-        shoppingInfoApis.createOrder(id, activeAddressId),
+      const { data: orderData } = await axiosInstance.post(shoppingInfoApis.createOrder(id, activeAddressId),
         raw,
-        { headers }
+        {
+          headers: {
+            'Content-Type': 'application/json',  // Set the Content-Type to JSON
+          },
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
+
+
+      // const { data: orderData } = await axios.post(
+      //   shoppingInfoApis.createOrder(id, activeAddressId),
+      //   raw,
+      //   { headers }
+      // );
       console.log("Order data received:", orderData);
 
 
@@ -176,46 +217,14 @@ const Billing = () => {
         throw new Error("Order creation failed");
       }
 
-
-
-
-
-
-
-
-
-
-
-      // const { data: orderData } = await axios.post(
-      //   DressCodeApi.checkout.url,
-      //   { amount: amountInPaise },
-      //   { headers }
-      // );
-
-      // console.log("Order data received:", orderData);
-
-      // if (!orderData.success) {
-      //   Swal.fire({
-      //     title: 'Order creation failed!',
-      //     text: 'Something went wrong in order creation',
-      //     icon: 'error',
-      //     showConfirmButton: false,
-      //     timer: 1500
-      //   })
-      //   throw new Error("Order creation failed");
-      // }
-
       // Step 2: Initialize Razorpay
       const options = {
-        // key: "rzp_test_xMaFmOwuo05QVV",
 
-        // key: "rzp_test_0PMwuUiWHNgJdU",
-
-
-       key: "rzp_live_YZAblE0DYussOv",  
+        key: "rzp_test_0PMwuUiWHNgJdU",
 
 
-        // amount: orderData.newOrderDetails.razorpay_checkout_order_amount.toString(),
+        //  key: "rzp_live_YZAblE0DYussOv",
+
         currency: "INR",
         name: "Dress Code ",
         description: "Test Transaction",
@@ -230,12 +239,21 @@ const Billing = () => {
           };
 
           try {
-            setLoading(true)
-            const responseData = await axios.post(
-              DressCodeApi.verifyPayment.url,
+            setLoading(true);
+
+            const responseData = await axiosInstance.post(DressCodeApi.verifyPayment.url,
               verifyPayload,
-              { headers }
+              {
+                withCredentials: true // Ensure cookies are sent with the request
+              }
             );
+
+
+            // const responseData = await axios.post(
+            //   DressCodeApi.verifyPayment.url,
+            //   verifyPayload,
+            //   { headers }
+            // );
 
             const verifyData = await responseData.data;
 
@@ -257,10 +275,6 @@ const Billing = () => {
                 removeCartItems(productIds);
 
                 navigate("/success");
-
-                // navigate("/success", {
-                //   state: { orderId: finalResponse?.data?.order?.orderId },
-                // });
               } else if (type === "buyNow") {
                 navigate("/success");
               }
@@ -275,106 +289,12 @@ const Billing = () => {
               })
             }
 
-
-
           } catch (error) {
             console.log("error")
           } finally {
             setLoading(false)
           }
 
-
-
-          // const verifyData = await responseData.json();
-
-
-
-
-
-
-          // Step 4: Create the order on your server
-          // setLoading(true)
-          // if (type === "cart") {
-          //   const raw = JSON.stringify({
-          //     paymentId: verifyData.paymentId,
-
-          //     products: orderedItems.map((item) => ({
-          //       group: item.group,
-          //       productId: item.productId,
-          //       color: item.color.name,
-          //       size: item.size,
-          //       quantityOrdered: item.quantityRequired,
-          //       price: item.productDetails.price,
-          //       logoUrl: item.logoUrl,
-          //       logoPosition: item.logoPosition,
-          //       discountPercentage: item.discountPercentage,
-          //       discountAmount: item.discountAmount,
-          //       imgUrl: item.imgUrl,
-          //     })),
-          //     deliveryCharges: 0,
-          //     TotalAmount: totalCartAmountWithoutDiscount,
-          //     TotalDiscountAmount: totalDiscount,
-          //     TotalPriceAfterDiscount: TotalPriceAfterDiscount,
-          //   });
-          //   console.log("Creating order with data:", raw);
-
-          //   const finalResponse = await axios.post(
-          //     shoppingInfoApis.createOrder(id, activeAddressId),
-          //     raw,
-          //     { headers }
-          //   );
-
-          //   if (finalResponse.status === 201) {
-          //     setLoading(false)
-          //     console.log("Order creation response:", finalResponse.data);
-          //     const productIds = orderedItems.map((item) => item._id);
-          //     console.log("productIds of cart", productIds);
-
-          //     removeCartItems(productIds);
-
-          //     navigate("/success", {
-          //       state: { orderId: finalResponse?.data?.order?.orderId },
-          //     });
-          //   }
-          // } else if (type === "buyNow") {
-          //   const raw = JSON.stringify({
-          //     paymentId: verifyData.paymentId,
-
-          //     products: product.map((item) => ({
-          //       group: item.group,
-          //       productId: item.productId,
-          //       color: item.color,
-          //       size: item.size,
-          //       quantityOrdered: item.quantityRequired,
-          //       price: item.price,
-          //       logoUrl: item.logoUrl,
-          //       logoPosition: item.logoPosition,
-          //       discountPercentage: item.discountPercentage,
-          //       discountAmount: item.discountAmount,
-          //       imgUrl: item.imgUrl,
-          //     })),
-          //     deliveryCharges: 0,
-          //     TotalAmount: totalCartAmountWithoutDiscount,
-          //     TotalDiscountAmount: totalDiscount,
-          //     TotalPriceAfterDiscount: TotalPriceAfterDiscount,
-          //   });
-
-          //   const finalResponse = await axios.post(
-          //     shoppingInfoApis.createOrder(id, activeAddressId),
-          //     raw,
-          //     { headers }
-          //   );
-
-          //   if (finalResponse.status === 201) {   
-          
-          //     // setLoading(false)
-          //     const result = await finalResponse.data;
-          //     console.log(result);
-          //     navigate("/success", {
-          //       state: { orderId: result?.order?.orderId },
-          //     });
-          //   }
-          // }
         },
         prefill: {
           name: localStorage.getItem('userName'),
@@ -439,7 +359,6 @@ const Billing = () => {
         >
           <div style={{ width: "120px", flexShrink: 0 }}>
             <img
-              // src={product.productDetails.productType.imageUrl}
               src={product.imgUrl}
               alt={product.group}
               className="w-100"
@@ -474,7 +393,6 @@ const Billing = () => {
           >
             <div style={{ width: "120px", flexShrink: 0 }}>
               <img
-                // src={product.productDetails.productType.imageUrl}
                 src={item.imgUrl}
                 alt={item.group}
                 className="w-100"
@@ -574,7 +492,6 @@ const Billing = () => {
                       </h5>
                       <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">
                         Bag total
-                        {/* <span>{convertToCurrency(totalAmount)}</span> */}
                         <span>
                           {Number(totalCartAmountWithoutDiscount).toLocaleString("en-US", {
                             style: "currency",
@@ -587,13 +504,6 @@ const Billing = () => {
                         <span>
                           (-)
                           {totalDiscount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
-                          {/* {(
-                            (discountPercentage * totalAmount) /
-                            100
-                          ).toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "INR",
-                          })} */}
                         </span>
                       </p>
                       <p className="fs-5 fw-normal lh-1 d-flex justify-content-between align-items-center">

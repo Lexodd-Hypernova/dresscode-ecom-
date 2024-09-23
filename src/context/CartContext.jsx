@@ -1,14 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { shoppingInfoApis } from "../common";
-
+import axiosInstance from "../common/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
-import axios from "axios";
+// import axios from "axios";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,21 +16,18 @@ export const CartProvider = ({ children }) => {
 
   const nav = useNavigate();
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const userId = localStorage.getItem("id");
 
   const fetchCart = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(
-        shoppingInfoApis.getCartData(userId),
-        config
+
+      const { data } = await axiosInstance.get(shoppingInfoApis.getCartData(userId),
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
+
       setCart(data.cartItems);
       console.log(data.cartItems);
     } catch (error) {
@@ -63,22 +60,18 @@ export const CartProvider = ({ children }) => {
 
         setCart(updatedCart);
       } else {
-        // Add new item if it doesn't exist
-        const response = await fetch(shoppingInfoApis.addCartData(userId), {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(newItem),
-        });
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        const response = await axiosInstance.post(shoppingInfoApis.addCartData(userId),
+          newItem,
+          {
+            withCredentials: true // Ensure cookies are sent with the request
+          }
+        );
 
-        const result = await response.json();
-        const updatedItem = result.cartItem;
+        console.log("response from addToCart", response)
+
+        // const result = await response.json();
+        const updatedItem = response.data.cartItem;
 
         // Add the new item to the cart
         setCart((prevCart) => [...prevCart, updatedItem]);
@@ -95,49 +88,17 @@ export const CartProvider = ({ children }) => {
   };
 
 
-
-
-
-  // const addToCart = async (item) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await fetch(shoppingInfoApis.addCartData(userId), {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify(item),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const newItem = await response.json();
-
-  //     const UpdatedItem = await newItem.cartItem;
-
-  //     // newItem = newItem.cartItem;
-  //     console.log(UpdatedItem);
-  //     setCart((prevCart) => [...prevCart, UpdatedItem]);
-  //     nav("/cart");
-  //   } catch (error) {
-  //     console.error("Error adding item to cart:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const removeFromCart = async (productId) => {
     console.log("userId", userId);
     console.log("productId", productId);
-
     try {
-      const res = await axios.delete(
-        shoppingInfoApis.deleteCartItem(userId, productId),
-        config
+
+      const res = await axiosInstance.delete(shoppingInfoApis.deleteCartItem(userId, productId),
+        {
+          withCredentials: true // Ensure cookies are sent with the request
+        }
       );
+
       console.log(res.data);
       fetchCart();
     } catch (error) {
@@ -161,14 +122,12 @@ export const CartProvider = ({ children }) => {
     try {
       // Call the API to update the checked state on the server
 
-      const res = await axios.patch(shoppingInfoApis.updateCartItemCheck(userId, cartItemId),
+      const res = await axiosInstance.patch(shoppingInfoApis.updateCartItemCheck(userId, cartItemId),
         { checked: updatedItem.checked },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true // Ensure cookies are sent with the request
         }
-      )
+      );
 
       setCart(updatedCart);
       console.log("updatedCart in handleCheckboxChange", updatedCart)
@@ -185,7 +144,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, loading, token, setCart, fetchCart, handleCheckboxChange }}
+      value={{ cart, addToCart, removeFromCart, loading, setCart, fetchCart, handleCheckboxChange }}
     >
       {children}
     </CartContext.Provider>

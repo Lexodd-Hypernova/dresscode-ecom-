@@ -20,6 +20,21 @@ const Cart = () => {
   const { cart, removeFromCart, setCart, loading, handleCheckboxChange } = useCart();
   const { addToWishList } = useWhishList();
 
+  // useEffect(() => {
+  //   if (!loading) {
+  //     const updatedCart = cart.map((item) => ({
+  //       ...item,
+  //       checked: item.checked ?? true, // Keep the existing checked state or set it to true initially
+  //     }));
+
+  //     setCart(updatedCart);
+  //     calculateBagTotal(updatedCart);
+  //     calculateInitialProductTotals(updatedCart);
+  //     calculateTotalCartAmountWithoutDiscount(updatedCart);
+  //   }
+  // }, [loading]);
+
+
   useEffect(() => {
     if (!loading) {
       const updatedCart = cart.map((item) => ({
@@ -28,11 +43,16 @@ const Cart = () => {
       }));
 
       setCart(updatedCart);
+
+      // Only calculate for checked items
       calculateBagTotal(updatedCart);
-      calculateInitialProductTotals(updatedCart);
       calculateTotalCartAmountWithoutDiscount(updatedCart);
+      calculateInitialProductTotals(updatedCart);
     }
-  }, [loading]);
+  }, [loading, cart]);  // Include cart dependency if cart changes dynamically
+
+
+
 
   // Calculate total amount of each item on loading cart page initially.
   const calculateInitialProductTotals = (updatedCart) => {
@@ -110,13 +130,30 @@ const Cart = () => {
     setTotalDiscount(Math.round(totalDiscount)); // You can store total discount in state
   };
 
+
+
+
+
   // Calculate total amount of the cart without discount
+  // const calculateTotalCartAmountWithoutDiscount = (updatedCart) => {
+  //   const totalAmountWithoutDiscount = updatedCart.reduce((acc, item) => {
+  //     return acc + (item.productDetails.price * item.quantityRequired);
+  //   }, 0);
+  //   setTotalCartAmountWithoutDiscount(totalAmountWithoutDiscount);
+  // };
+
+
   const calculateTotalCartAmountWithoutDiscount = (updatedCart) => {
     const totalAmountWithoutDiscount = updatedCart.reduce((acc, item) => {
-      return acc + (item.productDetails.price * item.quantityRequired);
+      if (item.checked) {
+        return acc + (item.productDetails.price * item.quantityRequired);
+      }
+      return acc;
     }, 0);
-    setTotalCartAmountWithoutDiscount(totalAmountWithoutDiscount);
+
+    setTotalCartAmountWithoutDiscount(Math.round(totalAmountWithoutDiscount));
   };
+
 
 
 
