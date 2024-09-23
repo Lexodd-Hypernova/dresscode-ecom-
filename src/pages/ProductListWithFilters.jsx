@@ -159,6 +159,7 @@ const ProductListWithFilters = () => {
                                     <select name="group" value={groupName} onChange={handleGroupChange}>
                                         <option value="ELITE">ELITE</option>
                                         <option value="HEAL">HEAL</option>
+                                        <option value="TOGS">TOGS</option>
                                     </select>
                                 </div>
 
@@ -711,7 +712,7 @@ const ProductListWithFilters = () => {
                     {
                         loading ? (
                             <div className='container-fluid'>
-                                <div className='row row-gap-5'>
+                                <div className='row mt-5 row-gap-5'>
                                     {loadingList.map((item, index) => (
                                         <div className="col-lg-4" key={index}>
                                             <div className='placeholder-glow' style={{ height: "50vh" }}>
@@ -726,18 +727,18 @@ const ProductListWithFilters = () => {
                             </div>
                         ) : (
                             <div className="container-fluid text-center">
-                                <Link className='back_link mb-3' to="/">
+                                <Link className='pr_back_link' to="/">
                                     <img src="/images/back.png" alt="" />
                                     <span>Back</span>
                                 </Link>
-                                <div className="row row-gap-5">
+                                <div className="row mt-5 row-gap-5">
 
                                     {filteredProducts.length > 0 ? (
                                         <>
                                             {filteredProducts.map((item) => {
                                                 return item.variants.map((variant, index) => {
                                                     return (
-                                                        <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="col-lg-3" key={index}>
+                                                        <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="col-lg-3 col-md-4" key={index}>
                                                             <img src={variant.imageUrls[0]} alt="" className="w-100" />
                                                             <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}-{item.price}/-</h5>
                                                         </Link>
