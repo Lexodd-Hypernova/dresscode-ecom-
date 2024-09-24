@@ -92,12 +92,6 @@ const EditPersonalinfo = () => {
           showConfirmButton: false,
           timer: 1000,
         });
-        // const token = localStorage.getItem("token");
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`
-        //   }
-        // };
         try {
           const response = await axiosInstance.patch(accountInfoApis.updateAccountInfo(localStorage.getItem("id")),
             formData,

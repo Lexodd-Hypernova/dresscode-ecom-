@@ -88,7 +88,10 @@
 }
 
 .order_outer {
-  padding: 40px 80px;
+  padding: 30px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .dt_delivery {
@@ -132,7 +135,20 @@
   margin: 0;
 }
 
-.pr_action button {
+.pr_track-outer h5 {
+  margin: 0;
+}
+
+/* .pr_track span {
+  font-family: 'Inter';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #3C3B3B;
+  border-bottom: 1px solid #3C3B3B;
+} */
+
+.pr_review button {
   font-family: 'Inter';
   font-size: 16px;
   font-weight: 400;
@@ -144,10 +160,18 @@
   border-radius: 5px;
 }
 
+.pr_track-outer {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  /* margin-bottom: 20px; */
+}
+
 .pr_action {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  justify-content: center;
 }
 
 .pr-logo {
@@ -227,7 +251,7 @@
   }
 
   .order_outer {
-    padding: 30px 50px;
+    padding: 20px 50px;
   }
 
   .dt_delivery {
@@ -256,7 +280,7 @@
     line-height: 30px;
   }
 
-  .pr_action button {
+  .pr_review button {
     font-size: 14px;
     padding: 12px 30px;
   }
@@ -329,9 +353,16 @@
 }
 
 @media screen and (max-width: 500px) {
+  .pr_track-outer {
+    display: flex;
+    gap: 10px;
+    justify-content: start;
+    /* margin-bottom: 20px; */
+  }
+
   .ord_nav-item {
-    font-size: 16px;
-    line-height: 27px;
+    font-size: 13px;
+    line-height: 24px;
   }
 
   .ord_nav-item.selected::after {
@@ -339,7 +370,7 @@
   }
 
   .order_navbar {
-    gap: 30px;
+    gap: 20px;
   }
 
   .order_head {
@@ -354,8 +385,8 @@
 
   .ord_plcd,
   .ord_id {
-    font-size: 14px;
-    line-height: 23px;
+    font-size: 11px;
+    line-height: 20px;
   }
 
   .order_content {
@@ -393,7 +424,7 @@
     width: 100px;
   }
 
-  .pr_action button {
+  .pr_review button {
     font-size: 14px;
     padding: 10px 25px;
   }

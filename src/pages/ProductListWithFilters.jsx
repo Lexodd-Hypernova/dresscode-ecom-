@@ -735,20 +735,38 @@ const ProductListWithFilters = () => {
 
                                     {filteredProducts.length > 0 ? (
                                         <>
+
                                             {filteredProducts.map((item) => {
                                                 return item.variants.map((variant, index) => {
                                                     return (
-                                                        <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="col-lg-3 col-md-4" key={index}>
-                                                            <img src={variant.imageUrls[0]} alt="" className="w-100" />
-                                                            <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}-{item.price}/-</h5>
-                                                        </Link>
+                                                        <div className="col-lg-3 col-md-4 col-sm-6 mb-4 product_card-div" key={index}>
+                                                            <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="product-card">
+
+
+                                                                <div className="product-image-wrapper">
+                                                                    <img src={variant.imageUrls[0]} alt={variant.color.name} className="product-image" />
+                                                                </div>
+
+
+                                                                <div className="product-info">
+                                                                    <h5 className="srt__Name">
+                                                                        {variant.color.name} {item.productType}<br></br>
+                                                                        Rs. {Number(item.price).toLocaleString("en-US", {
+                                                                            style: "currency",
+                                                                            currency: "INR",
+                                                                        })}
+                                                                        {/* Rs. {item.price.} */}
+                                                                    </h5>
+                                                                </div>
+
+
+                                                                {/* <img src={variant.imageUrls[0]} alt="" className="w-100" /> */}
+                                                                {/* <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}-{item.price}/-</h5> */}
+                                                            </Link>
+                                                        </div>
                                                     )
                                                 })
                                             }
-
-
-
-
                                             )}
                                         </>
 
