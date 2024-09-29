@@ -3,6 +3,8 @@ import axios from "axios";
 import "./pages-styles/ProductListWithFilters.style.css";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { shoppingInfoApis } from "../common";
+// import LazyImage from "../common/components/LazyImage";
+import LazyImage from "../common/components/LazyImage";
 
 const ProductListWithFilters = () => {
     const [allProducts, setAllProducts] = useState([]); // To store all fetched products
@@ -744,7 +746,12 @@ const ProductListWithFilters = () => {
 
 
                                                                 <div className="product-image-wrapper">
-                                                                    <img src={variant.imageUrls[0]} alt={variant.color.name} className="product-image" />
+                                                                    <LazyImage
+                                                                        src={variant.imageUrls[0]}
+                                                                        alt={variant.color.name}
+                                                                        className="product-image"
+                                                                    />
+                                                                    {/* <img src={variant.imageUrls[0]} alt={variant.color.name} className="product-image" /> */}
                                                                 </div>
 
 
@@ -755,13 +762,8 @@ const ProductListWithFilters = () => {
                                                                             style: "currency",
                                                                             currency: "INR",
                                                                         })}
-                                                                        {/* Rs. {item.price.} */}
                                                                     </h5>
                                                                 </div>
-
-
-                                                                {/* <img src={variant.imageUrls[0]} alt="" className="w-100" /> */}
-                                                                {/* <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}-{item.price}/-</h5> */}
                                                             </Link>
                                                         </div>
                                                     )

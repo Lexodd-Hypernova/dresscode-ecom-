@@ -690,7 +690,7 @@ const ProductDetails = () => {
             </div>
           )}
           <div className="row row-gap-4 mt-5">
-            <div className="d-grid col-6">
+            <div className="d-grid col-lg-6">
               {isLoggedIn ? (
                 <button
                   className={`btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
@@ -711,7 +711,7 @@ const ProductDetails = () => {
                 </button>
               )}
             </div>
-            <div className="d-grid col-6">
+            <div className="d-grid col-lg-6">
 
               <button
                 className={`btn ${count > 35 ? "btn-warning" : "btn-primary"} fs-5 fw-normal text-capitalize w-100 ${count <= 35 && stockError ? "disabled" : ""}`}
@@ -724,7 +724,7 @@ const ProductDetails = () => {
               </button>
 
             </div>
-            <div className="d-grid col-6">
+            <div className="d-grid col-lg-6">
 
 
               {isLoggedIn ? (

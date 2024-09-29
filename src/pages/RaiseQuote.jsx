@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { useUserContext } from '../context/UserContext';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import axiosInstance from "../common/axiosInstance";
+import "./pages-styles/raiseQuote.style.css";
 
 const QuoteSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
@@ -48,7 +49,7 @@ const RaiseQuote = () => {
     return (
         <>
 
-            <div className='container-fluid' style={{ position: "relative", marginTop: "100px" }}>
+            <div className='container-fluid raise_qt-screen' style={{}}>
                 <div className='row'>
                     <div className='fs-1 fw-medium text-primary text-center'>
                         <span style={{ color: "#20248A" }}>Get a {""}</span>
@@ -79,19 +80,8 @@ const RaiseQuote = () => {
                             validationSchema={QuoteSchema}
                             onSubmit={async (values) => {
                                 console.log(values);
-
-                                // const headers = {
-                                //     "Content-Type": "application/json",
-                                //     Authorization: `Bearer ${token}`,
-                                // };
                                 setLoading(true)
                                 try {
-
-                                    // const response = await axiosInstance.get(accountInfoApis.getOrders(localStorage.getItem("id")),
-                                    //     {
-                                    //         withCredentials: true // Ensure cookies are sent with the request
-                                    //     }
-                                    // );
 
                                     const response = await axiosInstance.post(shoppingInfoApis.createQuote(id), {
                                         group: quoteItem.group,
@@ -278,79 +268,7 @@ const RaiseQuote = () => {
                             )}
                         </Formik>
 
-
-
-                        {/* <form className='mt-5'>
-                            <div className="mb-3">
-                                <input
-                                    type="text"
-                                    className="form-control w-100"
-                                    name="name"
-                                    placeholder='Name'
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <input
-                                    type="text"
-                                    className="form-control w-100"
-                                    name="contactPhone"
-                                    placeholder='Contact Phone'
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <input
-                                    type="email"
-                                    className="form-control w-100"
-                                    name="email"
-                                    placeholder='E-mail'
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <input
-                                    type="text"
-                                    className="form-control w-100"
-                                    name="organizationName"
-                                    placeholder='Name of Organization (Optional)'
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <input
-                                    type="text"
-                                    className="form-control w-100"
-                                    name="street"
-                                    placeholder='Street'
-                                />
-                            </div>
-                            <div className='row'>
-                                <div className='col'>
-                                    <input
-                                        type="text"
-                                        className="form-control w-100"
-                                        name="lane"
-                                        placeholder='Lane'
-                                    />
-                                </div>
-                                <div className='col'>
-                                    <input
-                                        type="text"
-                                        className="form-control w-100 mb-3"
-                                        name="postalCode"
-                                        placeholder='Postal code'
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <button type='submit' className='mt-5 btn btn-primary w-100 text-uppercase text-white fs-5 fw-medium'>submit</button>
-                            </div>
-                        </form> */}
                     </div>
-                </div>
-                <div style={{ position: "absolute", top: "0px", left: "100px" }}>
-                    <Link className='back_link' to="/">
-                        <img src="/images/back.png" alt="" />
-                    </Link>
                 </div>
             </div>
 

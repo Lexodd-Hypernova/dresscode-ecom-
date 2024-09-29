@@ -1,0 +1,19 @@
+.suc_Img {
+    width: 500px;
+}
+
+@media only screen and (max-width: 1600px) {
+    .suc_Img {
+        width: 400px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .success_screen {
+        padding:0 10px;
+    }
+
+    .suc_Img {
+        width: 300px;
+    }
+}

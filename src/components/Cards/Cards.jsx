@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import DressCodeApi from "../../common";
 import { Link, useNavigate } from "react-router-dom";
 import "./cards.css";
+// import LazyImage from "../../common/components/"
+import LazyImage from "../../common/components/LazyImage";
 
 const groups = [
   //  {
@@ -84,11 +86,18 @@ const Cards = () => {
         <div className="row row-gap-4">
           {groups.map((group, index) => (
             <div className="col-lg-4" role="button" key={index} onClick={() => handleClick(group.name)}>
-              <img
+
+              <LazyImage
+                src={group.src}
+                alt={group.name}
+                className="w-100 rounded"
+              />
+
+              {/* <img
                 src={group.src}
                 className="w-100 rounded"
                 alt={group.name || "Card image"}
-              />
+              /> */}
               <h3 className="card-title mt-2">{group.name}</h3>
             </div>
           ))}
