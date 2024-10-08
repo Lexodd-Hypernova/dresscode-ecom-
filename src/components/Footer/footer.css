@@ -466,6 +466,12 @@ footer {
     }
 }
 
+@media only screen and (max-width: 768px) {
+    .ft_Ttl {
+        font-size: 120px;
+    }
+}
+
 
 @media only screen and (max-width: 500px) {
     .ft-icn {

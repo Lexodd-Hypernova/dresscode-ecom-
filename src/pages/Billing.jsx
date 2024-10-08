@@ -9,7 +9,6 @@ import { useCart } from "../context/CartContext";
 import LoadingComponent from "../common/components/LoadingComponent";
 import "./pages-styles/billing.style.css";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-
 import axiosInstance from "../common/axiosInstance";
 
 
@@ -24,8 +23,6 @@ const Billing = () => {
   const [activeAddressId, setActiveAddressId] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
-
-
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -107,35 +104,6 @@ const Billing = () => {
   };
   
 
-
-
-
-
-  // const removeCartItems = (productIds) => {
-  //   const myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-  //   myHeaders.append("Authorization", `Bearer ${token}`);
-
-  //   const raw = JSON.stringify({
-  //     cartItemIds: productIds,
-  //   });
-
-  //   const requestOptions = {
-  //     method: "DELETE",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(shoppingInfoApis.removeCartItems(id), requestOptions)
-  //     .then((response) => response.text())
-  //     .then((result) => {
-  //       console.log(result);
-  //       fetchCart();
-  //     })
-  //     .catch((error) => console.log(error));
-  // };
-
   const handlePayment = async () => {
     setLoading(true)
     try {
@@ -146,11 +114,6 @@ const Billing = () => {
       //   return;
       // }
 
-      // Define the headers including the Authorization token
-      // const headers = {
-      //   "Content-Type": "application/json",
-      //   Authorization: `Bearer ${token}`,
-      // };
 
       console.log("Creating payment order with amount:", amountInPaise);
 
@@ -197,12 +160,6 @@ const Billing = () => {
         }
       );
 
-
-      // const { data: orderData } = await axios.post(
-      //   shoppingInfoApis.createOrder(id, activeAddressId),
-      //   raw,
-      //   { headers }
-      // );
       console.log("Order data received:", orderData);
 
 
@@ -247,13 +204,6 @@ const Billing = () => {
                 withCredentials: true // Ensure cookies are sent with the request
               }
             );
-
-
-            // const responseData = await axios.post(
-            //   DressCodeApi.verifyPayment.url,
-            //   verifyPayload,
-            //   { headers }
-            // );
 
             const verifyData = await responseData.data;
 

@@ -241,6 +241,7 @@
         flex-direction: column;
         margin-top: 30px;
         gap: 30px;
+        overflow: hidden;
     }
 
     .productImage {
@@ -261,6 +262,7 @@
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
+        gap: 0px;
     }
 
     .pr__thumbs-inner {

@@ -3,6 +3,8 @@ import axios from "axios";
 import "./pages-styles/ProductListWithFilters.style.css";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { shoppingInfoApis } from "../common";
+// import LazyImage from "../common/components/LazyImage";
+import LazyImage from "../common/components/LazyImage";
 
 const ProductListWithFilters = () => {
     const [allProducts, setAllProducts] = useState([]); // To store all fetched products
@@ -735,20 +737,38 @@ const ProductListWithFilters = () => {
 
                                     {filteredProducts.length > 0 ? (
                                         <>
+
                                             {filteredProducts.map((item) => {
                                                 return item.variants.map((variant, index) => {
                                                     return (
-                                                        <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="col-lg-3 col-md-4" key={index}>
-                                                            <img src={variant.imageUrls[0]} alt="" className="w-100" />
-                                                            <h5 className='srt__Name'>{variant.color.name}&nbsp;{item.productType}-{item.price}/-</h5>
-                                                        </Link>
+                                                        <div className="col-lg-3 col-md-4 col-sm-6 mb-4 product_card-div" key={index}>
+                                                            <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="product-card">
+
+
+                                                                <div className="product-image-wrapper">
+                                                                    <LazyImage
+                                                                        src={variant.imageUrls[0]}
+                                                                        alt={variant.color.name}
+                                                                        className="product-image"
+                                                                    />
+                                                                    {/* <img src={variant.imageUrls[0]} alt={variant.color.name} className="product-image" /> */}
+                                                                </div>
+
+
+                                                                <div className="product-info">
+                                                                    <h5 className="srt__Name">
+                                                                        {variant.color.name} {item.productType}<br></br>
+                                                                        Rs. {Number(item.price).toLocaleString("en-US", {
+                                                                            style: "currency",
+                                                                            currency: "INR",
+                                                                        })}
+                                                                    </h5>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
                                                     )
                                                 })
                                             }
-
-
-
-
                                             )}
                                         </>
 

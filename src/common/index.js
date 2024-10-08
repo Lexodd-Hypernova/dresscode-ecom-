@@ -1,7 +1,7 @@
-// const baseUrl = "https://dresscode-updated.onrender.com";
+const baseUrl = "https://dresscode-updated.onrender.com";
 // const baseUrl = "https://dresscode-unique.onrender.com";
 
-const baseUrl = "https://dresscode-bck.onrender.com";
+// const baseUrl = "https://dresscode-bck.onrender.com";
 
 //  const baseUrl = "https://9e25-2405-201-c404-293c-4ddf-adfe-1857-27bb.ngrok-free.app";
 
@@ -85,6 +85,8 @@ export const shoppingInfoApis = {
   getOrderDetails: (orderId) => `${baseUrl}/dashboard/getOrderDetails/${orderId}`,
   createQuote: (userId) => `${baseUrl}/order/createQuote/user/${userId}`,
   trackPackage: (awbCode) => `${baseUrl}/dashboard/track/awb/${awbCode}`,
+  cancelOrder: (userId, orderId) => `${baseUrl}/user/${userId}/cancelOrder/${orderId}`,
+  getCanceledOrders: (userId) => `${baseUrl}/user/${userId}/getCanceledOrders`,
   getFiltersByGroup: (groupName) => `${baseUrl}/e-com/getFiltersByGroup?groupName=${groupName}`,
   getProductsByGroup: (groupName) => `${baseUrl}/e-com/getProductsByGroup?groupName=${groupName}`,
 

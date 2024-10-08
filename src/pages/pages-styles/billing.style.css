@@ -12,3 +12,14 @@
     padding: 0 40px;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .billing {
+    margin: 0 !important;
+    padding: 20px 0px;
+    overflow: hidden;
+  }
+  .order__bill {
+    width: 100%;
+}
+}
