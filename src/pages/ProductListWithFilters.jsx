@@ -743,7 +743,7 @@ const ProductListWithFilters = () => {
                                             {filteredProducts.map((item) => {
                                                 return item.variants.map((variant, index) => {
                                                     return (
-                                                        <div className="col-lg-4 col-md-4 col-sm-6 mb-4 product_card-div" key={index}>
+                                                        <div className="col-lg-4 col-md-6 col-sm-6 mb-4 product_card-div" key={index}>
                                                             <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="product-card">
                                                                 <div className="product-image-wrapper">
                                                                     <LazyImage
