@@ -59,7 +59,7 @@ const Footer = () => {
                                 <h4 className='ft-card-ttl'>
                                     Contact
                                 </h4>
-                                <a href="tel:+917447444481" className='ft-cn'>+91 74474 44481</a>
+                                <a href="tel:+917036436370" className='ft-cn'>+91 70364 36370</a>
                                 <a href="mailto:info@dress-code.in" className='ft-cn'>info@dress-code.in</a>
                             </div>
                         </div>

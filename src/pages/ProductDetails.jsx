@@ -406,7 +406,7 @@ const ProductDetails = () => {
             <button type="button" className="btn btn-success text-white">
               4.5<i className="fa-solid fa-star"></i>
             </button>
-            <span className="ms-2">10 Ratings</span>
+            <span className="ms-2">40 Ratings</span>
           </div>
 
 

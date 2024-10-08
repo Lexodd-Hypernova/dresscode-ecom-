@@ -738,23 +738,36 @@ const ProductListWithFilters = () => {
                                     {filteredProducts.length > 0 ? (
                                         <>
 
+
+
                                             {filteredProducts.map((item) => {
                                                 return item.variants.map((variant, index) => {
                                                     return (
                                                         <div className="col-lg-3 col-md-4 col-sm-6 mb-4 product_card-div" key={index}>
                                                             <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="product-card">
-
-
                                                                 <div className="product-image-wrapper">
                                                                     <LazyImage
                                                                         src={variant.imageUrls[0]}
                                                                         alt={variant.color.name}
                                                                         className="product-image"
                                                                     />
-                                                                    {/* <img src={variant.imageUrls[0]} alt={variant.color.name} className="product-image" /> */}
+                                                                    {/* Rating overlay */}
+                                                                    <div className="product-rating">
+                                                                        <div className="pr_inner">
+                                                                            <span style={{ marginRight: "4px" }}>
+                                                                                4.5
+                                                                            </span>
+                                                                            <i className="fa-solid fa-star" style={{ marginRight: "4px" }}></i>
+
+                                                                            <div className="rt_ppl">
+                                                                                <div style={{ marginRight: "4px" }}>
+                                                                                    |
+                                                                                </div>
+                                                                            </div>
+                                                                            40
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-
-
                                                                 <div className="product-info">
                                                                     <h5 className="srt__Name">
                                                                         {variant.color.name} {item.productType}<br></br>
