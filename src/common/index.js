@@ -1,7 +1,7 @@
-// const baseUrl = "https://dresscode-updated.onrender.com";
+const baseUrl = "https://dresscode-updated.onrender.com";
 // const baseUrl = "https://dresscode-unique.onrender.com";
 
-const baseUrl = "https://dresscode-bck.onrender.com";
+// const baseUrl = "https://dresscode-bck.onrender.com";
 
 //  const baseUrl = "https://9e25-2405-201-c404-293c-4ddf-adfe-1857-27bb.ngrok-free.app";
 
@@ -36,6 +36,9 @@ const DressCodeApi = {
   },
   verifyPayment: {
     url: `${baseUrl}/payment/verifyPayment`,
+  },
+  getSchoolNames: {
+    url: `${baseUrl}/e-com/getAllSchoolNames`,
   },
 };
 export default DressCodeApi;
@@ -89,6 +92,7 @@ export const shoppingInfoApis = {
   getCanceledOrders: (userId) => `${baseUrl}/user/${userId}/getCanceledOrders`,
   getFiltersByGroup: (groupName) => `${baseUrl}/e-com/getFiltersByGroup?groupName=${groupName}`,
   getProductsByGroup: (groupName) => `${baseUrl}/e-com/getProductsByGroup?groupName=${groupName}`,
+  getProductsByGroupAndSchoolName: (schoolName) => `${baseUrl}/e-com/getProductsByGroupAndSchoolName?groupName=TOGS&schoolName=${schoolName}`,
 
 };
 export const S3imageApis = {

@@ -6,12 +6,16 @@ import { shoppingInfoApis } from "../common";
 // import LazyImage from "../common/components/LazyImage";
 import LazyImage from "../common/components/LazyImage";
 
-const ProductListWithFilters = () => {
+const ProductsBySchool = () => {
+
+
     const [allProducts, setAllProducts] = useState([]); // To store all fetched products
     const [filteredProducts, setFilteredProducts] = useState([]); // To store filtered products
 
     const [loading, setLoading] = useState(true);
     const loadingList = new Array(8).fill(null);
+
+
     const [filters, setFilters] = useState({
         category: "",
         subCategory: "",
@@ -26,18 +30,18 @@ const ProductListWithFilters = () => {
         size: "",
         color: "",
     });
+
     const [filterOptions, setFilterOptions] = useState({});
-    const { groupName } = useParams(); // Get groupName from the URL
+    const { schoolName } = useParams(); // Get groupName from the URL
+    const groupName = "TOGS";
     const navigate = useNavigate(); // Initialize navigate from react-router-dom
-
-
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
                 // Fetch products
-                const productResponse = await axios.get(shoppingInfoApis.getProductsByGroup(groupName));
+                const productResponse = await axios.get(shoppingInfoApis.getProductsByGroupAndSchoolName(schoolName));
                 // Filter products that have variants with variantSizes length greater than zero
                 const filteredProductData = productResponse.data.filter(product =>
                     product.variants.some(variant => variant.variantSizes.length > 0)
@@ -49,7 +53,7 @@ const ProductListWithFilters = () => {
                 console.log("filteredProductData", filteredProductData);
 
                 // Fetch filters
-                const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup(groupName));
+                const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup("TOGS"));
                 setFilterOptions(filterResponse.data); // Store filter options
                 console.log("filterResponse", filterResponse.data);
             } catch (error) {
@@ -59,15 +63,13 @@ const ProductListWithFilters = () => {
             }
         };
 
-        if (groupName) {
+        if (schoolName) {
             fetchData();
         }
-    }, [groupName]);
+    }, [schoolName]);
 
 
 
-
-    // Apply filters whenever the filter state changes
     useEffect(() => {
         let filtered = [...allProducts]; // Start with all products
 
@@ -118,7 +120,8 @@ const ProductListWithFilters = () => {
         }
 
         setFilteredProducts(filtered); // Update filtered products
-    }, [filters, allProducts]); // Dependency array includes filters and allProducts
+    }, [filters, allProducts]);
+
 
     // Handle filter change
     const handleFilterChange = (e) => {
@@ -129,7 +132,6 @@ const ProductListWithFilters = () => {
         }));
     };
 
-    // Handle group change and update URL
     const handleGroupChange = (e) => {
         const newGroupName = e.target.value;
 
@@ -139,6 +141,7 @@ const ProductListWithFilters = () => {
             navigate(`/products/${newGroupName}`);
         }
     };
+
 
     return (
         <>
@@ -802,7 +805,7 @@ const ProductListWithFilters = () => {
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default ProductListWithFilters;
+export default ProductsBySchool
