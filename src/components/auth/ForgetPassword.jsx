@@ -59,7 +59,7 @@ function ForgetPassword() {
                                     });
                                     // { withCredentials: true }
                                     console.log(response.data);
-                                    if (response.status === "200") {
+                                    if (response.status === 200) {
                                         Swal.fire({
                                             title: 'Success!',
                                             text: 'Password reset request sent successfully to admin.',
