@@ -76,7 +76,7 @@
 
 }
 
-.reset-p{
+.reset-p {
     font-family: Poppins;
     font-size: 14px;
     font-weight: 400;
@@ -159,6 +159,23 @@
 
 .under-label p {
     margin: 0;
+}
+
+
+.auth-screen {
+    position: relative;
+}
+
+.notification {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    left: 50%;
+    width: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 19.33px 40.71px #0000000d inset;
 }
 
 
@@ -261,6 +278,13 @@
     .auth_third-party {
         margin: 0 auto;
         margin-top: 40px;
+    }
+    .notification{
+        top: unset;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        transform: none;
     }
 }
 
