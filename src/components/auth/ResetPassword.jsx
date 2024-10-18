@@ -44,7 +44,8 @@ function ResetPassword() {
                             console.log(values)
                             setLoading(true)
                             try {
-                                const response = await axios.update(authUrls.resetPassword, {
+                                const response = await axios.post(authUrls.resetPassword, {
+                                    token: token,
                                     password: values.password
                                 });
                                 console.log(response.data);

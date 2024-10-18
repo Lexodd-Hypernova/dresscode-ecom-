@@ -44,7 +44,7 @@ function ForgetPassword() {
                             onSubmit={async (values) => {
                                 setLoading(true)
                                 try {
-                                    const response = await axios.update(authUrls.forgotPassword, {
+                                    const response = await axios.post(authUrls.forgotPassword, {
                                         email: values.email,
                                     }, { withCredentials: true });
                                     console.log(response.data);
