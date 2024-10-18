@@ -46,7 +46,8 @@ function ForgetPassword() {
                                 try {
                                     const response = await axios.post(authUrls.forgotPassword, {
                                         email: values.email,
-                                    }, { withCredentials: true });
+                                    });
+                                    // { withCredentials: true }
                                     console.log(response.data);
                                     // if (response.data.message === "Success") {
                                     //     Swal.fire({
