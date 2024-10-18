@@ -211,6 +211,9 @@ const Login = () => {
                                     <div className="under-label">
                                         <p>I don’t have an account? <Link to="/register" style={{ color: "orange", cursor: "pointer" }}>Sign up</Link></p>
                                     </div>
+                                    <div className="under-label">
+                                        <p><Link to="/forgot-password" style={{ color: "orange", cursor: "pointer" }}>Forgot Password?</Link></p>
+                                    </div>
                                 </form>
                             )}
                         </Formik>

@@ -1,6 +1,9 @@
+// testing api
 const baseUrl = "https://dresscode-updated.onrender.com";
 // const baseUrl = "https://dresscode-unique.onrender.com";
 
+
+// production api
 // const baseUrl = "https://dresscode-bck.onrender.com";
 
 //  const baseUrl = "https://9e25-2405-201-c404-293c-4ddf-adfe-1857-27bb.ngrok-free.app";
@@ -48,6 +51,8 @@ export const authUrls = {
   signup: `${baseUrl}/user/createUser`,
   signInWithGoogle: `${baseUrl}/oAuth/login`,
   generateAccessToken: `${baseUrl}/token/generateAccessToken`,
+  forgotPassword: `${baseUrl}/user/forgot-password`,
+  resetPassword: `${baseUrl}/user/reset-password`,
 };
 export const accountInfoApis = {
   getAccountInfo: (userId) => `${baseUrl}/user/${userId}/getUserDetails`,
