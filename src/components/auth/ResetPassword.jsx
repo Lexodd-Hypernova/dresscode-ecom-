@@ -54,7 +54,7 @@ function ResetPassword() {
                             try {
                                 const response = await axios.post(authUrls.resetPassword, {
                                     token: token,
-                                    password: values.password
+                                    newPassword: values.password
                                 });
                                 console.log(response.data);
 
@@ -102,7 +102,7 @@ function ResetPassword() {
                             <form onSubmit={handleSubmit}>
                                 <div>
                                     <div className="">
-                                        <label htmlFor="password" className="form-label form-labels">Password</label>
+                                        <label htmlFor="password" className="form-label form-labels">New Password</label>
                                         <input
                                             type="password"
                                             onChange={handleChange}
