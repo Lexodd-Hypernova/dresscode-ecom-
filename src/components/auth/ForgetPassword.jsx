@@ -22,9 +22,19 @@ function ForgetPassword() {
 
     const [loading, setLoading] = useState(false);
 
+    const [notification, setNotification] = useState(""); // State for notification message
+
 
     return (
         <div className='auth-screen'>
+
+            {notification && (
+                <div className="notification">
+                    <p>{notification}</p>
+                    {/* <button onClick={handleCloseNotification}>Close</button> */}
+                </div>
+            )}
+
             <div className='auth-container'>
                 <div className='auth-inner'>
                     <Link to="/" className='auth-logo'>
@@ -49,26 +59,28 @@ function ForgetPassword() {
                                     });
                                     // { withCredentials: true }
                                     console.log(response.data);
-                                    // if (response.data.message === "Success") {
-                                    //     Swal.fire({
-                                    //         title: 'Success!',
-                                    //         text: 'Logged in successfully',
-                                    //         icon: 'success',
-                                    //         showConfirmButton: false,
-                                    //         timer: 1500
-                                    //     })
-                                    //     // router.navigate("/account-info")
-                                    //     navigate(redirectPath);
-                                    // }
+                                    if (response.status === "200") {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Password reset request sent successfully to admin.',
+                                            icon: 'success',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+
+                                        setNotification("We've sent a password reset link to your email! Please check your inbox (and spam folder, just in case) for an email from us. It may take a few minutes to arrive. Once you receive it, click the link to reset your password. If you don’t see the email shortly, please try again or contact support for assistance.");
+                                        // router.navigate("/account-info")
+                                        // navigate(redirectPath);
+                                    }
                                 } catch (error) {
                                     console.log("error", error)
-                                    // Swal.fire({
-                                    //     title: 'Login Failed!',
-                                    //     text: 'Please check your email and password or something went wrong',
-                                    //     icon: 'error',
-                                    //     showConfirmButton: false,
-                                    //     timer: 1500
-                                    // })
+                                    Swal.fire({
+                                        title: 'Failed!',
+                                        text: 'Please check your email or something went wrong',
+                                        icon: 'error',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
                                     // console.error('Error logging in:', error.response.data);
                                 } finally {
                                     setLoading(false)

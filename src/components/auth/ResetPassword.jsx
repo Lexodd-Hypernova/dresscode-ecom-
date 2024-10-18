@@ -16,12 +16,20 @@ const SignupSchema = Yup.object().shape({
 
 function ResetPassword() {
 
+    const [token, setToken] = useState();
+
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const redirectPath = queryParams.get('redirect') || '/account-info';
 
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        setToken(token);
+    }, [])
 
 
     return (
@@ -51,36 +59,28 @@ function ResetPassword() {
                                 console.log(response.data);
 
 
-                                // if (response.status === 201) {
-                                //     Swal.fire({
-                                //         title: 'Success!',
-                                //         text: 'Registered successfully',
-                                //         icon: 'success',
-                                //         showConfirmButton: false,
-                                //         timer: 1500
-                                //     })
-                                //     navigate("/login")
-                                //     console.log(response.data);
-                                // }
+                                if (response.status === 201) {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'You have updated password successfully',
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                    navigate("/login")
+                                    console.log(response.data);
+                                }
 
                             } catch (error) {
-                                // if (error.response.status === 400) {
-                                //     Swal.fire({
-                                //         title: 'Register Failed!',
-                                //         text: "Email or Phone number is already used",
-                                //         icon: 'error',
-                                //         showConfirmButton: false,
-                                //         timer: 1500
-                                //     })
-                                // } else if (error.response.status === 500) {
-                                //     Swal.fire({
-                                //         title: 'Register Failed!',
-                                //         text: "Something went wrong, please try later",
-                                //         icon: 'error',
-                                //         showConfirmButton: false,
-                                //         timer: 1500
-                                //     })
-                                // }
+
+                                Swal.fire({
+                                    title: 'Reset Failed!',
+                                    text: "Something went wrong, please try later",
+                                    icon: 'error',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+
                                 console.error('Error signing up:', error);
 
                                 // console.error('Error signing up:', error.response.data);
