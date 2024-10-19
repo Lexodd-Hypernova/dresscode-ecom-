@@ -25,13 +25,18 @@ function ForgetPassword() {
     const [notification, setNotification] = useState(""); // State for notification message
 
 
+    const handleCloseNotification = () => {
+        setNotification("")
+    }
+
+
     return (
         <div className='auth-screen'>
 
             {notification && (
                 <div className="notification">
                     <p>{notification}</p>
-                    {/* <button onClick={handleCloseNotification}>Close</button> */}
+                    <button className='btn btn-secondary' onClick={handleCloseNotification}>Close</button>
                 </div>
             )}
 
@@ -69,8 +74,9 @@ function ForgetPassword() {
                                         })
 
                                         setNotification("We've sent a password reset link to your email! Please check your inbox (and spam folder, just in case) for an email from us. It may take a few minutes to arrive. Once you receive it, click the link to reset your password. If you don’t see the email shortly, please try again or contact support for assistance.");
-                                        // router.navigate("/account-info")
-                                        // navigate(redirectPath);
+
+                                        // Clear the form fields
+                                        resetForm();
                                     }
                                 } catch (error) {
                                     console.log("error", error)

@@ -17,6 +17,7 @@ const SignupSchema = Yup.object().shape({
 function ResetPassword() {
 
     const [token, setToken] = useState();
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -36,7 +37,10 @@ function ResetPassword() {
         <div className='auth-screen'>
             <div className='auth-container'>
                 <div className='auth-inner'>
-                    <div className="sign-up-header">
+                    <Link to="/" className='auth-logo'>
+                        <img src={Logo} alt="DressCode logo" className='w-100' />
+                    </Link>
+                    <div className="sign-up-header mt-3">
                         Set a new password
                     </div>
 
@@ -103,30 +107,56 @@ function ResetPassword() {
                                 <div>
                                     <div className="">
                                         <label htmlFor="password" className="form-label form-labels">New Password</label>
-                                        <input
-                                            type="password"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.password}
-                                            className="auth-input form-control form-control-sm"
-                                            id="password"
-                                            name='password'
-                                            aria-describedby="passwordHelp" />
+
+                                        <div className='input-group'>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                value={values.password}
+                                                className="auth-input form-control form-control-sm"
+                                                id="password"
+                                                name='password'
+                                                aria-describedby="passwordHelp" />
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-secondary"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                                <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"
+                                                    }`}></i>
+                                            </button>
+                                        </div>
+
+
                                         {touched.password && errors.password ? (
                                             <p className='text-danger'>{errors.password}</p>
                                         ) : null}
                                     </div>
                                     <div className="">
                                         <label htmlFor="confirmPassword" className="form-label form-labels">Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.confirmPassword}
-                                            className="auth-input form-control form-control-sm"
-                                            id="confirmPassword"
-                                            name='confirmPassword'
-                                            aria-describedby="confirmPasswordHelp" />
+
+                                        <div className='input-group'>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                value={values.confirmPassword}
+                                                className="auth-input form-control form-control-sm"
+                                                id="confirmPassword"
+                                                name='confirmPassword'
+                                                aria-describedby="confirmPasswordHelp" />
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-secondary"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                                <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"
+                                                    }`}></i>
+                                            </button>
+                                        </div>
+
+
                                         {touched.confirmPassword && errors.confirmPassword ? (
                                             <p className='text-danger'>{errors.confirmPassword}</p>
                                         ) : null}
@@ -149,9 +179,6 @@ function ResetPassword() {
                         )}
                     </Formik>
                 </div>
-                {/* <Link to="/login" className='auth-back'>
-                    <img src="/images/auth/back-arrow.svg" alt="" />
-                </Link> */}
             </div>
             <div className='auth-banner'>
                 <div className='auth-banner-img'>
