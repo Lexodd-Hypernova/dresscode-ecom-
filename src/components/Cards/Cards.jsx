@@ -71,11 +71,11 @@ const Cards = () => {
   const handleClick = (name) => {
     console.log(name);
     navigate(`/products/${name}`)
-    // if (name === "TOGS") {
-    //   navigate("/coming-soon")
-    // } else {
-    //   navigate(`/products/${name}`)
-    // }
+    if (name === "TOGS") {
+      navigate("/all-schools")
+    } else {
+      navigate(`/products/${name}`)
+    }
   }
 
 
@@ -92,12 +92,6 @@ const Cards = () => {
                 alt={group.name}
                 className="w-100 rounded"
               />
-
-              {/* <img
-                src={group.src}
-                className="w-100 rounded"
-                alt={group.name || "Card image"}
-              /> */}
               <h3 className="card-title mt-2">{group.name}</h3>
             </div>
           ))}

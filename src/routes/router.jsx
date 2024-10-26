@@ -26,6 +26,10 @@ import RaiseQuote from "../pages/RaiseQuote";
 import QuoteSuccess from "../pages/QuoteSuccess";
 import ProductListWithFilters from "../pages/ProductListWithFilters";
 import PageNotFound from "../pages/404";
+import Schools from "../pages/Schools";
+import ProductsBySchool from "../pages/ProductsBySchool";
+import ForgetPassword from "../components/auth/ForgetPassword";
+import ResetPassword from "../components/auth/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -47,10 +51,20 @@ const router = createBrowserRouter([
       },
 
       {
+        path: "/all-schools",
+        element: <Schools />,
+      },
+
+
+      {
         path: "/products/:groupName",
         element: <ProductListWithFilters />,
       },
 
+      {
+        path: "/school-products/:schoolName",
+        element: <ProductsBySchool />,
+      },
 
       {
         path: "/:productId/:color/:productType/:subCategory/:category/:groupName",
@@ -184,6 +198,26 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      }
+    ],
+  },
+  {
+    path: "/forgot-password",
+    element: <AuthMain />,
+    children: [
+      {
+        path: "/forgot-password",
+        element: <ForgetPassword />,
+      }
+    ],
+  },
+  {
+    path: "/reset-password",
+    element: <AuthMain />,
+    children: [
+      {
+        path: "/reset-password",
+        element: <ResetPassword />,
       }
     ],
   }
