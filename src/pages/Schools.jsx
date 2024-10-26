@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DressCodeApi from '../common';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from "react-router-dom";
+import "./pages-styles/school.style.css";
 const Schools = () => {
     const navigate = useNavigate(); // Initialize navigate from react-router-dom
 
@@ -60,21 +61,20 @@ const Schools = () => {
                         </div>
                     </div>
                 ) : (
+
                     <div className="container-fluid">
-                        <div className="row gap-4">
+                        <div className="school_con">
                             {schoolNames.map((name, index) => (
-                                <div style={{
-                                    height: "30vh", backgroundColor: "#20248A",
-                                    borderRadius: "12px"
-                                }} className="rounded col-lg-4 d-flex justify-content-center align-items-center text-center text-light" role="button" key={index} onClick={() => handleClick(name)}>
-                                    <h3 className="fs-1 mt-2">{name}</h3>
+                                <div className="scl_item" role="button" key={index} onClick={() => handleClick(name)}>
+                                    <h3 className="fs-3">{name}</h3>
+                                    <button>View Products</button>
                                 </div>
                             ))}
                         </div>
                     </div>
                 )
             }
-        </section>
+        </section >
     )
 }
 

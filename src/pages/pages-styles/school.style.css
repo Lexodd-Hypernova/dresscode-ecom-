@@ -1,0 +1,71 @@
+.school_con {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5%;
+}
+
+.scl_item {
+    width: 30%;
+    margin-bottom: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    background: #20248A;
+    flex-direction: column;
+    height: 30vh;
+    border-radius: 15px;
+    transition: all 0.3s ease-in-out;
+}
+
+.scl_item h3 {
+    font-family: Inter;
+    /* letter-spacing: 0.2px; */
+    color: #fff;
+    text-align: center;
+}
+
+.scl_item button {
+    border: none;
+    background: transparent;
+    padding: 10px;
+    /* border-radius: 5px; */
+    font-family: 'Inter';
+    font-size: 14px;
+    line-height: 1;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.scl_item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .school_con {
+        justify-content: space-between;
+    }
+
+    .scl_item {
+        width: 45%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .scl_item {
+        height: 25vh;
+        width: 100%;
+    }
+
+    .school_con {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .scl_item:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: none;
+    }
+}
