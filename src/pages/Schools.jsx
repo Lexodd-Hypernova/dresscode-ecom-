@@ -61,7 +61,7 @@ const Schools = () => {
                     </div>
                 ) : (
                     <div className="container-fluid">
-                        <div className="row row-gap-4">
+                        <div className="row gap-4">
                             {schoolNames.map((name, index) => (
                                 <div style={{
                                     height: "30vh", backgroundColor: "#20248A",
