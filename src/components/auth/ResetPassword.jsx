@@ -26,6 +26,7 @@ function ResetPassword() {
 
     const [loading, setLoading] = useState(false);
 
+
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');

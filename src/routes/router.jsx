@@ -30,6 +30,7 @@ import Schools from "../pages/Schools";
 import ProductsBySchool from "../pages/ProductsBySchool";
 import ForgetPassword from "../components/auth/ForgetPassword";
 import ResetPassword from "../components/auth/ResetPassword";
+import TrumsyAuth from "../components/auth/TrumsyAuth";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,12 @@ const router = createBrowserRouter([
         path: "/all-schools",
         element: <Schools />,
       },
+
+      {
+        path: "/third",
+        element: <TrumsyAuth />,
+      },
+
 
 
       {

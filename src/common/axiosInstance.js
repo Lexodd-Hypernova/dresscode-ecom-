@@ -111,6 +111,7 @@ export const logout = () => {
     localStorage.removeItem('userName');
     localStorage.removeItem('email');
     localStorage.removeItem('phoneNumber');
+    localStorage.removeItem('authToken');
 
     // Clear refreshToken cookie
     document.cookie = 'refreshToken=; Max-Age=0; path=/'; // Clears the refreshToken cookie

@@ -60,7 +60,7 @@ const Login = () => {
             // };
 
 
-            const response = await fetch(authUrls.signInWithGoogle, {
+            const response = await fetch(`${authUrls.signInWithGoogle}/directLogin`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -77,8 +77,8 @@ const Login = () => {
                 console.log("User Data:", userData);
                 localStorage.setItem("accessToken", userData.data.accessToken);
                 localStorage.setItem("id", userData.data.userId);
-                localStorage.setItem("userName", result.user.displayName);
-                localStorage.setItem("email", result.user.email)
+                localStorage.setItem("userName", userData.data.name);
+                localStorage.setItem("email", userData.data.email);
                 Swal.fire({
                     title: 'Success!',
                     text: 'Logged in successfully',

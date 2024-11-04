@@ -53,6 +53,7 @@ export const authUrls = {
   generateAccessToken: `${baseUrl}/token/generateAccessToken`,
   forgotPassword: `${baseUrl}/user/forgot-password`,
   resetPassword: `${baseUrl}/user/reset-password`,
+  // thirdLogin: `${baseUrl}/login/redirection`
 };
 export const accountInfoApis = {
   getAccountInfo: (userId) => `${baseUrl}/user/${userId}/getUserDetails`,
