@@ -86,7 +86,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                const googleAuthRedirectPath = queryParams.get('redirect') || `/get-user-info/${localStorage.getItem("id")}`;
+                const googleAuthRedirectPath = queryParams.get('redirect') || `/`;
                 // router.navigate("/account-info")
                 navigate(googleAuthRedirectPath);
 
