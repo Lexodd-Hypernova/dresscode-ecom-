@@ -50,7 +50,7 @@ const TrumsyAuth = () => {
                     timer: 1500,
                 });
 
-                const redirectPath = `/get-user-info/${userData.data.userId}`;
+                const redirectPath = `/`;
                 setHasRedirected(true);
                 navigate(redirectPath);
             } else {
