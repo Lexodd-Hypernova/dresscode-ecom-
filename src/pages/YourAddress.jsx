@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const YourAddress = () => {
-  const { addressData, setAddressData, addAddress, loading, setLoading } = useUserContext();
+  const { addressData, setAddressData, addAddress, addressloading, setaddressLoading } = useUserContext();
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -87,7 +87,7 @@ const YourAddress = () => {
   };
 
   const deleteAddress1 = async (id) => {
-    setLoading(true)
+    setaddressLoading(true)
     try {
 
       const response = await axiosInstance.patch(accountInfoApis.deleteAddress(localStorage.getItem("id"), id),
@@ -106,12 +106,12 @@ const YourAddress = () => {
     } catch (error) {
       console.error('Error deleting address:', error);
     } finally {
-      setLoading(false)
+      setaddressLoading(false)
     }
   };
 
   const setAsDefaultAddress = async (id) => {
-    setLoading(true)
+    setaddressLoading(true)
     try {
 
       const response = await axiosInstance.patch(accountInfoApis.setAsDefaultAddress(localStorage.getItem("id"), id),
@@ -132,7 +132,7 @@ const YourAddress = () => {
     } catch (error) {
       console.error('Error setting default address:', error);
     } finally {
-      setLoading(false)
+      setaddressLoading(false)
     }
   };
 
@@ -176,7 +176,7 @@ const YourAddress = () => {
     //     Authorization: `Bearer ${token}`,
     //   },
     // };
-    setLoading(true)
+    setaddressLoading(true)
     try {
 
       const response = await axiosInstance.patch(accountInfoApis.updateAddress(localStorage.getItem("id"), id),
@@ -203,7 +203,7 @@ const YourAddress = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false)
+      setaddressLoading(false)
     }
   };
 
@@ -233,7 +233,7 @@ const YourAddress = () => {
 
         {
 
-          loading ? (
+          addressloading ? (
             <LoadingComponent></LoadingComponent>
           ) : (
             <>

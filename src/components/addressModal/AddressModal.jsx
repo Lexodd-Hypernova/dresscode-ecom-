@@ -81,10 +81,13 @@ const AddressModal = ({ FormOnSubmit, modalOpen, setModalOpen, formData, setForm
         phone: Yup.string().required('Required').matches(/^\d{10}$/, 'Phone number is not valid'),
         address: Yup.string().required('Required'),
         city: Yup.string().required('Required'),
-        pinCode: Yup.string().required('Required'),
+        pinCode: Yup.string()
+            .required('Required')
+            .matches(/^\d{6}$/, 'Pin code must be exactly 6 digits'),
         state: Yup.string().required('Required'),
         country: Yup.string().required('Required'),
     });
+
 
 
     // const formik = useFormik({

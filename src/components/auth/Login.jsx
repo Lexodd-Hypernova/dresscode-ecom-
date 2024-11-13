@@ -38,7 +38,10 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const redirectPath = queryParams.get('redirect') || '/account-info';
+    // const redirectPath = queryParams.get('redirect') || '/account-info';
+
+    const redirectPath = queryParams.get('redirect') || '/';
+
 
 
 

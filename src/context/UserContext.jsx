@@ -8,12 +8,12 @@ export const UserContextProvider = ({ children }) => {
 
     const [addressData, setAddressData] = useState([]);
 
-    const [loading, setLoading] = useState(false)
+    const [addressloading, setaddressLoading] = useState(false)
     const id = localStorage.getItem("id");
 
     const getAddressData = async () => {
 
-        setLoading(true)
+        setaddressLoading(true)
         try {
 
             const response = await axiosInstance.get(accountInfoApis.getAddress(id),
@@ -28,14 +28,14 @@ export const UserContextProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
-            setLoading(false)
+            setaddressLoading(false)
         }
     };
 
 
     const addAddress = async (formData) => {
 
-        setLoading(true)
+        setaddressLoading(true)
         try {
 
             const response = await axiosInstance.post(accountInfoApis.addAddress(id),
@@ -50,7 +50,7 @@ export const UserContextProvider = ({ children }) => {
         } catch (err) {
             console.log(err);
         } finally {
-            setLoading(false)
+            setaddressLoading(false)
         }
     };
 
@@ -61,7 +61,7 @@ export const UserContextProvider = ({ children }) => {
 
 
     return (
-        <userContext.Provider value={{ addressData, setAddressData, addAddress, id, loading, setLoading }}>
+        <userContext.Provider value={{ addressData, setAddressData, addAddress, id, addressloading, setaddressLoading }}>
             {children}
         </userContext.Provider>
     )

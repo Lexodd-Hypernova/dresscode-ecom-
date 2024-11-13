@@ -31,6 +31,7 @@ import ProductsBySchool from "../pages/ProductsBySchool";
 import ForgetPassword from "../components/auth/ForgetPassword";
 import ResetPassword from "../components/auth/ResetPassword";
 import TrumsyAuth from "../components/auth/TrumsyAuth";
+import Coupons from "../pages/Coupons";
 
 const router = createBrowserRouter([
   {
@@ -90,7 +91,7 @@ const router = createBrowserRouter([
         element:
           (
             <ProtectedRoute>
-              < RaiseQuote />
+              <RaiseQuote />
             </ProtectedRoute>
           )
       },
@@ -99,7 +100,16 @@ const router = createBrowserRouter([
         element:
           (
             <ProtectedRoute>
-              < PaymentSuccess />
+              <PaymentSuccess />
+            </ProtectedRoute>
+          )
+      },
+      {
+        path: "/coupons",
+        element:
+          (
+            <ProtectedRoute>
+              <Coupons />
             </ProtectedRoute>
           )
       },

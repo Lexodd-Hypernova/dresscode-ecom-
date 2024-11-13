@@ -30,6 +30,12 @@ const YourAccount = () => {
     history("/your-orders")
   }
 
+  const goToCoupons = () => {
+    history("/coupons")
+  }
+
+
+
   const handleLogOut = () => {
     // localStorage.removeItem('accessToken');
     // localStorage.removeItem('id');
@@ -55,7 +61,7 @@ const YourAccount = () => {
     <div className="your-account-screen">
       <div className="container-fluid">
         <span className="your-account">Your Account</span>
-        <div className="row" style={{ display: 'flex', alignContent: 'center', justifyContent: 'space-between' }}>
+        <div className="row" style={{ display: 'flex', alignContent: 'center' }}>
           <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
             <div className="info-card" onClick={goToUserInfo}>
               <div className="acc-icons">
@@ -97,6 +103,17 @@ const YourAccount = () => {
               <div>
                 <h4>Support</h4>
                 <p>24/7 customer support</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-4 col-md-6 col-sm-12 mb-4" onClick={goToCoupons}>
+            <div className="info-card">
+              <div className="acc-icons">
+                <img src="/images/accountInfo/gift-voucher.png" alt="" />
+              </div>
+              <div>
+                <h4>Coupons</h4>
+                <p>Get your coupons</p>
               </div>
             </div>
           </div>

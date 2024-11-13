@@ -152,8 +152,8 @@ const ProductDetails = () => {
     const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
     // Round the values to the nearest whole number
-    const roundedTotalAfterDiscount = Math.round(totalAfterDiscount);
-    const roundedDiscountAmount = Math.round(discountAmount);
+    const roundedTotalAfterDiscount = totalAfterDiscount;
+    const roundedDiscountAmount = discountAmount;
     setDiscountAmount(roundedDiscountAmount);
     setTotalPriceWithDiscount(roundedTotalAfterDiscount);
     setTotalPriceWithoutDiscount(totalBeforeDiscount);
@@ -417,7 +417,7 @@ const ProductDetails = () => {
             </p>
           ) : (
             <>
-              <div className="var_price my-2">
+              {/* <div className="var_price my-2">
                 MRP {Number(totalPriceWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}
               </div>
               {discountAmount > 0 && (
@@ -429,7 +429,28 @@ const ProductDetails = () => {
                 <div className="fs-5 fw-normal">
                   Price after discount: {totalPriceWithDiscount.toLocaleString('en-US', { style: "currency", currency: "INR" })}
                 </div>
-              )}
+              )} */}
+
+              <div className="pricing-section my-3 p-3 border rounded shadow-sm">
+                {/* Original Price */}
+                <div className="original-price text-muted fs-5">
+                  <span className="">
+                    MRP: {Number(totalPriceWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                  </span>
+                </div>
+
+                {/* Discounted Price */}
+                {discountAmount > 0 && (
+                  <>
+                    <div className="discount-amount text-success fs-6">
+                      <span className="fw-semibold">You Save:</span> {discountAmount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                    </div>
+                    <div className="price-after-discount fs-4 fw-bold text-primary mt-1">
+                      Price after Discount: {totalPriceWithDiscount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                    </div>
+                  </>
+                )}
+              </div>
             </>
           )}
 
