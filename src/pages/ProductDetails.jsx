@@ -214,11 +214,22 @@ const ProductDetails = () => {
       setAvailableColors(availableColorsSet);
       // console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
 
+      // const availableSizeSet = new Set(
+      //   data.productDetails.variants.flatMap((item) =>
+      //     item.variantSizes.map((size) => size.size)
+      //   )
+      // );
+
+      // Modified code to include quantity check for sizes
       const availableSizeSet = new Set(
-        data.productDetails.variants.flatMap((item) =>
-          item.variantSizes.map((size) => size.size)
+        data.productDetails.variants.flatMap((variant) =>
+          variant.variantSizes
+            .filter((size) => size.quantity > 0) // Only add sizes with quantity > 0
+            .map((size) => size.size)
         )
       );
+
+
       setAvailableSizes(availableSizeSet);
       // console.log("availableSizes Set:", availableSizeSet);
     }

@@ -38,7 +38,7 @@ const TrumsyAuth = () => {
             if (userData.message === "Success") {
                 // console.log("User Data:", userData);
                 localStorage.setItem("accessToken", userData.data.accessToken);
-                localStorage.setItem("id", userData.data.userId);
+                localStorage.setItem("id", userData.data.userId); 
                 localStorage.setItem("userName", userData.data.name);
                 localStorage.setItem("email", userData.data.email);
 
