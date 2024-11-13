@@ -50,7 +50,7 @@ const Orders = () => {
       );
 
       // const data = await response.json();
-      console.log(response.data);
+      // console.log(response.data);
       setData(response.data.orders);
       // setRaised(data.orders);
     } catch (error) {
@@ -71,7 +71,7 @@ const Orders = () => {
         }
       );
 
-      console.log("quote data", response.data);
+      // console.log("quote data", response.data);
       // setData(data.orders);
       setQuotes(response.data.quotes);
     } catch (error) {
@@ -91,7 +91,7 @@ const Orders = () => {
         }
       );
 
-      console.log("canceled data", response.data.orders);
+      // console.log("canceled data", response.data.orders);
       // setData(data.orders);
       setCanceledOrder(response.data.orders);
     } catch (error) {
@@ -245,7 +245,7 @@ const Orders = () => {
               withCredentials: true // Ensure cookies are sent with the request
             }
           );
-          console.log(response.data);
+          // console.log(response.data);
           window.location.reload()
         } catch (error) {
           console.error("Error cancelling order:", error);

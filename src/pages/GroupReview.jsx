@@ -67,7 +67,7 @@ const GroupReview = () => {
       //   comment,
       //   imgUrl: selectedImages
       // }, config)
-      console.log(res)
+      // console.log(res)
       if (res.data.message) {
         goToReviews()
       }

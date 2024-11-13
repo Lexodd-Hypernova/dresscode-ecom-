@@ -69,7 +69,7 @@ const Cards = () => {
 
 
   const handleClick = (name) => {
-    console.log(name);
+    // console.log(name);
     navigate(`/products/${name}`)
     if (name === "TOGS") {
       navigate("/all-schools")

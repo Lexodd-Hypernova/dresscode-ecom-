@@ -69,7 +69,7 @@ const YourAddress = () => {
 
 
   useEffect(() => {
-    console.log(addressData)
+    // console.log(addressData)
   }, [])
 
 
@@ -98,7 +98,7 @@ const YourAddress = () => {
 
       if (response) {
         setAddressData(addressData.filter(address => address._id !== id));
-        console.log("Address deleted successfully:", response.data);
+        // console.log("Address deleted successfully:", response.data);
         // window.location.reload()
       } else {
         console.error("Failed to delete address:", response.statusText);
@@ -192,7 +192,7 @@ const YourAddress = () => {
       //   formData, // Use formData from Formik
       //   config
       // );
-      console.log(response.data);
+      // console.log(response.data);
 
       const updatedAddresses = addressData.map(address =>
         address._id === formData._id ? formData : address

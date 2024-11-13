@@ -72,7 +72,7 @@ const Register = () => {
                                         timer: 1500
                                     })
                                     navigate("/login")
-                                    console.log(response.data);
+                                    // console.log(response.data);
                                 }
 
                             } catch (error) {

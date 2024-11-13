@@ -170,7 +170,7 @@ const ProductDetails = () => {
 
 
   useEffect(() => {
-    console.log("productId", productId);
+    // console.log("productId", productId);
     setLoading(true);
     setPriceLoading(true)
     const fetchData = async () => {
@@ -192,7 +192,7 @@ const ProductDetails = () => {
         // setActiveSize(result.productDetails.variants[0].variantSizes[0].size)
 
 
-        console.log("productAllData", result);
+        // console.log("productAllData", result);
       } catch (error) {
         console.error("Error fetching data:", error);
 
@@ -212,7 +212,7 @@ const ProductDetails = () => {
         data.available.map((item) => normalizeName(item.color.name))
       );
       setAvailableColors(availableColorsSet);
-      console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
+      // console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
 
       const availableSizeSet = new Set(
         data.productDetails.variants.flatMap((item) =>
@@ -220,7 +220,7 @@ const ProductDetails = () => {
         )
       );
       setAvailableSizes(availableSizeSet);
-      console.log("availableSizes Set:", availableSizeSet);
+      // console.log("availableSizes Set:", availableSizeSet);
     }
   }, [data]);
 
@@ -234,15 +234,15 @@ const ProductDetails = () => {
       setActiveSize("");
       setSizeError(true)
 
-      console.log(
-        "after filter variantId",
-        res.data.productDetails.variants[0].variantId
-      );
+      // console.log(
+      //   "after filter variantId",
+      //   res.data.productDetails.variants[0].variantId
+      // );
     });
   };
 
   const handleSize = (size) => {
-    console.log(size);
+    // console.log(size);
     setActiveSize(size);
     setSizeError(false);
     setCount(1);
@@ -294,14 +294,14 @@ const ProductDetails = () => {
 
 
   const updateAPI = async (quantity) => {
-    console.log("Size Error:", sizeError);
-    console.log("Active Size:", activeSize);
-    console.log("Active Color:", activeColor);
+    // console.log("Size Error:", sizeError);
+    // console.log("Active Size:", activeSize);
+    // console.log("Active Color:", activeColor);
 
     if (!sizeError && activeSize && activeColor) {
       // setLoading(true);
       setPriceLoading(true);
-      console.log("hitting in productDetails counter");
+      // console.log("hitting in productDetails counter");
       try {
 
         const response = await axios.get(
@@ -311,7 +311,7 @@ const ProductDetails = () => {
 
         updateTotalPrice(quantity);
         setStockError("")
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error updating item quantity:", error);
         setStockError(error.response?.data?.message || "Stock issue detected");

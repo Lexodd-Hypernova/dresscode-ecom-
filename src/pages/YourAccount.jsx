@@ -23,7 +23,7 @@ const YourAccount = () => {
   }
   const history = useNavigate();
   const goToAddress = () => {
-    console.log('clicked')
+    // console.log('clicked')
     history("/your-address")
   }
   const goToOrders = () => {

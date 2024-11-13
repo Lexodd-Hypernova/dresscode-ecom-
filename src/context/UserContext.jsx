@@ -24,7 +24,7 @@ export const UserContextProvider = ({ children }) => {
 
             // const result = await response.json();
             setAddressData(response.data.data);
-            console.log(response.data.data)
+            // console.log(response.data.data)
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -45,7 +45,7 @@ export const UserContextProvider = ({ children }) => {
                 }
             );
 
-            console.log(response.data.data);
+            // console.log(response.data.data);
             setAddressData((prevData) => [...prevData, response.data.data])
         } catch (err) {
             console.log(err);

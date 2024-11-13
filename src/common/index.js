@@ -45,7 +45,11 @@ const DressCodeApi = {
   },
   getInvoice: {
     url: `${baseUrl}/dashboard/print/invoice`,
+  },
+  generateThirdToken: {
+    url: `${baseUrl}/coupon/generateThirdToken`,
   }
+
 };
 export default DressCodeApi;
 

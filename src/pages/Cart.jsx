@@ -174,7 +174,7 @@ const Cart = () => {
         return item; // Return other items unchanged
       });
 
-      console.log("updatedCart after quantity update:", updatedCart);
+      // console.log("updatedCart after quantity update:", updatedCart);
 
       setCart(updatedCart);
 

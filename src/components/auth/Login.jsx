@@ -17,7 +17,7 @@ import { signInWithPopup } from "firebase/auth";
 export const refreshToken = async () => {
     try {
         const response = await axios.post(authUrls.generateAccessToken, {}, { withCredentials: true });
-        console.log("response from refreshToken func.", response)
+        // console.log("response from refreshToken func.", response)
         const newAccessToken = response.data.accessToken;
         localStorage.setItem('accessToken', newAccessToken);  // Update access token in localStorage
         return newAccessToken;
@@ -52,7 +52,7 @@ const Login = () => {
         setLoading(true);
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            console.log(result);
+            // console.log(result);
             const token = await result.user.getIdToken();
 
             // const config = {
@@ -82,6 +82,8 @@ const Login = () => {
                 localStorage.setItem("id", userData.data.userId);
                 localStorage.setItem("userName", userData.data.name);
                 localStorage.setItem("email", userData.data.email);
+                localStorage.setItem("uid", userData.data.uid);
+                localStorage.setItem("gLogin", userData.data.gLogin);
                 Swal.fire({
                     title: 'Success!',
                     text: 'Logged in successfully',
@@ -89,7 +91,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                const googleAuthRedirectPath = queryParams.get('redirect') || `/get-user-info/${localStorage.getItem("id")}`;
+                const googleAuthRedirectPath = queryParams.get('redirect') || `/`;
                 // router.navigate("/account-info")
                 navigate(googleAuthRedirectPath);
 
@@ -135,11 +137,13 @@ const Login = () => {
                                     }, { withCredentials: true });
                                     console.log(response.data);
                                     if (response.data.message === "Success") {
-                                        localStorage.setItem("accessToken", response.data.data.accessToken)
-                                        localStorage.setItem("id", response.data.data.userId)
-                                        localStorage.setItem("userName", response.data.data.name)
-                                        localStorage.setItem("phoneNumber", response.data.data.phoneNumber)
-                                        localStorage.setItem("email", response.data.data.email)
+                                        localStorage.setItem("accessToken", response.data.data.accessToken);
+                                        localStorage.setItem("id", response.data.data.userId);
+                                        localStorage.setItem("userName", response.data.data.name);
+                                        localStorage.setItem("phoneNumber", response.data.data.phoneNumber);
+                                        localStorage.setItem("email", response.data.data.email);
+                                        localStorage.setItem("uid", response.data.data.uid);
+                                        localStorage.setItem("gLogin", response.data.data.gLogin);
                                         Swal.fire({
                                             title: 'Success!',
                                             text: 'Logged in successfully',

@@ -36,7 +36,7 @@ const TrumsyAuth = () => {
             const userData = await response.json();
 
             if (userData.message === "Success") {
-                console.log("User Data:", userData);
+                // console.log("User Data:", userData);
                 localStorage.setItem("accessToken", userData.data.accessToken);
                 localStorage.setItem("id", userData.data.userId);
                 localStorage.setItem("userName", userData.data.name);
@@ -50,7 +50,7 @@ const TrumsyAuth = () => {
                     timer: 1500,
                 });
 
-                const redirectPath = `/`;
+                const redirectPath = `/coupons`;
                 setHasRedirected(true);
                 navigate(redirectPath);
             } else {

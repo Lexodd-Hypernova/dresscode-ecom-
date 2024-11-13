@@ -95,7 +95,7 @@ const Billing = () => {
           }
         );
         setCoupons(response.data.couponsApplicableToAllProducts);
-        console.log("active coupons", response.data.coupons)
+        // console.log("active coupons", response.data.coupons)
       } catch (error) {
         console.error('Failed to fetch coupons:', error);
       }
@@ -169,7 +169,7 @@ const Billing = () => {
         }
       );
 
-      console.log(result);
+      // console.log(result);
       fetchCart();
     } catch (error) {
       console.error(error);
@@ -188,7 +188,7 @@ const Billing = () => {
       // }
 
 
-      console.log("Creating payment order with amount:", amountInPaise);
+      // console.log("Creating payment order with amount:", amountInPaise);
 
       // Step 1: Create a payment order on your server
 
@@ -235,7 +235,7 @@ const Billing = () => {
         }
       );
 
-      console.log("Order data received:", orderData);
+      // console.log("Order data received:", orderData);
 
 
       if (!orderData.success) {
@@ -282,7 +282,7 @@ const Billing = () => {
 
             const verifyData = await responseData.data;
 
-            console.log("Payment verification response:", verifyData);
+            // console.log("Payment verification response:", verifyData);
 
 
             if (verifyData.success) {
@@ -295,7 +295,7 @@ const Billing = () => {
               })
               if (type === "cart") {
                 const productIds = orderedItems.map((item) => item._id);
-                console.log("productIds of cart", productIds);
+                // console.log("productIds of cart", productIds);
 
                 removeCartItems(productIds);
 
@@ -334,7 +334,7 @@ const Billing = () => {
         },
       };
 
-      console.log("Razorpay options:", options);
+      // console.log("Razorpay options:", options);
 
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (response) {

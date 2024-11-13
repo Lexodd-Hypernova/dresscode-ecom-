@@ -40,8 +40,8 @@ const RaiseQuote = () => {
 
     const quoteItem = product[0];
 
-    console.log(product, "product");
-    console.log(totalAmount, "totalAmount");
+    // console.log(product, "product");
+    // console.log(totalAmount, "totalAmount");
 
 
 
@@ -79,7 +79,7 @@ const RaiseQuote = () => {
                             }
                             validationSchema={QuoteSchema}
                             onSubmit={async (values) => {
-                                console.log(values);
+                                // console.log(values);
                                 setLoading(true)
                                 try {
 
@@ -121,7 +121,7 @@ const RaiseQuote = () => {
                                             timer: 1500
                                         })
                                         navigate("/quote-success")
-                                        console.log(response.data);
+                                        // console.log(response.data);
                                     }
 
                                 } catch (error) {

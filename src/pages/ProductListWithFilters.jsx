@@ -46,12 +46,12 @@ const ProductListWithFilters = () => {
                 setAllProducts(filteredProductData); // Store filtered products
                 setFilteredProducts(filteredProductData); // Initially show filtered products
 
-                console.log("filteredProductData", filteredProductData);
+                // console.log("filteredProductData", filteredProductData);
 
                 // Fetch filters
                 const filterResponse = await axios.get(shoppingInfoApis.getFiltersByGroup(groupName));
                 setFilterOptions(filterResponse.data); // Store filter options
-                console.log("filterResponse", filterResponse.data);
+                // console.log("filterResponse", filterResponse.data);
             } catch (error) {
                 console.error("Error fetching data", error);
             } finally {
