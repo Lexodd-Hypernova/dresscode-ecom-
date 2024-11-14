@@ -152,8 +152,8 @@ const ProductDetails = () => {
     const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
     // Round the values to the nearest whole number
-    const roundedTotalAfterDiscount = Math.round(totalAfterDiscount);
-    const roundedDiscountAmount = Math.round(discountAmount);
+    const roundedTotalAfterDiscount = totalAfterDiscount;
+    const roundedDiscountAmount = discountAmount;
     setDiscountAmount(roundedDiscountAmount);
     setTotalPriceWithDiscount(roundedTotalAfterDiscount);
     setTotalPriceWithoutDiscount(totalBeforeDiscount);
@@ -170,7 +170,7 @@ const ProductDetails = () => {
 
 
   useEffect(() => {
-    console.log("productId", productId);
+    // console.log("productId", productId);
     setLoading(true);
     setPriceLoading(true)
     const fetchData = async () => {
@@ -192,7 +192,7 @@ const ProductDetails = () => {
         // setActiveSize(result.productDetails.variants[0].variantSizes[0].size)
 
 
-        console.log("productAllData", result);
+        // console.log("productAllData", result);
       } catch (error) {
         console.error("Error fetching data:", error);
 
@@ -212,15 +212,26 @@ const ProductDetails = () => {
         data.available.map((item) => normalizeName(item.color.name))
       );
       setAvailableColors(availableColorsSet);
-      console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
+      // console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
 
+      // const availableSizeSet = new Set(
+      //   data.productDetails.variants.flatMap((item) =>
+      //     item.variantSizes.map((size) => size.size)
+      //   )
+      // );
+
+      // Modified code to include quantity check for sizes
       const availableSizeSet = new Set(
-        data.productDetails.variants.flatMap((item) =>
-          item.variantSizes.map((size) => size.size)
+        data.productDetails.variants.flatMap((variant) =>
+          variant.variantSizes
+            .filter((size) => size.quantity > 0) // Only add sizes with quantity > 0
+            .map((size) => size.size)
         )
       );
+
+
       setAvailableSizes(availableSizeSet);
-      console.log("availableSizes Set:", availableSizeSet);
+      // console.log("availableSizes Set:", availableSizeSet);
     }
   }, [data]);
 
@@ -234,15 +245,15 @@ const ProductDetails = () => {
       setActiveSize("");
       setSizeError(true)
 
-      console.log(
-        "after filter variantId",
-        res.data.productDetails.variants[0].variantId
-      );
+      // console.log(
+      //   "after filter variantId",
+      //   res.data.productDetails.variants[0].variantId
+      // );
     });
   };
 
   const handleSize = (size) => {
-    console.log(size);
+    // console.log(size);
     setActiveSize(size);
     setSizeError(false);
     setCount(1);
@@ -294,14 +305,14 @@ const ProductDetails = () => {
 
 
   const updateAPI = async (quantity) => {
-    console.log("Size Error:", sizeError);
-    console.log("Active Size:", activeSize);
-    console.log("Active Color:", activeColor);
+    // console.log("Size Error:", sizeError);
+    // console.log("Active Size:", activeSize);
+    // console.log("Active Color:", activeColor);
 
     if (!sizeError && activeSize && activeColor) {
       // setLoading(true);
       setPriceLoading(true);
-      console.log("hitting in productDetails counter");
+      // console.log("hitting in productDetails counter");
       try {
 
         const response = await axios.get(
@@ -311,7 +322,7 @@ const ProductDetails = () => {
 
         updateTotalPrice(quantity);
         setStockError("")
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error updating item quantity:", error);
         setStockError(error.response?.data?.message || "Stock issue detected");
@@ -417,7 +428,7 @@ const ProductDetails = () => {
             </p>
           ) : (
             <>
-              <div className="var_price my-2">
+              {/* <div className="var_price my-2">
                 MRP {Number(totalPriceWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}
               </div>
               {discountAmount > 0 && (
@@ -429,7 +440,28 @@ const ProductDetails = () => {
                 <div className="fs-5 fw-normal">
                   Price after discount: {totalPriceWithDiscount.toLocaleString('en-US', { style: "currency", currency: "INR" })}
                 </div>
-              )}
+              )} */}
+
+              <div className="pricing-section my-3 p-3 border rounded shadow-sm">
+                {/* Original Price */}
+                <div className="original-price text-muted fs-5">
+                  <span className="">
+                    MRP: {Number(totalPriceWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                  </span>
+                </div>
+
+                {/* Discounted Price */}
+                {discountAmount > 0 && (
+                  <>
+                    <div className="discount-amount text-success fs-6">
+                      <span className="fw-semibold">You Save:</span> {discountAmount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                    </div>
+                    <div className="price-after-discount fs-4 fw-bold text-primary mt-1">
+                      Price after Discount: {totalPriceWithDiscount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                    </div>
+                  </>
+                )}
+              </div>
             </>
           )}
 

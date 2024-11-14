@@ -54,14 +54,14 @@ function ResetPassword() {
                         }
                         validationSchema={SignupSchema}
                         onSubmit={async (values) => {
-                            console.log(values)
+                            // console.log(values)
                             setLoading(true)
                             try {
                                 const response = await axios.post(authUrls.resetPassword, {
                                     token: token,
                                     newPassword: values.password
                                 });
-                                console.log(response.data);
+                                // console.log(response.data);
 
 
                                 if (response.status === 201) {
@@ -73,7 +73,7 @@ function ResetPassword() {
                                         timer: 1500
                                     })
                                     navigate("/login")
-                                    console.log(response.data);
+                                    // console.log(response.data);
                                 }
 
                             } catch (error) {

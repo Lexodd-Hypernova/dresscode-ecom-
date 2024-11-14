@@ -4,9 +4,11 @@ import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../common/components/LoadingComponent";
 import { shoppingInfoApis } from "../common";
+import DressCodeApi from "../common";
 import axiosInstance from "../common/axiosInstance";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import axios from "axios";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
@@ -48,7 +50,7 @@ const Orders = () => {
       );
 
       // const data = await response.json();
-      console.log(response.data);
+      // console.log(response.data);
       setData(response.data.orders);
       // setRaised(data.orders);
     } catch (error) {
@@ -69,7 +71,7 @@ const Orders = () => {
         }
       );
 
-      console.log("quote data", response.data);
+      // console.log("quote data", response.data);
       // setData(data.orders);
       setQuotes(response.data.quotes);
     } catch (error) {
@@ -89,7 +91,7 @@ const Orders = () => {
         }
       );
 
-      console.log("canceled data", response.data.orders);
+      // console.log("canceled data", response.data.orders);
       // setData(data.orders);
       setCanceledOrder(response.data.orders);
     } catch (error) {
@@ -126,6 +128,15 @@ const Orders = () => {
       .replace(/ /g, '-');
     return formattedDate;
   }
+
+  const downloadFile = (url) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = url.split('/').pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
 
   const handleTrackPackage = async (awbCode, orderId) => {
@@ -172,6 +183,30 @@ const Orders = () => {
   };
 
 
+  const downloadInvoice = async (shiprocket_order_id) => {
+    try {
+      const token = import.meta.env.VITE_TRACK_TOKEN;
+      const response = await axios.post(DressCodeApi.getInvoice.url, {
+        ids: [shiprocket_order_id],
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const { is_invoice_created, invoice_url } = response.data;
+      if (is_invoice_created) {
+        downloadFile(invoice_url); // Trigger the download immediately
+      } else {
+        alert("Invoice creation failed.");
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   const cancelOrder = async (orderId) => {
 
@@ -210,7 +245,7 @@ const Orders = () => {
               withCredentials: true // Ensure cookies are sent with the request
             }
           );
-          console.log(response.data);
+          // console.log(response.data);
           window.location.reload()
         } catch (error) {
           console.error("Error cancelling order:", error);
@@ -279,8 +314,18 @@ const Orders = () => {
                         <div className="order_outer">
 
                           <div className="pr_track-outer">
+
+
                             <div className="pr_track">
-                              <button className="btn btn-info" onClick={() => handleTrackPackage(val.shiprocket_awb_code, val.orderId)}>
+                              {val.shiprocket_order_id !== null && (
+                                <button className="btn btn-secondary" onClick={() => downloadInvoice(val.shiprocket_order_id)}>
+                                  Download Invoice
+                                </button>
+                              )}
+                            </div>
+
+                            <div className="pr_track">
+                              <button className="btn btn-primary" onClick={() => handleTrackPackage(val.shiprocket_awb_code, val.orderId)}>
                                 Track Package
                               </button>
 
@@ -448,7 +493,7 @@ const Orders = () => {
                           <div className="pr_track-outer">
                             <h5 className="fs-5">Refund payment status:</h5>
                             <div className="badge bg-primary text-wrap">
-                            {val.refund_payment_status}
+                              {val.refund_payment_status}
                             </div>
                           </div>
                           {

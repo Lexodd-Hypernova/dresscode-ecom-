@@ -33,7 +33,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
 
   const updateAPI = async (quantity) => {
     setLoading(true);
-    console.log("hitting in counter");
+    // console.log("hitting in counter");
     try {
 
       const response = await axiosInstance.patch(shoppingInfoApis.handleItemsCount(userId, cartItemId),
@@ -53,7 +53,7 @@ const Counter = ({ initialCount, cartItemId, price, onUpdateQuantity }) => {
       onUpdateQuantity(quantity, cartItemId); // Keep this item checked
       setCounterError(); // Clear any previous errors
 
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error updating item quantity:", error);
       setCount(1)

@@ -20,6 +20,7 @@ const Cart = () => {
   const { cart, removeFromCart, setCart, loading, handleCheckboxChange } = useCart();
   const { addToWishList } = useWhishList();
 
+
   // useEffect(() => {
   //   if (!loading) {
   //     const updatedCart = cart.map((item) => ({
@@ -28,28 +29,32 @@ const Cart = () => {
   //     }));
 
   //     setCart(updatedCart);
+
+  //     // Only calculate for checked items
   //     calculateBagTotal(updatedCart);
-  //     calculateInitialProductTotals(updatedCart);
   //     calculateTotalCartAmountWithoutDiscount(updatedCart);
+  //     calculateInitialProductTotals(updatedCart);
   //   }
-  // }, [loading]);
+  // }, [loading, cart]);  // Include cart dependency if cart changes dynamically
 
 
   useEffect(() => {
     if (!loading) {
       const updatedCart = cart.map((item) => ({
         ...item,
-        checked: item.checked ?? true, // Keep the existing checked state or set it to true initially
+        checked: item.checked ?? true, // Set initial checked state if not already set
       }));
 
       setCart(updatedCart);
-
-      // Only calculate for checked items
-      calculateBagTotal(updatedCart);
-      calculateTotalCartAmountWithoutDiscount(updatedCart);
-      calculateInitialProductTotals(updatedCart);
     }
-  }, [loading, cart]);  // Include cart dependency if cart changes dynamically
+  }, [loading]);  // Trigger only on loading change
+
+  useEffect(() => {
+    // Calculate totals whenever cart is updated
+    calculateBagTotal(cart);
+    calculateTotalCartAmountWithoutDiscount(cart);
+    calculateInitialProductTotals(cart);
+  }, [cart]);  // Trigger on cart change only
 
 
 
@@ -82,7 +87,7 @@ const Cart = () => {
     const discountPercentage = getDiscountPercentage(quantity);
 
     // Calculate total before discount
-    const totalBeforeDiscount = Math.round(quantity * price);
+    const totalBeforeDiscount = quantity * price;
 
     // Calculate discount amount
     const discountAmount = (totalBeforeDiscount * discountPercentage) / 100;
@@ -91,8 +96,8 @@ const Cart = () => {
     const totalAfterDiscount = totalBeforeDiscount - discountAmount;
 
     // Round the values to the nearest whole number
-    const roundedTotalAfterDiscount = Math.round(totalAfterDiscount);
-    const roundedDiscountAmount = Math.round(discountAmount);
+    const roundedTotalAfterDiscount = totalAfterDiscount;
+    const roundedDiscountAmount = discountAmount;
 
     // Update product totals with discount information
     setProductTotal((prevTotals) => ({
@@ -126,8 +131,8 @@ const Cart = () => {
     });
 
     // Round the totals to the nearest whole number
-    setBagTotal(Math.round(totalPriceAfterDiscount));
-    setTotalDiscount(Math.round(totalDiscount)); // You can store total discount in state
+    setBagTotal(totalPriceAfterDiscount);
+    setTotalDiscount(totalDiscount); // You can store total discount in state
   };
 
 
@@ -151,7 +156,7 @@ const Cart = () => {
       return acc;
     }, 0);
 
-    setTotalCartAmountWithoutDiscount(Math.round(totalAmountWithoutDiscount));
+    setTotalCartAmountWithoutDiscount(totalAmountWithoutDiscount);
   };
 
 
@@ -169,7 +174,7 @@ const Cart = () => {
         return item; // Return other items unchanged
       });
 
-      console.log("updatedCart after quantity update:", updatedCart);
+      // console.log("updatedCart after quantity update:", updatedCart);
 
       setCart(updatedCart);
 
@@ -240,7 +245,6 @@ const Cart = () => {
                 <div className="p_outer">
                   <div className="p_img">
                     <img
-                      // src="https://t4.ftcdn.net/jpg/02/44/43/69/360_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg"
                       src={item.imgUrl}
                       alt={item.group}
                       className="w-100"
@@ -248,18 +252,41 @@ const Cart = () => {
                   </div>
                   <div className="p_desc">
                     <div className="p_name">
-                      {item.color.name} {item.productDetails.productType}
+                      <h5 className="text-truncate">{item.color.name} {item.productDetails.productType}</h5>
+                      {/* {item.color.name} {item.productDetails.productType} */}
                     </div>
-                    <div className="p_act">
-                      <span style={{ cursor: "pointer" }} onClick={() => removeFromCart(item._id)}>Delete</span>{" "}
-                      <span style={{ cursor: "pointer" }} onClick={() => handleWishList(item)}>
+                    {/* p_act */}
+                    <div className=" d-flex justify-content-start align-items-center gap-3">
+
+                      <button
+                        onClick={() => removeFromCart(item._id)}
+                        className="btn btn-sm btn-danger d-flex align-items-center gap-2"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <i className="fa fa-trash"></i> Delete
+                      </button>
+
+                      <button
+                        onClick={() => handleWishList(item)}
+                        className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <i className="fa-regular fa-heart"></i> Move to Wishlist
+                      </button>
+
+
+                      {/* <span style={{ cursor: "pointer" }} onClick={() => removeFromCart(item._id)}>Delete</span>{" "} */}
+                      {/* <span style={{ cursor: "pointer" }} onClick={() => handleWishList(item)}>
                         <i className="fa-regular fa-heart"></i> Move to wishlist
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
 
-                <div className="p_size">Size: {item.size}</div>
+                {/* <div className="p_size">Size: {item.size}</div> */}
+                <div className="p_size mt-2">
+                  <span className="badge bg-secondary">{`Size: ${item.size}`}</span>
+                </div>
 
                 {/* middle */}
                 <div className="p_counter">
@@ -270,25 +297,49 @@ const Cart = () => {
                     onUpdateQuantity={updateItemQuantity}
                   />
                   <div className="p_price">
-                    Rs. {productTotal[item._id]?.totalBeforeDiscount}
+                    {/* <div className="text-muted fs-6">
+                      Price per unit ₹{item.productDetails.price}
+                    </div> */}
+
+                    <span className="text-muted fs-6">
+                      MRP ₹{productTotal[item._id]?.totalBeforeDiscount}
+                    </span>
+
                     {productTotal[item._id]?.discountAmount > 0 && (
-                      <div className="p_discount">
-                        Discount: ₹{productTotal[item._id]?.discountAmount}
+                      <div className="p_discount text-success fw-semibold">
+                        You save: ₹{productTotal[item._id]?.discountAmount}
+                      </div>
+                    )}
+                    {productTotal[item._id]?.discountAmount > 0 && (
+                      <div className="p_discount fs-6 text-primary">
+                        Price after discount: ₹{productTotal[item._id]?.totalAfterDiscount}
                       </div>
                     )}
                   </div>
                 </div>
 
+
                 <div className="logo_detail">
                   <div className="p_logo">
-                    <div>Logo</div>
+                    <div className="fw-bold">Logo</div>
                     <div className="logo_f">
-                      <img src={item.logoUrl} className="w-100" alt="" />
+                      {item.logoUrl ? (
+                        <img
+                          src={item.logoUrl}
+                          className="img-fluid rounded-3"
+                          alt="Logo"
+                          style={{ maxHeight: '100px', objectFit: 'contain' }}
+                        />
+                      ) : (
+                        <span className="text-muted">Not Provided</span>
+                      )}
                     </div>
                   </div>
                   <div className="p_logo-pos">
-                    <div>Logo placement</div>
-                    <div className="lg_ttl">{item.logoPosition}</div>
+                    <div className="fw-bold">Logo placement</div>
+                    <div className="lg_ttl">
+                      {item.logoPosition ? item.logoPosition : <span className="text-muted">Not Provided</span>}
+                    </div>
                   </div>
                 </div>
 
@@ -307,9 +358,46 @@ const Cart = () => {
               </div>
             ))}
 
-            <div className="cart_total">
+
+            <div
+              className="cart_total p-4 rounded shadow-sm mt-3"
+              style={{ border: "1px solid #ddd", maxWidth: "400px", margin: "0 auto", backgroundColor: "#fdfdfd" }}
+            >
+              {/* <h5 className="text-primary mb-3">Order Summary</h5> */}
+
+              <div className="cart_discount d-flex justify-content-between align-items-center mb-2">
+                <span className="text-muted">Total Discount:</span>
+                <span className="fs-5 fw-semibold text-success">{`₹${totalDiscount}`}</span>
+              </div>
+
+              <div className="cart_amt d-flex justify-content-between align-items-center mb-4">
+                <span className="text-muted">Bag Total (after discount):</span>
+                <span className="fs-5 fw-semibold text-dark">{`₹${bagTotal}`}</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleProceedToShipping}
+                className={`btn btn-primary w-100 ${bagTotal === 0 ? "disabled" : ""}`}
+                style={{
+                  padding: "12px",
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  borderRadius: "8px",
+                  transition: "background-color 0.3s ease",
+                }}
+                disabled={bagTotal === 0} // Adds native button disable functionality
+              >
+                PROCEED TO SHIPPING
+              </button>
+            </div>
+
+
+
+
+            {/* <div className="cart_total">
               <div className="cart_discount">
-                {`Total Discount: ₹${totalDiscount}`} {/* Total discount state */}
+                {`Total Discount: ₹${totalDiscount}`} 
               </div>
               <div className="cart_amt">
                 {`Bag total (after discount): ₹${bagTotal}`}
@@ -321,7 +409,7 @@ const Cart = () => {
               >
                 PROCEED TO SHIPPING
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

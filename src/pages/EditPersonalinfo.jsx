@@ -45,7 +45,7 @@ const EditPersonalinfo = () => {
           withCredentials: true // Ensure cookies are sent with the request
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setUserData(response.data.userDetails);
       return response.data;
 
@@ -99,7 +99,7 @@ const EditPersonalinfo = () => {
               withCredentials: true // Ensure cookies are sent with the request
             },
           );
-          console.log(response.data);
+          // console.log(response.data);
         } catch (error) {
           console.error("Error updating account info:", error);
         }

@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const YourAddress = () => {
-  const { addressData, setAddressData, addAddress, loading, setLoading } = useUserContext();
+  const { addressData, setAddressData, addAddress, addressloading, setaddressLoading } = useUserContext();
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -69,7 +69,7 @@ const YourAddress = () => {
 
 
   useEffect(() => {
-    console.log(addressData)
+    // console.log(addressData)
   }, [])
 
 
@@ -87,7 +87,7 @@ const YourAddress = () => {
   };
 
   const deleteAddress1 = async (id) => {
-    setLoading(true)
+    setaddressLoading(true)
     try {
 
       const response = await axiosInstance.patch(accountInfoApis.deleteAddress(localStorage.getItem("id"), id),
@@ -98,7 +98,7 @@ const YourAddress = () => {
 
       if (response) {
         setAddressData(addressData.filter(address => address._id !== id));
-        console.log("Address deleted successfully:", response.data);
+        // console.log("Address deleted successfully:", response.data);
         // window.location.reload()
       } else {
         console.error("Failed to delete address:", response.statusText);
@@ -106,12 +106,12 @@ const YourAddress = () => {
     } catch (error) {
       console.error('Error deleting address:', error);
     } finally {
-      setLoading(false)
+      setaddressLoading(false)
     }
   };
 
   const setAsDefaultAddress = async (id) => {
-    setLoading(true)
+    setaddressLoading(true)
     try {
 
       const response = await axiosInstance.patch(accountInfoApis.setAsDefaultAddress(localStorage.getItem("id"), id),
@@ -132,7 +132,7 @@ const YourAddress = () => {
     } catch (error) {
       console.error('Error setting default address:', error);
     } finally {
-      setLoading(false)
+      setaddressLoading(false)
     }
   };
 
@@ -176,7 +176,7 @@ const YourAddress = () => {
     //     Authorization: `Bearer ${token}`,
     //   },
     // };
-    setLoading(true)
+    setaddressLoading(true)
     try {
 
       const response = await axiosInstance.patch(accountInfoApis.updateAddress(localStorage.getItem("id"), id),
@@ -192,7 +192,7 @@ const YourAddress = () => {
       //   formData, // Use formData from Formik
       //   config
       // );
-      console.log(response.data);
+      // console.log(response.data);
 
       const updatedAddresses = addressData.map(address =>
         address._id === formData._id ? formData : address
@@ -203,7 +203,7 @@ const YourAddress = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false)
+      setaddressLoading(false)
     }
   };
 
@@ -233,7 +233,7 @@ const YourAddress = () => {
 
         {
 
-          loading ? (
+          addressloading ? (
             <LoadingComponent></LoadingComponent>
           ) : (
             <>

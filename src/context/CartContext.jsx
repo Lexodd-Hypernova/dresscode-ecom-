@@ -29,7 +29,7 @@ export const CartProvider = ({ children }) => {
       );
 
       setCart(data.cartItems);
-      console.log(data.cartItems);
+      // console.log(data.cartItems);
     } catch (error) {
       console.error("Error fetching the cart:", error);
     } finally {
@@ -68,7 +68,7 @@ export const CartProvider = ({ children }) => {
           }
         );
 
-        console.log("response from addToCart", response)
+        // console.log("response from addToCart", response)
 
         // const result = await response.json();
         const updatedItem = response.data.cartItem;
@@ -89,8 +89,8 @@ export const CartProvider = ({ children }) => {
 
 
   const removeFromCart = async (productId) => {
-    console.log("userId", userId);
-    console.log("productId", productId);
+    // console.log("userId", userId);
+    // console.log("productId", productId);
     try {
 
       const res = await axiosInstance.delete(shoppingInfoApis.deleteCartItem(userId, productId),
@@ -99,7 +99,7 @@ export const CartProvider = ({ children }) => {
         }
       );
 
-      console.log(res.data);
+      // console.log(res.data);
       fetchCart();
     } catch (error) {
       console.log(error);
@@ -130,7 +130,7 @@ export const CartProvider = ({ children }) => {
       );
 
       setCart(updatedCart);
-      console.log("updatedCart in handleCheckboxChange", updatedCart)
+      // console.log("updatedCart in handleCheckboxChange", updatedCart)
 
     } catch (error) {
       console.error("Error updating checked state:", error);

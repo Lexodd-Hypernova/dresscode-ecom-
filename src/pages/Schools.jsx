@@ -15,7 +15,7 @@ const Schools = () => {
         setLoading(true)
         try {
             const response = await axios.get(DressCodeApi.getSchoolNames.url);
-            console.log("school response", response.data);
+            // console.log("school response", response.data);
             setSchoolNames(response.data)
         } catch (error) {
             console.log(error)
@@ -31,7 +31,7 @@ const Schools = () => {
 
 
     const handleClick = (name) => {
-        console.log(name);
+        // console.log(name);
         navigate(`/school-products/${name}`)
     }
 

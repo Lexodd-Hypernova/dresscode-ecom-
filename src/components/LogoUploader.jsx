@@ -184,7 +184,7 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
             .then((result) => {
 
                 if (result.status === "success") {
-                    console.log(result);
+                    // console.log(result);
                     let logoURL = result.imgURL;
                     setImageUrl(logoURL);
                     setUploading(false);
@@ -204,7 +204,7 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
     const handlePlacementChange = (event) => {
         let logoPosition = event.target.value;
         setLogoPlacement(logoPosition);
-        console.log("logoPosition", logoPosition);
+        // console.log("logoPosition", logoPosition);
         sessionStorage.setItem('logoPosition', logoPosition)
     };
 

@@ -22,7 +22,7 @@ export const WishListProvider = ({ children }) => {
                 }
             );
 
-            console.log(res.data.Wishlist);
+            // console.log(res.data.Wishlist);
             setWishList(res.data.Wishlist)
         } catch (error) {
             console.log(error)
@@ -49,7 +49,7 @@ export const WishListProvider = ({ children }) => {
                     withCredentials: true // Ensure cookies are sent with the request
                 }
             );
-            console.log(res);
+            // console.log(res);
             const data = await res.data.wishlistItem;
             setWishList((prevList) => [...prevList, data])
 
@@ -63,7 +63,7 @@ export const WishListProvider = ({ children }) => {
                 })
             }
 
-            console.log(data)
+            // console.log(data)
 
 
         } catch (error) {
@@ -92,7 +92,7 @@ export const WishListProvider = ({ children }) => {
             );
 
             getWishList();
-            console.log(res.data)
+            // console.log(res.data)
         } catch (error) {
             console.error(error)
         } finally {
