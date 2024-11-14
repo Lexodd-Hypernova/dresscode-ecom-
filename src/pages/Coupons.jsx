@@ -62,7 +62,7 @@ const Coupons = () => {
                 // console.log("Token generated successfully!");
 
                 // Smoothly redirect to the URL with token
-                const redirectUrl = `https://offers.dress-code.in/third?token=${token}`;
+                const redirectUrl = `https://offers.dress-code.in/64589430-a974-438a-b09d-8ab6ea344ca3/auth/login-third?token=${token}`;
                 setTimeout(() => {
                     window.location.href = redirectUrl;
                 }, 100); // Add a short delay for smoothness if needed
