@@ -50,7 +50,9 @@ const TrumsyAuth = () => {
                     timer: 1500,
                 });
 
+
                 const redirectPath = `/coupons`;
+
                 setHasRedirected(true);
                 navigate(redirectPath);
             } else {
