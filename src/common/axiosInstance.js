@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 const axiosInstance = axios.create({
 
     // testing
-    baseURL: 'https://dresscode-updated.onrender.com',
+    // baseURL: 'https://dresscode-updated.onrender.com',
+
+    const baseUrl = "https://dresscode-bck-final.onrender.com";
 
     // production
     // baseURL: 'https://dresscode-bck.onrender.com',
