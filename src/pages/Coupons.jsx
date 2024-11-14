@@ -56,7 +56,7 @@ const Coupons = () => {
             });
 
             // Check if token is received
-            // const token = tokenRes.data.token; // Adjust according to your actual response structure
+            const token = tokenRes.data.token; // Adjust according to your actual response structure
             if (token) {
                 // Show success message
                 // console.log("Token generated successfully!");
