@@ -109,7 +109,8 @@ const YourAccount = () => {
           <div className="col-lg-4 col-md-6 col-sm-12 mb-4" onClick={goToCoupons}>
             <div className="info-card">
               <div className="acc-icons">
-                <img src="/images/accountInfo/gift-voucher.png" alt="" />
+              <img src="/images/accountInfo/gift-voucher.png" alt="" style="width: 126px; height: 118px;" />
+
               </div>
               <div>
                 <h4>Coupons</h4>
