@@ -1,11 +1,7 @@
-// testing api
+// testing
 // const baseUrl = "https://dresscode-updated.onrender.com";
 
-
-
-// production api
-// const baseUrl = "https://dresscode-bck.onrender.com";
-
+// production
 const baseUrl = "https://dresscode-bck-final.onrender.com";
 
 
