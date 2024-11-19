@@ -28,6 +28,7 @@ const Billing = () => {
 
   const [couponloading, setcouponLoading] = useState(false);
   const [coupons, setCoupons] = useState([]);
+  const [couponAmount, setCouponAmount] = useState();
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -129,8 +130,17 @@ const Billing = () => {
   const handleApplyCoupon = () => {
     if (!selectedCoupon) return;
 
+    // Calculate the discount amount
+    const discountAmount = (originalTotalPrice * selectedCoupon.discountPercentage) / 100;
+
     // Apply discount based on the original total price
-    const discountedTotal = originalTotalPrice - (originalTotalPrice * selectedCoupon.discountPercentage) / 100;
+    // const discountedTotal = originalTotalPrice - (originalTotalPrice * selectedCoupon.discountPercentage) / 100;
+
+    // Calculate the discounted total price
+    const discountedTotal = originalTotalPrice - discountAmount;
+
+    setCouponAmount(discountAmount);
+
     setTotalPriceAfterDiscount(discountedTotal);
     setAppliedCoupon(selectedCoupon);
     setShowModal(false);
@@ -211,7 +221,7 @@ const Billing = () => {
       }
       else if (type === "buyNow") {
         raw = JSON.stringify({
-          products: product.map((item) => ({  
+          products: product.map((item) => ({
             group: item.group,
             productId: item.productId,
             color: item.color,
@@ -821,10 +831,20 @@ const Billing = () => {
                         <div
                           className="d-flex justify-content-between align-items-center p-2 border rounded cursor-pointer"
                           onClick={() => setShowModal(true)}
-                          style={{ color: appliedCoupon ? "#28a745" : "#007bff", borderColor: appliedCoupon ? "#28a745" : "#007bff" }}
+                          style={{ color: appliedCoupon ? "#28a745" : "#007bff", cursor: "pointer", borderColor: appliedCoupon ? "#28a745" : "#007bff" }}
                         >
                           <span className="fs-6 fw-semibold">
-                            {appliedCoupon ? `Applied Coupon: ${appliedCoupon.couponCode}` : "Apply Coupon"}
+                            {appliedCoupon ? (
+                              <>
+                                <span className="text-success">Coupon Applied: </span>
+                                <strong>{appliedCoupon.couponCode}</strong>
+                                <span> ({appliedCoupon.discountPercentage}%)</span><br></br>
+                                <span> - You saved </span>
+                                <strong>₹{couponAmount.toFixed(2)}</strong>
+                              </>
+                            ) : (
+                              <span className="text-primary">Apply coupon</span>
+                            )}
                           </span>
                           <i className="fa-solid fa-arrow-right"></i>
                         </div>
