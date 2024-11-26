@@ -24,15 +24,15 @@ const groups = [
   // },
   {
     name: "ELITE",
-    src: "images/Elite.png"
+    src: "images/Elite.webp"
   },
   {
     name: "HEAL",
-    src: "images/Heal.png"
+    src: "images/Heal.webp"
   },
   {
     name: "TOGS",
-    src: "images/Togs.png"
+    src: "images/Togs.webp"
   },
 
 ]
