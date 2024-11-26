@@ -1,0 +1,169 @@
+.cpn-section {
+    padding: 0 80px;
+    height: 65vh;
+    margin-top: 50px;
+}
+
+.cpn-inner {
+    width: 100%;
+    height: 100%;
+    /* background-color: #E4895F; */
+    background: url(/public/images/coupon-bck.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: end;
+    position: relative;
+    overflow: hidden;
+}
+
+/* .cpn-inner::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 65vh;
+    background: url(/public/images/coupon.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    left: -30%;
+} */
+
+.cpn-text {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px;
+}
+
+.cpn-ttl {
+    font-family: Inter;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 58px;
+    color: #fff;
+    margin-bottom: 40px;
+}
+
+.cpn-p1 {
+    font-family: Inter;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 52px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.cpn-p2 {
+    font-family: Inter;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 50.4px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.cpn-btn button {
+    font-family: Inter;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 48px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    padding: 25px 65px;
+    border: none;
+    background: #000;
+    color: #fff;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+
+@media screen and (max-width: 1440px) {
+    .cpn-ttl {
+        font-size: 32px;
+        line-height: 50px;
+        margin-bottom: 30px;
+    }
+
+    .cpn-p1 {
+        font-size: 22px;
+        line-height: 38px;
+        margin-bottom: 15px;
+    }
+
+    .cpn-p2 {
+        font-size: 22px;
+        line-height: 38px;
+        margin-bottom: 15px;
+    }
+
+    .cpn-btn button {
+        font-size: 32px;
+        line-height: 40px;
+        padding: 20px 65px;
+    }
+
+    .cpn-inner::before {
+        width: 66%;
+        left: -33%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .cpn-section {
+        padding: 0 30px;
+        height: 85vh;
+        margin-top: 40px;
+    }
+
+    .cpn-inner {
+        width: 100%;
+        height: 100%;
+        background: url(/public/images/cpn-bck-mob.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border-radius: 10px;
+        display: flex;
+        justify-content: end;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cpn-text {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .cpn-btn button {
+        font-size: 20px;
+        line-height: 30px;
+        padding: 13px 50px;
+    }
+
+    .cpn-ttl {
+        font-size: 22px;
+        line-height: 34px;
+        margin-bottom: 20px;
+    }
+
+    .cpn-p1 {
+        font-size: 14px;
+        line-height: 26px;
+        margin-bottom: 15px;
+    }
+    .cpn-p2 {
+        font-size: 14px;
+        line-height: 26px;
+        margin-bottom: 15px;
+    }
+}
