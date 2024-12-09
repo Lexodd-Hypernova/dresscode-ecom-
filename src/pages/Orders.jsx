@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ReactDOMServer from 'react-dom/server';
 import "./pages-styles/Orders.styles.css";
 import { accountInfoApis } from "../common";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,9 @@ import axiosInstance from "../common/axiosInstance";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import axios from "axios";
+import { jsPDF } from "jspdf";
+import InvoiceForOrder from "../components/Invoice/InvoiceForOrder";
+import html2canvas from "html2canvas";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
@@ -50,7 +54,7 @@ const Orders = () => {
       );
 
       // const data = await response.json();
-      // console.log(response.data);
+      console.log(response.data.orders);
       setData(response.data.orders);
       // setRaised(data.orders);
     } catch (error) {
@@ -267,6 +271,74 @@ const Orders = () => {
 
 
 
+  // Function to generate the PDF Blob
+  const generateInvoicePDFBlob = async (orderDetails) => {
+    // Step 1: Render the React component to an HTML string
+    const invoiceHTMLString = ReactDOMServer.renderToString(
+      <InvoiceForOrder data={orderDetails} />
+    );
+
+    // Step 2: Create a temporary container for the rendered HTML
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = invoiceHTMLString;
+    document.body.appendChild(tempContainer);
+
+    try {
+      // Step 3: Use html2canvas to convert the rendered HTML into a canvas
+      const canvas = await html2canvas(tempContainer, {
+        scale: 0.8, // Adjust scale for higher quality
+        useCORS: true, // Ensure cross-origin content is included
+        logging: false, // Disable console logs to reduce overhead
+      });
+
+      // Remove the temporary container after rendering
+      document.body.removeChild(tempContainer);
+
+      // Step 4: Convert the canvas to an image and add it to a jsPDF document
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = 210; // A4 width in mm
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width; // Maintain aspect ratio
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      // Optional: Compress the PDF further by reducing the resolution of the PDF image
+      // pdf.compress();
+      // Step 5: Return the PDF as a blob
+      return pdf.output("blob");
+    } catch (error) {
+      // Handle any errors that occur during the PDF generation process
+      console.error("Error generating the invoice PDF:", error);
+      throw error;
+    }
+  };
+
+  // Function to handle invoice download
+  const handleInvoiceDownload = async (orderDetails) => {
+    try {
+      // Step 1: Generate the PDF Blob using the invoice data
+      const invoiceBlob = await generateInvoicePDFBlob(orderDetails);
+
+      // Step 2: Create a temporary object URL for the PDF Blob
+      const blobURL = URL.createObjectURL(invoiceBlob);
+
+      // Step 3: Create a download link and trigger the download
+      const downloadLink = document.createElement("a");
+      downloadLink.href = blobURL;
+      downloadLink.download = `OrderInvoice-${orderDetails.orderId || "Order"}.pdf`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      // Step 4: Revoke the object URL to free memory
+      URL.revokeObjectURL(blobURL);
+    } catch (error) {
+      // Handle any errors that occur during the download process
+      console.error("Error generating or downloading the invoice:", error);
+    }
+  };
+
+
+
+
 
   return (
     <div className="orders-container">
@@ -317,11 +389,17 @@ const Orders = () => {
 
 
                             <div className="pr_track">
-                              {val.shiprocket_order_id !== null && (
+                              {/* {val.shiprocket_order_id !== null && (
                                 <button className="btn btn-secondary" onClick={() => downloadInvoice(val.shiprocket_order_id)}>
                                   Download Invoice
                                 </button>
-                              )}
+                              )} */}
+
+
+                              <button className="btn btn-secondary" onClick={() => handleInvoiceDownload(val)}>
+                                Download Invoice
+                              </button>
+
                             </div>
 
                             <div className="pr_track">
@@ -360,19 +438,29 @@ const Orders = () => {
                                           className="w-100"
                                         />
                                       </div>
+
                                       <div className="ord_item-des">
-                                        <p className="prd_name">
-                                          {product.color.name} {product.productDetails.neckline}
-                                        </p>
-                                        <p className="pr_price">MRP : &#8377;{product.price}</p>
-                                        <p className="pr_size">Size : {product.size}</p>
-                                        <p className="pr_color">Color : {product.color.name}</p>
-                                        {
-                                          product.logoPosition !== "" && (
-                                            <p className="pr_lg-place">Logo Position : {product.logoPosition}</p>
-                                          )
-                                        }
+                                        <div className="ord_desc-con">
+                                          <p className="prd_name">
+                                            {product.color.name} {product.productDetails.neckline}
+                                          </p>
+                                          <p className="pr_size">Size : {product.size}</p>
+                                          <p className="pr_color">Color : {product.color.name}</p>
+                                          {
+                                            product.logoPosition !== "" && (
+                                              <p className="pr_lg-place">Logo Position : {product.logoPosition}</p>
+                                            )
+                                          }
+                                        </div>
+                                        <div className="prd-price-det">
+                                          <p className="pr_price">Unit Price: &#8377;{product.price}</p>
+                                          <p className="pr_color">Quantity : {product.quantityOrdered}</p>
+                                          <p className="pr_color">Slab discount percentage : {product.slabDiscountPercentage}%</p>
+                                          <p className="pr_color">Slab discount amount : &#8377;{product.slabDiscountAmount}</p>
+                                          <p className="pr_color">Price after slab discount : &#8377;{product.priceAfterSlabDiscount}</p>
+                                        </div>
                                       </div>
+
                                     </div>
                                     <div className="pr_action">
                                       <div className="pr_review">
@@ -393,6 +481,20 @@ const Orders = () => {
                               )
                             })
                           }
+
+                          <div className="ord_bal">
+                            <div className="text-success fs-6">
+                              <span className="fw-semibold">Coupon discount: &#8377;{val.couponDiscountAmount}</span>
+                            </div>
+                            <div className="text-success fs-6">
+                              <span className="fw-semibold">Total discount: &#8377;{val.TotalDiscountAmount}</span>
+                            </div>
+                            <div className="text-success fs-6">
+                              <span className="fw-semibold">Total Price After Discount: &#8377;{val.TotalPriceAfterDiscount}</span>
+                            </div>
+                          </div>
+
+
                         </div>
                       </div>
                     ))

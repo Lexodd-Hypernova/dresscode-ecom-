@@ -22,7 +22,7 @@ export const WishListProvider = ({ children }) => {
                 }
             );
 
-            // console.log(res.data.Wishlist);
+            console.log(res.data.Wishlist);
             setWishList(res.data.Wishlist)
         } catch (error) {
             console.log(error)

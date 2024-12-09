@@ -217,7 +217,8 @@ const Cart = () => {
       size: item.size,
       logoUrl: item.logoUrl,
       logoPosition: item.logoPosition,
-      productDetails: null
+      productDetails: null,
+      imgUrl: item.imgUrl,
     };
     await addToWishList(itemToAdd);
     await removeFromCart(item._id);

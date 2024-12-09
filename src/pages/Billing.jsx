@@ -469,7 +469,7 @@ const Billing = () => {
         loading ? (
           <LoadingComponent />
         ) : (
-          <section className="billing mt-5 ms-5">
+          <section className="billing mt-5 ms-5"> 
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-6">
