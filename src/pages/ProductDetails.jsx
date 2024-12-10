@@ -20,7 +20,7 @@ const normalizeName = (name) => {
   }
 };
 
-
+ 
 const ProductDetails = () => {
   const { productId, color, productType, subCategory, category, groupName } = useParams();
   const [loading, setLoading] = useState(true);

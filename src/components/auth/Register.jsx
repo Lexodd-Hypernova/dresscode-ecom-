@@ -29,6 +29,16 @@ const Register = () => {
 
     const [loading, setLoading] = useState(false);
 
+    const isAuthenticated = () => {
+        return !!localStorage.getItem("accessToken"); // Replace with your actual logic
+    };
+
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate("/"); // Redirect to home or dashboard if already logged in
+        }
+    }, [navigate]);
+
     return (
         <div className='auth-screen'>
             <div className='auth-container'>

@@ -57,7 +57,7 @@ const Login = () => {
 
       // Extract providerData
       const providerData = user.providerData[0] || {}; // Assume the first provider is Google
-  
+
       const token = await user.getIdToken();
 
       const response = await fetch(`${authUrls.signInWithGoogle}/directLogin`, {
@@ -73,7 +73,7 @@ const Login = () => {
           picture: user.photoURL || providerData.photoURL,
         }),
       });
-  
+
       const userData = await response.json();
 
       if (userData.message === "Success") {
@@ -107,6 +107,17 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Mock function to check if user is authenticated
+  const isAuthenticated = () => {
+    return !!localStorage.getItem("accessToken"); // Replace with your actual logic
+  };
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/"); // Redirect to home or dashboard if already logged in
+    }
+  }, [navigate]);
 
   return (
     <div className="auth-screen">
