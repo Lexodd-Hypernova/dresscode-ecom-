@@ -531,13 +531,15 @@ const Orders = () => {
                                     className="w-100"
                                   />
                                 </div>
-                                <div className="ord_item-des">
+                                <div className="">
                                   <p className="prd_name">
-                                    {val.color.name} {val.neckline}
+                                    {val.productDetails.productType} {val.color.name}
                                   </p>
-                                  {/* <p className="pr_price">MRP : &#8377;{val.productDetails.price}</p> */}
+                                  <p className="pr_price">Unit price : &#8377;{val.productDetails.price}</p>
                                   <p className="pr_size">Size : {val.size}</p>
                                   <p className="pr_color">Color : {val.color.name}</p>
+                                  <p className="pr_color">Quantity : {val.quantityRequired}</p>
+
                                   {/* <p className="pr_lg-place">Logo Position : {val.logoPosition}</p> */}
                                   {
                                     val.logoPosition !== "" && (

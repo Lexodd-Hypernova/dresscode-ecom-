@@ -65,6 +65,7 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
+          withCredentials: true
         },
         body: JSON.stringify({
           uid: providerData.uid, // Use provider-specific UID
@@ -77,12 +78,15 @@ const Login = () => {
       const userData = await response.json();
 
       if (userData.message === "Success") {
+        const refreshToken = userData.data.refreshToken;
+        localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("accessToken", userData.data.accessToken);
         localStorage.setItem("id", userData.data.userId);
         localStorage.setItem("userName", userData.data.name);
         localStorage.setItem("email", userData.data.email);
         localStorage.setItem("uid", userData.data.uid);
         localStorage.setItem("gLogin", userData.data.gLogin);
+        document.cookie = `refreshToken=${refreshToken}; max-age=420; path=/; SameSite=None; Secure; HttpOnly`;
         Swal.fire({
           title: "Success!",
           text: "Logged in successfully",
@@ -145,6 +149,9 @@ const Login = () => {
                     { withCredentials: true }
                   );
                   if (response.data.message === "Success") {
+
+                    const refreshToken = response.data.data.refreshToken;
+
                     localStorage.setItem(
                       "accessToken",
                       response.data.data.accessToken
@@ -158,6 +165,8 @@ const Login = () => {
                     localStorage.setItem("email", response.data.data.email);
                     localStorage.setItem("uid", response.data.data.uid);
                     localStorage.setItem("gLogin", response.data.data.gLogin);
+                    localStorage.setItem("isLoggedIn", "true");
+                    document.cookie = `refreshToken=${refreshToken}; max-age=420; path=/; SameSite=None; Secure; HttpOnly`;
                     Swal.fire({
                       title: "Success!",
                       text: "Logged in successfully",

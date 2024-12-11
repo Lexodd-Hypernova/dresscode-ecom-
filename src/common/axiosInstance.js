@@ -14,96 +14,123 @@ const axiosInstance = axios.create({
     withCredentials: true, // Ensures cookies (refresh token) are sent with requests
 });
 
-let isLoggedOut = false; // Track logout state
+// let isLoggedOut = localStorage.getItem("isLoggedIn"); // Track logout state
 
 // Function to refresh access token
 const refreshAccessToken = async () => {
+
+    const testLog = localStorage.getItem("isLoggedIn");
+    console.log("testLog", testLog);
+
+    const isLoggedOut = localStorage.getItem("isLoggedIn") !== "true";
+
     if (isLoggedOut) {
         return null; // Prevent refreshing tokens if the user has logged out
     }
 
+    // const redirectOccurred = localStorage.getItem("redirectOccurred");
+
+    // if (redirectOccurred) {
+    //     return null; // Do not attempt to refresh again
+    // }
+
     try {
         const response = await axios.post(authUrls.generateAccessToken, {}, { withCredentials: true });
         const { accessToken } = response.data;
+        localStorage.setItem('accessToken', accessToken);
 
-        if (!isLoggedOut) {
-            // Only save the new access token if the user isn't logged out
-            localStorage.setItem('accessToken', accessToken);
-        }
+        // localStorage.removeItem('redirectOccurred');
+
+        // if (!isLoggedOut) {
+        //     // Only save the new access token if the user isn't logged out
+        //     localStorage.setItem('accessToken', accessToken);
+        // }
 
         return accessToken;
     } catch (error) {
         console.error('Failed to refresh access token:', error);
+
+        localStorage.setItem('redirectOccurred', 'true');
+
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('id');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('email');
+        localStorage.removeItem('phoneNumber');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem("uid");
+        localStorage.removeItem("gLogin");
+        localStorage.setItem("isLoggedIn", "false");
+        // window.location.reload();
+        // window.location.href = "/login"
         throw error;
     }
 };
 
+axiosInstance.interceptors.request.use(
+    async (config) => {
+        const isLoggedOut = localStorage.getItem("isLoggedIn") !== "true"; // Check logout state
+        if (isLoggedOut) {
+            return Promise.reject(new Error('User is logged out. No API requests should be made.'));
+        }
 
-axiosInstance.interceptors.request.use(async (config) => {
-    if (isLoggedOut) {
-        return Promise.reject('User is logged out. No API requests should be made.');
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        console.error('Request error:', error);
+        return Promise.reject(error); // Forward the error for handling in API calls
     }
-
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-
-    return config;
-}, (error) => {
-    return Promise.reject(error);
-});
-
-
-
-// Request interceptor to attach access token
-axiosInstance.interceptors.request.use(async (config) => {
-    if (isLoggedOut) {
-        return Promise.reject('User is logged out. No requests should be made.');
-    }
-
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-}, (error) => {
-    return Promise.reject(error);
-});
+);
 
 
 
 // Response interceptor to handle expired tokens
-axiosInstance.interceptors.response.use((response) => {
-    return response;
-}, async (error) => {
-    if (isLoggedOut) {
-        return Promise.reject('User is logged out. No token refresh should happen.');
-    }
+axiosInstance.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async (error) => {
+        const isLoggedOut = localStorage.getItem("isLoggedIn") !== "true"; // Check logout state
 
-    const originalRequest = error.config;
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true; // Prevent endless retries
+        console.log("isLoggedIn", localStorage.getItem("isLoggedIn"))
 
-        try {
-            const newAccessToken = await refreshAccessToken();
-            if (newAccessToken) {
-                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-                return axiosInstance(originalRequest); // Retry the request with the new token
-            }
-        } catch (refreshError) {
-            console.error('Refresh token expired or invalid:', refreshError);
+
+        if (isLoggedOut) {
+            return Promise.reject(new Error('User is logged out. No token refresh should happen.'));
         }
-    }
 
-    return Promise.reject(error);
-});
+        const originalRequest = error.config;
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true; // Prevent endless retries
+
+            try {
+                const newAccessToken = await refreshAccessToken();
+                console.log("newAccessToken", newAccessToken)
+                if (newAccessToken) {
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    return axiosInstance(originalRequest); // Retry the request with the new token
+                }
+            } catch (refreshError) {
+                console.error('Refresh token expired or invalid:', refreshError);
+                // Optionally redirect to login page or show an appropriate message to the user
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 
 
 // Function to call on logout
 export const logout = () => {
     // Set logged out state globally
-    isLoggedOut = true;
+    // isLoggedOut = true;
 
     // Clear accessToken and other user data from localStorage
     localStorage.removeItem('accessToken');
@@ -112,18 +139,17 @@ export const logout = () => {
     localStorage.removeItem('email');
     localStorage.removeItem('phoneNumber');
     localStorage.removeItem('authToken');
+    localStorage.removeItem("uid");
+    localStorage.removeItem("gLogin");
+    localStorage.setItem("isLoggedIn", "false");
 
     // Clear refreshToken cookie
     document.cookie = 'refreshToken=; Max-Age=0; path=/'; // Clears the refreshToken cookie
     document.cookie = 'accessToken=; Max-Age=0; path=/'; // Clears accessToken if stored in cookies
 
-    // Optionally force a page reload to clear any state
-    setTimeout(() => {
-        window.location.reload(); // Refresh to reset state after clearing tokens
-    }, 100); // Short delay to ensure everything is cleared before reload
+    window.location.href = "/login";
 
-    // Redirect to login page after logout
-    history('/login');
+
 };
 
 
