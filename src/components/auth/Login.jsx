@@ -86,7 +86,7 @@ const Login = () => {
         localStorage.setItem("email", userData.data.email);
         localStorage.setItem("uid", userData.data.uid);
         localStorage.setItem("gLogin", userData.data.gLogin);
-        document.cookie = `refreshToken=${refreshToken}; max-age=420; path=/; SameSite=None; Secure; HttpOnly`;
+        document.cookie = `refreshToken=${refreshToken}; max-age=604800; path=/; SameSite=None; Secure; HttpOnly`;
         Swal.fire({
           title: "Success!",
           text: "Logged in successfully",
@@ -166,7 +166,7 @@ const Login = () => {
                     localStorage.setItem("uid", response.data.data.uid);
                     localStorage.setItem("gLogin", response.data.data.gLogin);
                     localStorage.setItem("isLoggedIn", "true");
-                    document.cookie = `refreshToken=${refreshToken}; max-age=420; path=/; SameSite=None; Secure; HttpOnly`;
+                    document.cookie = `refreshToken=${refreshToken}; max-age=604800; path=/; SameSite=None; Secure; HttpOnly`;
                     Swal.fire({
                       title: "Success!",
                       text: "Logged in successfully",
