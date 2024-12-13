@@ -65,7 +65,7 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
-          withCredentials: true
+          // withCredentials: true
         },
         body: JSON.stringify({
           uid: providerData.uid, // Use provider-specific UID
@@ -92,7 +92,7 @@ const Login = () => {
           text: "Logged in successfully",
           icon: "success",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 3000,
         });
         const googleAuthRedirectPath = queryParams.get("redirect") || `/`;
         // router.navigate("/account-info")
@@ -105,7 +105,7 @@ const Login = () => {
         text: "Something went wrong",
         icon: "error",
         showConfirmButton: false,
-        timer: 1500,
+        timer: 3000,
       });
     } finally {
       setLoading(false);
@@ -172,7 +172,7 @@ const Login = () => {
                       text: "Logged in successfully",
                       icon: "success",
                       showConfirmButton: false,
-                      timer: 1500,
+                      timer: 3000,
                     });
                     // router.navigate("/account-info")
                     navigate(redirectPath);
@@ -183,7 +183,7 @@ const Login = () => {
                     text: "Please check your email and password or something went wrong",
                     icon: "error",
                     showConfirmButton: false,
-                    timer: 1500,
+                    timer: 3000,
                   });
                   console.error("Error logging in:", error.response.data);
                 } finally {
