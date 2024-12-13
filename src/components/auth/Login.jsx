@@ -67,6 +67,7 @@ const Login = () => {
           Authorization: token,
           // withCredentials: true
         },
+        credentials: "include", // This is the correct way to include credentials
         body: JSON.stringify({
           uid: providerData.uid, // Use provider-specific UID
           name: user.displayName || providerData.displayName,
