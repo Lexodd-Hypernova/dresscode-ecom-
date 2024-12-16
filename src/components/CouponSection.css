@@ -1,6 +1,6 @@
 .cpn-section {
     padding: 0 80px;
-    height: 65vh;
+    /* height: 65vh; */
     margin-top: 50px;
 }
 
@@ -83,7 +83,7 @@
 }
 
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1680px) {
     .cpn-ttl {
         font-size: 32px;
         line-height: 50px;
@@ -111,6 +111,55 @@
     .cpn-inner::before {
         width: 66%;
         left: -33%;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .cpn-text {
+        padding: 40px 40px;
+        width: 70%;
+    }
+
+    .cpn-btn button {
+        font-size: 24px;
+        line-height: 32px;
+        padding: 15px 40px;
+    }
+
+    .cpn-ttl {
+        margin-bottom: 20px;
+    }
+
+    .cpn-p1 {
+        line-height: 32px;
+    }
+
+    .cpn-p2 {
+        line-height: 32px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .cpn-ttl {
+        font-size: 24px;
+        line-height: 34px;
+    }
+
+    .cpn-p1 {
+        font-size: 17px;
+        line-height: 27px;
+    }
+
+    .cpn-p2 {
+        font-size: 17px;
+        line-height: 27px;
+    }
+
+    .cpn-btn button {
+        font-size: 17px;
+        line-height: 27px;
+        padding: 10px 30px;
+        margin-top: 0px;
     }
 }
 
@@ -161,6 +210,7 @@
         line-height: 26px;
         margin-bottom: 15px;
     }
+
     .cpn-p2 {
         font-size: 14px;
         line-height: 26px;

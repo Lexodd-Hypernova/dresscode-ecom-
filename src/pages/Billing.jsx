@@ -11,6 +11,13 @@ import LoadingComponent from "../common/components/LoadingComponent";
 import "./pages-styles/billing.style.css";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import axiosInstance from "../common/axiosInstance";
+import { toast } from "react-toastify";
+
+import ReactDOMServer from "react-dom/server";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+
+import InvoiceForOrder from "../components/Invoice/InvoiceForOrder";
 
 
 const Billing = () => {
@@ -60,13 +67,13 @@ const Billing = () => {
   const { state } = location;
 
   const { totalCartAmountWithoutDiscount, totalDiscount, cart: orderedItems, product, type } = state || {};
-  console.log(orderedItems, "orderedItems");
+  // console.log(orderedItems, "orderedItems");
 
 
 
-  console.log(type, "type");
+  // console.log(type, "type");
 
-  console.log(product, "product");
+  // console.log(product, "product");
 
   useEffect(() => {
     calculateInitialTotalPrice();
@@ -187,6 +194,132 @@ const Billing = () => {
   };
 
 
+  // Function to generate the PDF Blob
+  const generateInvoicePDFBlob = async (orderDetails) => {
+    const invoiceHTMLString = ReactDOMServer.renderToString(
+      <InvoiceForOrder data={orderDetails} />
+    );
+
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = invoiceHTMLString;
+    document.body.appendChild(tempContainer);
+
+    try {
+      const canvas = await html2canvas(tempContainer, {
+        scale: 0.8,
+        useCORS: true,
+      });
+      document.body.removeChild(tempContainer);
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = 210;
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      return pdf.output("blob");
+    } catch (error) {
+      console.error("Error generating invoice PDF:", error);
+      throw error;
+    }
+  };
+
+  // Function to send invoice via WhatsApp
+  const sendInvoiceViaWhatsApp = async (orderDetails) => {
+    try {
+      const invoiceBlob = await generateInvoicePDFBlob(orderDetails);
+
+      const whatsappFormData = new FormData();
+      whatsappFormData.append(
+        "file",
+        invoiceBlob,
+        `invoice-${orderDetails.orderId}.pdf`
+      );
+      whatsappFormData.append("messaging_product", "whatsapp");
+
+      const fbResponse = await fetch(
+        `https://graph.facebook.com/v13.0/${import.meta.env.VITE_WHATSAPP_ID}/media`,
+        {
+          method: "POST",
+          body: whatsappFormData,
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+          },
+        }
+      );
+
+      if (!fbResponse.ok) {
+        console.error(`Facebook Graph API error: ${fbResponse.status}`);
+        return;
+      }
+
+      const fbData = await fbResponse.json();
+
+      const phoneNumber =
+        orderDetails.userDetails.phoneNumber !== "N/A"
+          ? orderDetails.userDetails.phoneNumber
+          : orderDetails.addressDetails.phone;
+
+      // if (!phoneNumber || phoneNumber === "N/A") {
+      //   console.error("Valid phone number not found in order details.");
+      //   return; // Exit early if no valid phone number is found
+      // }
+
+      const whatsappData = {
+        messaging_product: "whatsapp",
+        to: `91${phoneNumber}`,
+        type: "template",
+        template: {
+          name: "invoice_template",
+          language: { code: "en" },
+          components: [
+            {
+              type: "header",
+              parameters: [
+                {
+                  type: "document",
+                  document: { id: fbData.id },
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const whatsappResponse = await fetch(
+        `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/messages`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(whatsappData),
+        }
+      );
+
+      if (!whatsappResponse.ok) {
+        const errorData = await whatsappResponse.json();
+        console.error(
+          `Error sending WhatsApp message: ${whatsappResponse.status}`,
+          errorData
+        );
+        if (errorData.error?.message?.includes("incapable")) {
+          console.error(
+            `${phoneNumber} incapable of receiving WhatsApp message.`
+          );
+        }
+      } else {
+        console.log(`${phoneNumber} Invoice sent successfully via WhatsApp!`);
+      }
+    } catch (error) {
+      console.error("Error sending invoice via WhatsApp:", error);
+    }
+  };
+
+
+
+
   const handlePayment = async () => {
     setLoading(true)
     try {
@@ -262,17 +395,17 @@ const Billing = () => {
       // Step 2: Initialize Razorpay
       const options = {
 
-        key: "rzp_test_0PMwuUiWHNgJdU",
+        // key: "rzp_test_0PMwuUiWHNgJdU",
 
 
-        // key: "rzp_live_YZAblE0DYussOv",
+        key: "rzp_live_YZAblE0DYussOv",
 
         currency: "INR",
         name: "Dress Code ",
         description: "Test Transaction",
         order_id: orderData.newOrderDetails.razorpay_checkout_order_id, // This is the order ID created in the previous step
         handler: async (response) => {
-          console.log("Payment successful, verifying payment:", response);
+          // console.log("Payment successful, verifying payment:", response);
           const verifyPayload = {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_order_id: response.razorpay_order_id,
@@ -303,6 +436,11 @@ const Billing = () => {
                 showConfirmButton: false,
                 timer: 1500
               })
+
+
+
+
+
               if (type === "cart") {
                 const productIds = orderedItems.map((item) => item._id);
                 // console.log("productIds of cart", productIds);
@@ -323,6 +461,9 @@ const Billing = () => {
                 timer: 1500
               })
             }
+
+            sendInvoiceViaWhatsApp(verifyData.OrderWithDetails);
+
 
           } catch (error) {
             console.log("error")
@@ -469,7 +610,7 @@ const Billing = () => {
         loading ? (
           <LoadingComponent />
         ) : (
-          <section className="billing mt-5 ms-5"> 
+          <section className="billing mt-5 ms-5">
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-6">
@@ -967,6 +1108,7 @@ const Billing = () => {
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
       ></AddressModal>
+
     </>
   );
 };

@@ -20,7 +20,7 @@ const axiosInstance = axios.create({
 const refreshAccessToken = async () => {
 
     const testLog = localStorage.getItem("isLoggedIn");
-    console.log("testLog", testLog);
+    // console.log("testLog", testLog);
 
     const isLoggedOut = localStorage.getItem("isLoggedIn") !== "true";
 
@@ -97,7 +97,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const isLoggedOut = localStorage.getItem("isLoggedIn") !== "true"; // Check logout state
 
-        console.log("isLoggedIn", localStorage.getItem("isLoggedIn"))
+        // console.log("isLoggedIn", localStorage.getItem("isLoggedIn"))
 
 
         if (isLoggedOut) {
@@ -110,7 +110,7 @@ axiosInstance.interceptors.response.use(
 
             try {
                 const newAccessToken = await refreshAccessToken();
-                console.log("newAccessToken", newAccessToken)
+                // console.log("newAccessToken", newAccessToken)
                 if (newAccessToken) {
                     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                     return axiosInstance(originalRequest); // Retry the request with the new token

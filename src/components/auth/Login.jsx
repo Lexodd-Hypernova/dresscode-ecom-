@@ -65,8 +65,9 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
-          withCredentials: true
+          // withCredentials: true
         },
+        credentials: "include",
         body: JSON.stringify({
           uid: providerData.uid, // Use provider-specific UID
           name: user.displayName || providerData.displayName,

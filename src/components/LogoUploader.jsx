@@ -309,11 +309,14 @@ const LogoUploader = ({ selectType, cartItem, buyItem, quoteItem, isSizeSelected
                                             onChange={handlePlacementChange}
                                         >
                                             <option value="">Logo placement</option>
-                                            <option value="onPockets">On Pockets</option>
-                                            <option value="backside">Backside</option>
-                                            <option value="shoulder">Shoulder</option>
-                                            <option value="frontside">Frontside</option>
+                                            <option value="left side on chest">left side on chest</option>
+                                            <option value="right side on chest">right side on chest</option>
+                                            <option value="left sleeve">left sleeve</option>
+                                            <option value="right sleeve">right sleeve</option>
                                         </select>
+                                    </div>
+                                    <div className="mt-3">
+                                        <span className='fw-3 text-danger fs-6'>*Note: </span><span className='fs-6'>upto 4 colors in the logo</span>
                                     </div>
                                 </div>
                                 <div className="modal-footer">
