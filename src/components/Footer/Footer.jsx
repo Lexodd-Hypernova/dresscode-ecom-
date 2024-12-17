@@ -53,7 +53,7 @@ const Footer = () => {
                                     Annapurna Studio Lane,
                                     Rd No :2, LV Prasad Marg, Jubilee Hills, Hyderabad, Telangana 500033.
                                 </address>
-                                <a className='ft_dir'>Get Directions</a>
+                                <a href="https://www.google.com/maps/place/17%C2%B025'30.8%22N+78%C2%B025'24.2%22E/@17.4252227,78.4208078,1046m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d17.4252227!4d78.4233827?hl=en&entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" className='ft_dir'>Get Directions</a>
                             </div>
                             <div className='ft-card-contact'>
                                 <h4 className='ft-card-ttl'>
