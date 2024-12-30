@@ -20,9 +20,9 @@ const normalizeName = (name) => {
   }
 };
 
- 
 const ProductDetails = () => {
-  const { productId, color, productType, subCategory, category, groupName } = useParams();
+  const { productId, color, productType, subCategory, category, groupName } =
+    useParams();
   const [loading, setLoading] = useState(true);
   const [priceLoading, setPriceLoading] = useState(true);
   const loadingList = new Array(5).fill(null);
@@ -54,14 +54,13 @@ const ProductDetails = () => {
   const [sizeError, setSizeError] = useState(false);
   const [stockError, setStockError] = useState();
 
-
   const { addToWishList } = useWhishList();
 
-
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("accessToken"));
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("accessToken")
+  );
 
   const nav = useNavigate();
-
 
   const handleAddToWishList = async () => {
     if (activeSize) {
@@ -77,9 +76,8 @@ const ProductDetails = () => {
       };
       await addToWishList(item);
       setSizeError(false);
-    }
-    else {
-      setSizeError(true)
+    } else {
+      setSizeError(true);
     }
   };
 
@@ -96,12 +94,11 @@ const ProductDetails = () => {
         checked: true,
         isRequiredQuantityPresent: true,
         imgUrl: data?.productDetails?.variants[0]?.imageUrls[0] || "",
-      })
+      });
       setSelectType("cartType");
     } else {
-      setSizeError(true)
+      setSizeError(true);
     }
-
   };
 
   const handleBlur = () => {
@@ -124,24 +121,21 @@ const ProductDetails = () => {
     updateTotalPrice(1);
   };
 
-
   const getDiscountPercentage = (quantity) => {
     if (quantity >= 1 && quantity <= 5) {
       return 0; // No discount for 1-5 items
     } else if (quantity >= 6 && quantity <= 10) {
-      return 5; // 5% discount for 6-10 items
+      return 0; // 5% discount for 6-10 items
     } else if (quantity >= 11 && quantity <= 20) {
-      return 10; // 10% discount for 11-20 items
+      return 0; // 10% discount for 11-20 items
     } else if (quantity > 20) {
-      return 15; // 15% discount for 21+ items
+      return 0; // 15% discount for 21+ items
     }
     return 0;
   };
 
-
   // Update the total price based on the count
   const updateTotalPrice = (newCount) => {
-
     const discountPercentage = getDiscountPercentage(newCount);
 
     // Calculate total before discount
@@ -164,22 +158,19 @@ const ProductDetails = () => {
       totalAfterDiscount: roundedTotalAfterDiscount,
       discountAmount: roundedDiscountAmount,
       discountPercentage,
-      totalBeforeDiscount
+      totalBeforeDiscount,
     };
   };
-
-
-
 
   useEffect(() => {
     // console.log("productId", productId);
     setLoading(true);
-    setPriceLoading(true)
+    setPriceLoading(true);
     const fetchData = async () => {
       try {
         const response = await fetch(
           DressCodeApi.getProductDetailsWithSpecificVariant.url +
-          `?groupName=${groupName}&productId=${productId}&color=${color}`
+            `?groupName=${groupName}&productId=${productId}&color=${color}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -193,15 +184,12 @@ const ProductDetails = () => {
         setTotalPriceWithoutDiscount(result.productDetails.price);
         // setActiveSize(result.productDetails.variants[0].variantSizes[0].size)
 
-
         // console.log("productAllData", result);
       } catch (error) {
         console.error("Error fetching data:", error);
-
-      }
-      finally {
+      } finally {
         setLoading(false);
-        setPriceLoading(false)
+        setPriceLoading(false);
       }
     };
 
@@ -231,7 +219,6 @@ const ProductDetails = () => {
         )
       );
 
-
       setAvailableSizes(availableSizeSet);
       // console.log("availableSizes Set:", availableSizeSet);
     }
@@ -245,7 +232,7 @@ const ProductDetails = () => {
       setData(res.data);
       setActiveColor(value);
       setActiveSize("");
-      setSizeError(true)
+      setSizeError(true);
 
       // console.log(
       //   "after filter variantId",
@@ -259,7 +246,7 @@ const ProductDetails = () => {
     setActiveSize(size);
     setSizeError(false);
     setCount(1);
-    updateTotalPrice(1)
+    updateTotalPrice(1);
   };
 
   const handleButtonClick = () => {
@@ -267,7 +254,6 @@ const ProductDetails = () => {
     // nav(`/auth?redirect=${currentPath}`);
     nav(`/login?redirect=${currentPath}`);
   };
-
 
   const handleBuyNow = (e) => {
     if (activeSize) {
@@ -286,14 +272,12 @@ const ProductDetails = () => {
         quantityRequired: count,
         imgUrl: data?.productDetails?.variants[0]?.imageUrls[0] || "",
         productType: data?.productDetails?.productType || "",
-      })
-      setSelectType("buyNowType")
+      });
+      setSelectType("buyNowType");
+    } else {
+      setSizeError(true);
     }
-    else {
-      setSizeError(true)
-    }
-
-  }
+  };
 
   const debounce = (func, delay) => {
     let timer;
@@ -305,7 +289,6 @@ const ProductDetails = () => {
     };
   };
 
-
   const updateAPI = async (quantity) => {
     // console.log("Size Error:", sizeError);
     // console.log("Active Size:", activeSize);
@@ -316,23 +299,26 @@ const ProductDetails = () => {
       setPriceLoading(true);
       // console.log("hitting in productDetails counter");
       try {
-
         const response = await axios.get(
-          shoppingInfoApis.checkProductQuantity(groupName, productId, activeColor, activeSize, quantity),
+          shoppingInfoApis.checkProductQuantity(
+            groupName,
+            productId,
+            activeColor,
+            activeSize,
+            quantity
+          )
           // config
         );
 
         updateTotalPrice(quantity);
-        setStockError("")
+        setStockError("");
         // console.log(response.data);
       } catch (error) {
         console.error("Error updating item quantity:", error);
         setStockError(error.response?.data?.message || "Stock issue detected");
         updateTotalPrice(quantity);
-
-      }
-      finally {
-        setPriceLoading(false)
+      } finally {
+        setPriceLoading(false);
       }
     } else {
       setSizeError(true);
@@ -340,23 +326,22 @@ const ProductDetails = () => {
     }
   };
 
-
-
-  const debouncedUpdateAPI = useCallback(debounce((quantity) => {
-    if (activeColor && activeSize) {
-      updateAPI(quantity);
-    } else {
-      console.warn("Active color or size is missing in debounced function");
-      setSizeError(true);
-    }
-  }, 1000), [activeColor, activeSize]);
-
+  const debouncedUpdateAPI = useCallback(
+    debounce((quantity) => {
+      if (activeColor && activeSize) {
+        updateAPI(quantity);
+      } else {
+        console.warn("Active color or size is missing in debounced function");
+        setSizeError(true);
+      }
+    }, 1000),
+    [activeColor, activeSize]
+  );
 
   const increment = () => {
     const newCount = count + 1;
     setCount(newCount);
     debouncedUpdateAPI(newCount);
-
   };
 
   const decrement = () => {
@@ -365,14 +350,13 @@ const ProductDetails = () => {
     debouncedUpdateAPI(newCount);
   };
 
-
   const handleChange = (e) => {
     const value = e.target.value;
 
     // Update state even if input is empty
     if (value === "") {
       setCount("");
-      setStockError("Please add quantity")
+      setStockError("Please add quantity");
       return;
     }
 
@@ -383,10 +367,9 @@ const ProductDetails = () => {
     if (!isNaN(parsedValue) && parsedValue >= 1) {
       setCount(parsedValue);
       debouncedUpdateAPI(parsedValue);
-      setStockError("")
+      setStockError("");
     }
   };
-
 
   const handleRaiseQuote = (e) => {
     if (activeSize) {
@@ -399,14 +382,13 @@ const ProductDetails = () => {
         price: price,
         imgUrl: data?.productDetails?.variants[0]?.imageUrls[0] || "",
         totalPrice: totalPriceWithoutDiscount,
-        quantityRequired: count
-      })
-      setSelectType("quoteType")
+        quantityRequired: count,
+      });
+      setSelectType("quoteType");
     } else {
-      setSizeError(true)
+      setSizeError(true);
     }
-  }
-
+  };
 
   return (
     <>
@@ -421,7 +403,6 @@ const ProductDetails = () => {
             </button>
             <span className="ms-2">40 Ratings</span>
           </div>
-
 
           {/* <div className="price_discount"> */}
           {priceLoading ? (
@@ -448,7 +429,11 @@ const ProductDetails = () => {
                 {/* Original Price */}
                 <div className="original-price text-muted fs-5">
                   <span className="">
-                    MRP: {Number(totalPriceWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                    MRP:{" "}
+                    {Number(totalPriceWithoutDiscount).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "INR",
+                    })}
                   </span>
                 </div>
 
@@ -456,10 +441,18 @@ const ProductDetails = () => {
                 {discountAmount > 0 && (
                   <>
                     <div className="discount-amount text-success fs-6">
-                      <span className="fw-semibold">You Save:</span> {discountAmount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                      <span className="fw-semibold">You Save:</span>{" "}
+                      {discountAmount.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      })}
                     </div>
                     <div className="price-after-discount fs-4 fw-bold text-primary mt-1">
-                      Price after Discount: {totalPriceWithDiscount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                      Price after Discount:{" "}
+                      {totalPriceWithDiscount.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      })}
                     </div>
                   </>
                 )}
@@ -469,15 +462,13 @@ const ProductDetails = () => {
 
           {/* Discount Slab Button */}
           <div className="price_discount">
-            <button
+            {/* <button
               className="discount-btn"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
               View Discount Slabs
-            </button>
-
-
+            </button> */}
 
             {/* Discount Slab Table - Show on hover */}
             {showDiscountSlab && (
@@ -510,7 +501,6 @@ const ProductDetails = () => {
                 </table>
               </div>
             )}
-
           </div>
 
           <div className="var__Color">
@@ -541,11 +531,13 @@ const ProductDetails = () => {
                           onClick={() => {
                             handleFilter("color", color.name);
                           }}
-                          className={`list-group-item rounded-circle ${isAvailable ? "" : "disabled"
-                            } ${activeColor === color.name
+                          className={`list-group-item rounded-circle ${
+                            isAvailable ? "" : "disabled"
+                          } ${
+                            activeColor === color.name
                               ? "border-primary shadow-lg border-2"
                               : ""
-                            }`}
+                          }`}
                           id={`color${color.name}`}
                           // value={color.name}
                           style={{
@@ -553,7 +545,7 @@ const ProductDetails = () => {
                             width: "32px",
                             height: "32px",
                             position: "relative",
-                            cursor: "pointer"
+                            cursor: "pointer",
                           }}
                           key={index}
                         >
@@ -603,9 +595,11 @@ const ProductDetails = () => {
                       // console.log(`Checking size: "${size}" - Available: ${isAvailable}`);
                       return (
                         <li
-                          className={`size_item list-group-item rounded-circle fs-5 fw-normal ${isAvailable ? "" : "disabled"
-                            } ${activeSize === size ? "bg-primary shadow-lg" : ""
-                            }`}
+                          className={`size_item list-group-item rounded-circle fs-5 fw-normal ${
+                            isAvailable ? "" : "disabled"
+                          } ${
+                            activeSize === size ? "bg-primary shadow-lg" : ""
+                          }`}
                           id={`size${size}`}
                           key={index}
                           style={{ position: "relative", cursor: "pointer" }}
@@ -635,37 +629,59 @@ const ProductDetails = () => {
               </>
             )}
             <div className="size_error">
-              {
-                sizeError === true ? (
-                  <div className="alert alert-warning alert-dismissible fade show mt-2" role="alert">
-                    {/* {sizeError} */}
-                    Please select size
-                    {/* <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> */}
-                  </div>
-                ) : (
-                  <></>
-                )
-              }
+              {sizeError === true ? (
+                <div
+                  className="alert alert-warning alert-dismissible fade show mt-2"
+                  role="alert"
+                >
+                  {/* {sizeError} */}
+                  Please select size
+                  {/* <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> */}
+                </div>
+              ) : (
+                <></>
+              )}
 
               {/* {conterError && <span className="text-danger">{conterError}</span>} */}
             </div>
           </div>
           <div className="check_scale">
-
-            <a type="button" className="fs-5 fw-normal text-primary mb-2" data-bs-toggle="modal" data-bs-target="#sizeModal">
+            <a
+              type="button"
+              className="fs-5 fw-normal text-primary mb-2"
+              data-bs-toggle="modal"
+              data-bs-target="#sizeModal"
+            >
               Size chart
             </a>
 
             {/*Size Modal */}
-            <div className="modal fade" id="sizeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div
+              className="modal fade"
+              id="sizeModal"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabIndex="-1"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
                     {/* <h5 className="modal-title" id="staticBackdropLabel">Modal title</h5> */}
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
                   </div>
                   <div className="modal-body">
-                    <img src={data?.productDetails?.sizeChart} alt="" className="w-100" />
+                    <img
+                      src={data?.productDetails?.sizeChart}
+                      alt=""
+                      className="w-100"
+                    />
                   </div>
                 </div>
               </div>
@@ -712,14 +728,23 @@ const ProductDetails = () => {
               <i className="fa-regular fa-trash-can fs-4"></i>
             </button>
             <div className="counter_status">
-              {priceLoading && <div className="spinner-border " style={{ color: 'oragne' }} role="status">
-                <span className="sr-only"></span>
-              </div>}
+              {priceLoading && (
+                <div
+                  className="spinner-border "
+                  style={{ color: "oragne" }}
+                  role="status"
+                >
+                  <span className="sr-only"></span>
+                </div>
+              )}
             </div>
           </div>
 
           {count <= 35 && stockError && (
-            <div className="alert alert-warning alert-dismissible mt-2 fade show" role="alert">
+            <div
+              className="alert alert-warning alert-dismissible mt-2 fade show"
+              role="alert"
+            >
               {stockError}
             </div>
           )}
@@ -727,7 +752,9 @@ const ProductDetails = () => {
             <div className="d-grid col-lg-6">
               {isLoggedIn ? (
                 <button
-                  className={`btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
+                  className={`btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100 ${
+                    stockError ? "disabled" : ""
+                  }`}
                   type="button"
                   data-bs-toggle="modal"
                   data-bs-target="#logoModal"
@@ -746,25 +773,33 @@ const ProductDetails = () => {
               )}
             </div>
             <div className="d-grid col-lg-6">
-
               <button
-                className={`btn ${count > 35 ? "btn-warning" : "btn-primary"} fs-5 fw-normal text-capitalize w-100 ${count <= 35 && stockError ? "disabled" : ""}`}
+                className={`btn ${
+                  count > 35 ? "btn-warning" : "btn-primary"
+                } fs-5 fw-normal text-capitalize w-100 ${
+                  count <= 35 && stockError ? "disabled" : ""
+                }`}
                 type="button"
                 data-bs-toggle={isLoggedIn ? "modal" : ""}
                 data-bs-target="#logoModal"
-                onClick={isLoggedIn ? (count > 35 ? handleRaiseQuote : handleBuyNow) : handleButtonClick}
+                onClick={
+                  isLoggedIn
+                    ? count > 35
+                      ? handleRaiseQuote
+                      : handleBuyNow
+                    : handleButtonClick
+                }
               >
                 {count > 35 ? "Raise Quote" : "Buy Now"}
               </button>
-
             </div>
             <div className="d-grid col-lg-6">
-
-
               {isLoggedIn ? (
                 <button
                   onClick={handleAddToWishList}
-                  className={`btn btn-outline-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
+                  className={`btn btn-outline-primary fs-5 fw-normal text-capitalize w-100 ${
+                    stockError ? "disabled" : ""
+                  }`}
                   type="button"
                 >
                   Save to wishlist
@@ -778,7 +813,6 @@ const ProductDetails = () => {
                   Save to wishlist
                 </button>
               )}
-
 
               {/* <button
                 onClick={handleAddToWishList}
@@ -799,7 +833,13 @@ const ProductDetails = () => {
           </div>
         </div>
       </section>
-      <LogoUploader cartItem={cartItem} buyItem={buyItem} quoteItem={quoteItem} selectType={selectType} isSizeSelected={activeSize}></LogoUploader>
+      <LogoUploader
+        cartItem={cartItem}
+        buyItem={buyItem}
+        quoteItem={quoteItem}
+        selectType={selectType}
+        isSizeSelected={activeSize}
+      ></LogoUploader>
 
       {/* <!-- Modal --> */}
     </>
@@ -807,4 +847,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Counter from "../common/components/Counter";
 import { useCart } from "../context/CartContext";
 import "./pages-styles/cart.styles.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useWhishList } from "../context/WishListContext";
 import LoadingComponent from "../common/components/LoadingComponent";
 
@@ -15,11 +15,12 @@ const Cart = () => {
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [bagTotal, setBagTotal] = useState(0);
 
-  const [totalCartAmountWithoutDiscount, setTotalCartAmountWithoutDiscount] = useState(0);
+  const [totalCartAmountWithoutDiscount, setTotalCartAmountWithoutDiscount] =
+    useState(0);
 
-  const { cart, removeFromCart, setCart, loading, handleCheckboxChange } = useCart();
+  const { cart, removeFromCart, setCart, loading, handleCheckboxChange } =
+    useCart();
   const { addToWishList } = useWhishList();
-
 
   // useEffect(() => {
   //   if (!loading) {
@@ -37,7 +38,6 @@ const Cart = () => {
   //   }
   // }, [loading, cart]);  // Include cart dependency if cart changes dynamically
 
-
   useEffect(() => {
     if (!loading) {
       const updatedCart = cart.map((item) => ({
@@ -47,17 +47,14 @@ const Cart = () => {
 
       setCart(updatedCart);
     }
-  }, [loading]);  // Trigger only on loading change
+  }, [loading]); // Trigger only on loading change
 
   useEffect(() => {
     // Calculate totals whenever cart is updated
     calculateBagTotal(cart);
     calculateTotalCartAmountWithoutDiscount(cart);
     calculateInitialProductTotals(cart);
-  }, [cart]);  // Trigger on cart change only
-
-
-
+  }, [cart]); // Trigger on cart change only
 
   // Calculate total amount of each item on loading cart page initially.
   const calculateInitialProductTotals = (updatedCart) => {
@@ -70,11 +67,11 @@ const Cart = () => {
     if (quantity >= 1 && quantity <= 5) {
       return 0; // No discount for 1-5 items
     } else if (quantity >= 6 && quantity <= 10) {
-      return 5; // 5% discount for 6-10 items
+      return 0; // 5% discount for 6-10 items
     } else if (quantity >= 11 && quantity <= 20) {
-      return 10; // 10% discount for 11-20 items
+      return 0; // 10% discount for 11-20 items
     } else if (quantity > 20) {
-      return 15; // 15% discount for 21+ items
+      return 0; // 15% discount for 21+ items
     }
     return 0;
   };
@@ -106,7 +103,7 @@ const Cart = () => {
         totalAfterDiscount: roundedTotalAfterDiscount,
         discountAmount: roundedDiscountAmount,
         discountPercentage,
-        totalBeforeDiscount
+        totalBeforeDiscount,
       },
     }));
 
@@ -114,7 +111,7 @@ const Cart = () => {
       totalAfterDiscount: roundedTotalAfterDiscount,
       discountAmount: roundedDiscountAmount,
       discountPercentage,
-      totalBeforeDiscount
+      totalBeforeDiscount,
     };
   };
 
@@ -124,7 +121,8 @@ const Cart = () => {
 
     updatedCart.forEach((item) => {
       if (item.checked && item.productDetails.price !== undefined) {
-        const { totalAfterDiscount, discountAmount } = calculateProductTotal(item);
+        const { totalAfterDiscount, discountAmount } =
+          calculateProductTotal(item);
         totalPriceAfterDiscount += totalAfterDiscount;
         totalDiscount += discountAmount;
       }
@@ -135,10 +133,6 @@ const Cart = () => {
     setTotalDiscount(totalDiscount); // You can store total discount in state
   };
 
-
-
-
-
   // Calculate total amount of the cart without discount
   // const calculateTotalCartAmountWithoutDiscount = (updatedCart) => {
   //   const totalAmountWithoutDiscount = updatedCart.reduce((acc, item) => {
@@ -147,20 +141,16 @@ const Cart = () => {
   //   setTotalCartAmountWithoutDiscount(totalAmountWithoutDiscount);
   // };
 
-
   const calculateTotalCartAmountWithoutDiscount = (updatedCart) => {
     const totalAmountWithoutDiscount = updatedCart.reduce((acc, item) => {
       if (item.checked) {
-        return acc + (item.productDetails.price * item.quantityRequired);
+        return acc + item.productDetails.price * item.quantityRequired;
       }
       return acc;
     }, 0);
 
     setTotalCartAmountWithoutDiscount(totalAmountWithoutDiscount);
   };
-
-
-
 
   const updateItemQuantity = async (newQuantity, cartItemId) => {
     try {
@@ -187,12 +177,14 @@ const Cart = () => {
   };
 
   const handleProceedToShipping = () => {
-    const checkedItems = cart.filter((item) => item.checked).map((item) => ({
-      ...item,
-      discountAmount: productTotal[item._id]?.discountAmount || 0,
-      totalAfterDiscount: productTotal[item._id]?.totalAfterDiscount || 0,
-      discountPercentage: productTotal[item._id]?.discountPercentage || 0,
-    }));
+    const checkedItems = cart
+      .filter((item) => item.checked)
+      .map((item) => ({
+        ...item,
+        discountAmount: productTotal[item._id]?.discountAmount || 0,
+        totalAfterDiscount: productTotal[item._id]?.totalAfterDiscount || 0,
+        discountPercentage: productTotal[item._id]?.discountPercentage || 0,
+      }));
 
     navigate("/billing", {
       state: {
@@ -241,28 +233,28 @@ const Cart = () => {
         <div className="container-fluid">
           <div className="row">
             {cart.map((item, index) => (
-              <div key={index} className="d-flex justify-content-between p_cart">
+              <div
+                key={index}
+                className="d-flex justify-content-between p_cart"
+              >
                 {/* img */}
                 <div className="p_outer">
                   <div className="p_img">
-                    <img
-                      src={item.imgUrl}
-                      alt={item.group}
-                      className="w-100"
-                    />
+                    <img src={item.imgUrl} alt={item.group} className="w-100" />
                   </div>
                   <div className="p_desc">
                     <div className="p_name">
-                      <h5 className="text-truncate">{item.color.name} {item.productDetails.productType}</h5>
+                      <h5 className="text-truncate">
+                        {item.color.name} {item.productDetails.productType}
+                      </h5>
                       {/* {item.color.name} {item.productDetails.productType} */}
                     </div>
                     {/* p_act */}
                     <div className=" d-flex justify-content-start align-items-center gap-3">
-
                       <button
                         onClick={() => removeFromCart(item._id)}
                         className="btn btn-sm btn-danger d-flex align-items-center gap-2"
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                       >
                         <i className="fa fa-trash"></i> Delete
                       </button>
@@ -270,11 +262,10 @@ const Cart = () => {
                       <button
                         onClick={() => handleWishList(item)}
                         className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2"
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                       >
                         <i className="fa-regular fa-heart"></i> Move to Wishlist
                       </button>
-
 
                       {/* <span style={{ cursor: "pointer" }} onClick={() => removeFromCart(item._id)}>Delete</span>{" "} */}
                       {/* <span style={{ cursor: "pointer" }} onClick={() => handleWishList(item)}>
@@ -313,12 +304,12 @@ const Cart = () => {
                     )}
                     {productTotal[item._id]?.discountAmount > 0 && (
                       <div className="p_discount fs-6 text-primary">
-                        Price after discount: ₹{productTotal[item._id]?.totalAfterDiscount}
+                        Price after discount: ₹
+                        {productTotal[item._id]?.totalAfterDiscount}
                       </div>
                     )}
                   </div>
                 </div>
-
 
                 <div className="logo_detail">
                   <div className="p_logo">
@@ -329,17 +320,31 @@ const Cart = () => {
                           src={item.logoUrl}
                           className="img-fluid rounded-3"
                           alt="Logo"
-                          style={{ maxHeight: '100px', objectFit: 'contain' }}
+                          style={{ maxHeight: "100px", objectFit: "contain" }}
                         />
                       ) : (
                         <span className="text-muted">Not Provided</span>
                       )}
                     </div>
                   </div>
-                  <div className="p_logo-pos">
-                    <div className="fw-bold">Logo placement</div>
+                  <div className="p_logo">
+                    <div className="fw-bold">Name</div>
                     <div className="lg_ttl">
-                      {item.logoPosition ? item.logoPosition : <span className="text-muted">Not Provided</span>}
+                      {item.name ? (
+                        item.name
+                      ) : (
+                        <span className="text-muted">Not Provided</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p_logo-pos">
+                    <div className="fw-bold">Logo Placement</div>
+                    <div className="lg_ttl">
+                      {item.logoPosition ? (
+                        item.logoPosition
+                      ) : (
+                        <span className="text-muted">Not Provided</span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -359,10 +364,14 @@ const Cart = () => {
               </div>
             ))}
 
-
             <div
               className="cart_total p-4 rounded shadow-sm mt-3"
-              style={{ border: "1px solid #ddd", maxWidth: "400px", margin: "0 auto", backgroundColor: "#fdfdfd" }}
+              style={{
+                border: "1px solid #ddd",
+                maxWidth: "400px",
+                margin: "0 auto",
+                backgroundColor: "#fdfdfd",
+              }}
             >
               {/* <h5 className="text-primary mb-3">Order Summary</h5> */}
 
@@ -379,7 +388,9 @@ const Cart = () => {
               <button
                 type="button"
                 onClick={handleProceedToShipping}
-                className={`btn btn-primary w-100 ${bagTotal === 0 ? "disabled" : ""}`}
+                className={`btn btn-primary w-100 ${
+                  bagTotal === 0 ? "disabled" : ""
+                }`}
                 style={{
                   padding: "12px",
                   fontSize: "1rem",
@@ -392,9 +403,6 @@ const Cart = () => {
                 PROCEED TO SHIPPING
               </button>
             </div>
-
-
-
 
             {/* <div className="cart_total">
               <div className="cart_discount">

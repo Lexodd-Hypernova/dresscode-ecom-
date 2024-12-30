@@ -9,7 +9,7 @@ import { accountInfoApis } from "../common";
 import { useCart } from "../context/CartContext";
 import LoadingComponent from "../common/components/LoadingComponent";
 import "./pages-styles/billing.style.css";
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Swal from "sweetalert2/dist/sweetalert2.js";
 import axiosInstance from "../common/axiosInstance";
 import { toast } from "react-toastify";
 
@@ -18,7 +18,6 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
 import InvoiceForOrder from "../components/Invoice/InvoiceForOrder";
-
 
 const Billing = () => {
   const navigate = useNavigate();
@@ -66,10 +65,14 @@ const Billing = () => {
   const location = useLocation();
   const { state } = location;
 
-  const { totalCartAmountWithoutDiscount, totalDiscount, cart: orderedItems, product, type } = state || {};
+  const {
+    totalCartAmountWithoutDiscount,
+    totalDiscount,
+    cart: orderedItems,
+    product,
+    type,
+  } = state || {};
   // console.log(orderedItems, "orderedItems");
-
-
 
   // console.log(type, "type");
 
@@ -86,8 +89,6 @@ const Billing = () => {
     setOriginalTotalPrice(totalPrice);
   };
 
-
-
   // Fetch coupons based on product or cart items
   useEffect(() => {
     const fetchCoupons = async () => {
@@ -96,18 +97,18 @@ const Billing = () => {
         const couponRequestData = getCouponRequestData();
         if (!couponRequestData) return;
 
-        const response = await axiosInstance.post(accountInfoApis.getActiveCoupons(localStorage.getItem("id")),
+        const response = await axiosInstance.post(
+          accountInfoApis.getActiveCoupons(localStorage.getItem("id")),
           couponRequestData,
           {
-            withCredentials: true
+            withCredentials: true,
           }
         );
         setCoupons(response.data.couponsApplicableToAllProducts);
         // console.log("active coupons", response.data.coupons)
       } catch (error) {
-        console.error('Failed to fetch coupons:', error);
-      }
-      finally {
+        console.error("Failed to fetch coupons:", error);
+      } finally {
         setcouponLoading(false);
       }
     };
@@ -115,15 +116,14 @@ const Billing = () => {
     fetchCoupons();
   }, [product, orderedItems]);
 
-
   // Helper function to prepare data for coupon API based on product or cart items
   const getCouponRequestData = () => {
-    if (type === 'buyNow' && product?.length) {
+    if (type === "buyNow" && product?.length) {
       return product.map(({ group, productId }) => ({
         group: group,
         productId: productId,
       }));
-    } else if (type === 'cart' && orderedItems?.length) {
+    } else if (type === "cart" && orderedItems?.length) {
       return orderedItems.map(({ group, productId }) => ({
         group: group,
         productId: productId,
@@ -132,13 +132,12 @@ const Billing = () => {
     return null;
   };
 
-
-
   const handleApplyCoupon = () => {
     if (!selectedCoupon) return;
 
     // Calculate the discount amount
-    const discountAmount = (originalTotalPrice * selectedCoupon.discountPercentage) / 100;
+    const discountAmount =
+      (originalTotalPrice * selectedCoupon.discountPercentage) / 100;
 
     // Apply discount based on the original total price
     // const discountedTotal = originalTotalPrice - (originalTotalPrice * selectedCoupon.discountPercentage) / 100;
@@ -156,8 +155,6 @@ const Billing = () => {
     setTimeout(() => setShowAlert(false), 3000);
   };
 
-
-
   const convertToCurrency = (num) => {
     // Ensure `num` is a number before applying `toFixed` and `toLocaleString`
     let roundedNumber = Number(num.toFixed(2)); // Round to 2 decimal places as a number
@@ -167,7 +164,6 @@ const Billing = () => {
     });
     return convertedNumber;
   };
-
 
   const removeCartItems = async (productIds) => {
     try {
@@ -179,7 +175,7 @@ const Billing = () => {
         shoppingInfoApis.removeCartItems(id),
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           data: raw, // Pass the body (payload) here for DELETE requests
           withCredentials: true, // Ensure cookies are sent with the request
@@ -192,7 +188,6 @@ const Billing = () => {
       console.error(error);
     }
   };
-
 
   // Function to generate the PDF Blob
   const generateInvoicePDFBlob = async (orderDetails) => {
@@ -238,7 +233,9 @@ const Billing = () => {
       whatsappFormData.append("messaging_product", "whatsapp");
 
       const fbResponse = await fetch(
-        `https://graph.facebook.com/v13.0/${import.meta.env.VITE_WHATSAPP_ID}/media`,
+        `https://graph.facebook.com/v13.0/${
+          import.meta.env.VITE_WHATSAPP_ID
+        }/media`,
         {
           method: "POST",
           body: whatsappFormData,
@@ -287,7 +284,9 @@ const Billing = () => {
       };
 
       const whatsappResponse = await fetch(
-        `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/messages`,
+        `https://graph.facebook.com/v18.0/${
+          import.meta.env.VITE_WHATSAPP_ID
+        }/messages`,
         {
           method: "POST",
           headers: {
@@ -317,11 +316,8 @@ const Billing = () => {
     }
   };
 
-
-
-
   const handlePayment = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const amountInPaise = TotalPriceAfterDiscount; // Example amount in paise (i.e., 1000 paise = 10 INR)
 
@@ -330,12 +326,11 @@ const Billing = () => {
       //   return;
       // }
 
-
       // console.log("Creating payment order with amount:", amountInPaise);
 
       // Step 1: Create a payment order on your server
 
-      var raw = {}
+      var raw = {};
 
       if (type === "cart") {
         raw = JSON.stringify({
@@ -348,11 +343,14 @@ const Billing = () => {
             imgUrl: item.imgUrl,
             logoUrl: item.logoUrl,
             logoPosition: item.logoPosition,
+            name: item.name,
           })),
-          couponCode: appliedCoupon && appliedCoupon.couponCode ? appliedCoupon.couponCode : null, // Safeguard against null or undefined
-        })
-      }
-      else if (type === "buyNow") {
+          couponCode:
+            appliedCoupon && appliedCoupon.couponCode
+              ? appliedCoupon.couponCode
+              : null, // Safeguard against null or undefined
+        });
+      } else if (type === "buyNow") {
         raw = JSON.stringify({
           products: product.map((item) => ({
             group: item.group,
@@ -363,40 +361,42 @@ const Billing = () => {
             imgUrl: item.imgUrl,
             logoUrl: item.logoUrl,
             logoPosition: item.logoPosition,
+            name: item.name,
           })),
-          couponCode: appliedCoupon && appliedCoupon.couponCode ? appliedCoupon.couponCode : null, // Safeguard against null or undefined
-        })
+          couponCode:
+            appliedCoupon && appliedCoupon.couponCode
+              ? appliedCoupon.couponCode
+              : null, // Safeguard against null or undefined
+        });
       }
 
-      const { data: orderData } = await axiosInstance.post(shoppingInfoApis.createOrder(id, activeAddressId),
+      const { data: orderData } = await axiosInstance.post(
+        shoppingInfoApis.createOrder(id, activeAddressId),
         raw,
         {
           headers: {
-            'Content-Type': 'application/json',  // Set the Content-Type to JSON
+            "Content-Type": "application/json", // Set the Content-Type to JSON
           },
-          withCredentials: true // Ensure cookies are sent with the request
+          withCredentials: true, // Ensure cookies are sent with the request
         }
       );
 
       // console.log("Order data received:", orderData);
 
-
       if (!orderData.success) {
         Swal.fire({
-          title: 'Order creation failed!',
-          text: 'Something went wrong in order creation',
-          icon: 'error',
+          title: "Order creation failed!",
+          text: "Something went wrong in order creation",
+          icon: "error",
           showConfirmButton: false,
-          timer: 1500
-        })
+          timer: 1500,
+        });
         throw new Error("Order creation failed");
       }
 
       // Step 2: Initialize Razorpay
       const options = {
-
         // key: "rzp_test_0PMwuUiWHNgJdU",
-
 
         key: "rzp_live_YZAblE0DYussOv",
 
@@ -416,10 +416,11 @@ const Billing = () => {
           try {
             setLoading(true);
 
-            const responseData = await axiosInstance.post(DressCodeApi.verifyPayment.url,
+            const responseData = await axiosInstance.post(
+              DressCodeApi.verifyPayment.url,
               verifyPayload,
               {
-                withCredentials: true // Ensure cookies are sent with the request
+                withCredentials: true, // Ensure cookies are sent with the request
               }
             );
 
@@ -427,19 +428,14 @@ const Billing = () => {
 
             // console.log("Payment verification response:", verifyData);
 
-
             if (verifyData.success) {
               Swal.fire({
-                title: 'Success!',
-                text: 'Order created successfully',
-                icon: 'success',
+                title: "Success!",
+                text: "Order created successfully",
+                icon: "success",
                 showConfirmButton: false,
-                timer: 1500
-              })
-
-
-
-
+                timer: 1500,
+              });
 
               if (type === "cart") {
                 const productIds = orderedItems.map((item) => item._id);
@@ -454,28 +450,25 @@ const Billing = () => {
             } else {
               // alert("Payment verification failed!");
               Swal.fire({
-                title: 'Failed!',
-                text: 'Payment verification failed!',
-                icon: 'error',
+                title: "Failed!",
+                text: "Payment verification failed!",
+                icon: "error",
                 showConfirmButton: false,
-                timer: 1500
-              })
+                timer: 1500,
+              });
             }
 
             sendInvoiceViaWhatsApp(verifyData.OrderWithDetails);
-
-
           } catch (error) {
-            console.log("error")
+            console.log("error");
           } finally {
-            setLoading(false)
+            setLoading(false);
           }
-
         },
         prefill: {
-          name: localStorage.getItem('userName'),
-          email: localStorage.getItem('email'),
-          contact: localStorage.getItem('phoneNumber'),
+          name: localStorage.getItem("userName"),
+          email: localStorage.getItem("email"),
+          contact: localStorage.getItem("phoneNumber"),
         },
         notes: {
           address: "Razorpay address",
@@ -493,34 +486,32 @@ const Billing = () => {
         // alert("Payment failed. Please try again.");
 
         Swal.fire({
-          title: 'Failed!',
-          text: 'Payment failed. Please try again.',
-          icon: 'error',
+          title: "Failed!",
+          text: "Payment failed. Please try again.",
+          icon: "error",
           showConfirmButton: false,
-          timer: 1500
-        })
-
+          timer: 1500,
+        });
       });
       rzp.open();
     } catch (error) {
       console.error("Error in payment process:", error);
       // alert("Payment process failed!");
       Swal.fire({
-        title: 'Failed!',
-        text: 'Payment process failed!',
-        icon: 'error',
+        title: "Failed!",
+        text: "Payment process failed!",
+        icon: "error",
         showConfirmButton: false,
-        timer: 1500
-      })
+        timer: 1500,
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   const handleAddressClick = (addressId) => {
     setActiveAddressId(addressId);
   };
-
 
   const showCartItems = (orderedItems) => {
     if (orderedItems) {
@@ -533,22 +524,31 @@ const Billing = () => {
             padding: "16px",
             borderRadius: "8px",
             // maxWidth: "600px",
-            // margin: "0 auto",  
+            // margin: "0 auto",
           }}
         >
           {/* Product Image */}
-          <div style={{ width: "100px", flexShrink: 0, borderRadius: "8px", overflow: "hidden" }}>
-            <img
-              src={product.imgUrl}
-              alt={product.group}
-              className="w-100"
-            />
+          <div
+            style={{
+              width: "100px",
+              flexShrink: 0,
+              borderRadius: "8px",
+              overflow: "hidden",
+            }}
+          >
+            <img src={product.imgUrl} alt={product.group} className="w-100" />
           </div>
 
           {/* Product Details */}
-          <div style={{ flex: "1 1 auto", maxWidth: "70%" }}> {/* Removed minWidth */}
-            <div className="fs-5 fw-semibold text-primary">{product.color.name}</div>
-            <div className="fs-6 text-secondary">{product.productDetails.productType}</div>
+          <div style={{ flex: "1 1 auto", maxWidth: "70%" }}>
+            {" "}
+            {/* Removed minWidth */}
+            <div className="fs-5 fw-semibold text-primary">
+              {product.color.name}
+            </div>
+            <div className="fs-6 text-secondary">
+              {product.productDetails.productType}
+            </div>
             <div className="d-flex align-items-center mt-2">
               <span className="badge bg-info text-dark me-2">Qty</span>
               <span className="fs-6">{product.quantityRequired}</span>
@@ -558,7 +558,6 @@ const Billing = () => {
       ));
     }
   };
-
 
   const showBuyNowProduct = (product) => {
     if (product) {
@@ -572,12 +571,19 @@ const Billing = () => {
               padding: "16px",
               borderRadius: "12px",
               backgroundColor: "#fdfdfd",
-              // maxWidth: "600px", 
-              // margin: "0 auto",  
+              // maxWidth: "600px",
+              // margin: "0 auto",
             }}
           >
             {/* Product Image */}
-            <div style={{ width: "100px", flexShrink: 0, borderRadius: "8px", overflow: "hidden" }}>
+            <div
+              style={{
+                width: "100px",
+                flexShrink: 0,
+                borderRadius: "8px",
+                overflow: "hidden",
+              }}
+            >
               <img
                 src={item.imgUrl}
                 alt={item.group}
@@ -587,7 +593,9 @@ const Billing = () => {
             </div>
 
             {/* Product Details */}
-            <div style={{ flex: "1 1 auto", maxWidth: "70%" }}> {/* Removed minWidth */}
+            <div style={{ flex: "1 1 auto", maxWidth: "70%" }}>
+              {" "}
+              {/* Removed minWidth */}
               <div className="fs-5 fw-semibold text-primary">{item.color}</div>
               <div className="fs-6 text-secondary">{item.productType}</div>
               <div className="d-flex align-items-center mt-2">
@@ -601,99 +609,109 @@ const Billing = () => {
     }
   };
 
-
-
   return (
     <>
-
-      {
-        loading ? (
-          <LoadingComponent />
-        ) : (
-          <section className="billing mt-5 ms-5">
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-lg-6">
-                  <div>
-                    <h5 className="fs-3 fw-medium">Delivery Address</h5>
-                    <p className="fs-4 fw-medium lh-1 mb-3">
-                      We will deliver your order to this address
-                    </p>
-                  </div>
-
-                  {/* show address data */}
-
-                  <div>
-                    {addressloading ? (
-                      <div className="d-flex justify-content-center my-4">
-                        <div className="spinner-border text-primary" role="status">
-                          <span className="sr-only">Loading...</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {addressData.length === 0 ? (
-                          <p>You do not have an address. Please add an address to proceed with checkout.</p>
-                        ) : (
-                          addressData.map((address) => (
-                            <div
-                              key={address._id}
-                              className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? "active" : ""
-                                }`}
-                              onClick={() => handleAddressClick(address._id)}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <div>
-                                <div className="fs-4 fw-medium">
-                                  {address.firstName} {address.lastName}
-                                </div>
-                                <div className="fs-4" style={{ color: "#A56528" }}>
-                                  {address.markAsDefault ? "Default" : ""}
-                                </div>
-                                <div className="fs-4">
-                                  {address.address}, {address.city}, {address.pinCode}, {address.state},{" "}
-                                  {address.country}
-                                </div>
-                                <div className="fs-4">
-                                  Phone: <span className="fw-medium">{address.phone}</span>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input fs-4"
-                                    type="radio"
-                                    name="flexRadioDefault"
-                                    checked={address._id === activeAddressId}
-                                    readOnly
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  {/* add address button */}
-
-                  <div className="mt-5">
-                    <button
-                      type="button"
-                      onClick={() => setModalOpen(true)}
-                      className="fs-4 fw-medium text-capitalize border-0 text-primary"
-                      style={{ background: "none" }}
-                    >
-                      Add new Address  <i className="fa-solid fa-plus"></i>
-                    </button>
-                  </div>
-
-                  <hr className="w-100 mt-4" />
+      {loading ? (
+        <LoadingComponent />
+      ) : (
+        <section className="billing mt-5 ms-5">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-6">
+                <div>
+                  <h5 className="fs-3 fw-medium">Delivery Address</h5>
+                  <p className="fs-4 fw-medium lh-1 mb-3">
+                    We will deliver your order to this address
+                  </p>
                 </div>
 
-                {/* --------------Order details----------- */}
-                {/* <div className="col-lg-6">
+                {/* show address data */}
+
+                <div>
+                  {addressloading ? (
+                    <div className="d-flex justify-content-center my-4">
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {addressData.length === 0 ? (
+                        <p>
+                          You do not have an address. Please add an address to
+                          proceed with checkout.
+                        </p>
+                      ) : (
+                        addressData.map((address) => (
+                          <div
+                            key={address._id}
+                            className={`mb-4 d-flex align-items-center gap-5 ${
+                              address._id === activeAddressId ? "active" : ""
+                            }`}
+                            onClick={() => handleAddressClick(address._id)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <div>
+                              <div className="fs-4 fw-medium">
+                                {address.firstName} {address.lastName}
+                              </div>
+                              <div
+                                className="fs-4"
+                                style={{ color: "#A56528" }}
+                              >
+                                {address.markAsDefault ? "Default" : ""}
+                              </div>
+                              <div className="fs-4">
+                                {address.address}, {address.city},{" "}
+                                {address.pinCode}, {address.state},{" "}
+                                {address.country}
+                              </div>
+                              <div className="fs-4">
+                                Phone:{" "}
+                                <span className="fw-medium">
+                                  {address.phone}
+                                </span>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="form-check">
+                                <input
+                                  className="form-check-input fs-4"
+                                  type="radio"
+                                  name="flexRadioDefault"
+                                  checked={address._id === activeAddressId}
+                                  readOnly
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </>
+                  )}
+                </div>
+
+                {/* add address button */}
+
+                <div className="mt-5">
+                  <button
+                    type="button"
+                    onClick={() => setModalOpen(true)}
+                    className="fs-4 fw-medium text-capitalize border-0 text-primary"
+                    style={{ background: "none" }}
+                  >
+                    Add new Address <i className="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+
+                <hr className="w-100 mt-4" />
+              </div>
+
+              {/* --------------Order details----------- */}
+              {/* <div className="col-lg-6">
                   <div className="order__bill">
                     <div className="px-5 py-4 border border-bottom-0 rounded-top-1">
                       <h5 className="fs-4 fw-medium text-capitalize mb-3">
@@ -867,10 +885,9 @@ const Billing = () => {
                   </div>
                 </div> */}
 
-
-                {/* Order Details Section */}
-                <div className="col-lg-6">
-                  {/* <div className="order__bill rounded shadow-sm">
+              {/* Order Details Section */}
+              <div className="col-lg-6">
+                {/* <div className="order__bill rounded shadow-sm">
                     <div className="px-5 py-4 border-bottom rounded-top-3" style={{ backgroundColor: "#f8f9fa" }}>
                       <h5 className="fs-4 fw-semibold text-capitalize mb-3 text-dark">
                         Order Details
@@ -938,168 +955,234 @@ const Billing = () => {
                     </button>
                   </div> */}
 
-                  <div className="order__bill border rounded shadow-sm">
-                    <div className="px-4 py-4">
-                      {/* Section Title */}
-                      <h5 className="fs-4 fw-semibold mb-4 text-primary text-uppercase">Order Summary</h5>
+                <div className="order__bill border rounded shadow-sm">
+                  <div className="px-4 py-4">
+                    {/* Section Title */}
+                    <h5 className="fs-4 fw-semibold mb-4 text-primary text-uppercase">
+                      Order Summary
+                    </h5>
 
-                      {/* Bag Total */}
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <span className="fs-6 text-muted">Bag Total</span>
-                        <span className="fs-6 fw-bold">{Number(totalCartAmountWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
-                      </div>
+                    {/* Bag Total */}
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="fs-6 text-muted">Bag Total</span>
+                      <span className="fs-6 fw-bold">
+                        {Number(totalCartAmountWithoutDiscount).toLocaleString(
+                          "en-US",
+                          { style: "currency", currency: "INR" }
+                        )}
+                      </span>
+                    </div>
 
-                      {/* Bag Discount */}
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <span className="fs-6 text-muted">Bag Discount</span>
-                        <span className="fs-6 text-danger">
-                          (-){totalDiscount.toLocaleString("en-US", { style: "currency", currency: "INR" })}
+                    {/* Bag Discount */}
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="fs-6 text-muted">Bag Discount</span>
+                      <span className="fs-6 text-danger">
+                        (-)
+                        {totalDiscount.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "INR",
+                        })}
+                      </span>
+                    </div>
+
+                    {/* Divider */}
+                    <hr className="my-3" />
+
+                    {/* Delivery Fee */}
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="fs-6 text-muted">Delivery Fee</span>
+                      <span className="fs-6">
+                        {convertToCurrency(deliveryCharges)}
+                      </span>
+                    </div>
+
+                    {/* Apply Coupon */}
+                    <div className="my-3">
+                      <div
+                        className="d-flex justify-content-between align-items-center p-2 border rounded cursor-pointer"
+                        onClick={() => setShowModal(true)}
+                        style={{
+                          color: appliedCoupon ? "#28a745" : "#007bff",
+                          cursor: "pointer",
+                          borderColor: appliedCoupon ? "#28a745" : "#007bff",
+                        }}
+                      >
+                        <span className="fs-6 fw-semibold">
+                          {appliedCoupon ? (
+                            <>
+                              <span className="text-success">
+                                Coupon Applied:{" "}
+                              </span>
+                              <strong>{appliedCoupon.couponCode}</strong>
+                              <span>
+                                {" "}
+                                ({appliedCoupon.discountPercentage}%)
+                              </span>
+                              <br></br>
+                              <span> - You saved </span>
+                              <strong>₹{couponAmount.toFixed(2)}</strong>
+                            </>
+                          ) : (
+                            <span className="text-primary">Apply coupon</span>
+                          )}
                         </span>
-                      </div>
-
-
-                      {/* Divider */}
-                      <hr className="my-3" />
-
-                      {/* Delivery Fee */}
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <span className="fs-6 text-muted">Delivery Fee</span>
-                        <span className="fs-6">{convertToCurrency(deliveryCharges)}</span>
-                      </div>
-
-                      {/* Apply Coupon */}
-                      <div className="my-3">
-                        <div
-                          className="d-flex justify-content-between align-items-center p-2 border rounded cursor-pointer"
-                          onClick={() => setShowModal(true)}
-                          style={{ color: appliedCoupon ? "#28a745" : "#007bff", cursor: "pointer", borderColor: appliedCoupon ? "#28a745" : "#007bff" }}
-                        >
-                          <span className="fs-6 fw-semibold">
-                            {appliedCoupon ? (
-                              <>
-                                <span className="text-success">Coupon Applied: </span>
-                                <strong>{appliedCoupon.couponCode}</strong>
-                                <span> ({appliedCoupon.discountPercentage}%)</span><br></br>
-                                <span> - You saved </span>
-                                <strong>₹{couponAmount.toFixed(2)}</strong>
-                              </>
-                            ) : (
-                              <span className="text-primary">Apply coupon</span>
-                            )}
-                          </span>
-                          <i className="fa-solid fa-arrow-right"></i>
-                        </div>
-                      </div>
-
-                      {/* Divider */}
-                      <hr className="my-3" />
-
-                      {/* Order Total */}
-                      <div className="d-flex justify-content-between align-items-center mb-4">
-                        <span className="fs-5 fw-bold text-uppercase">Order Total</span>
-                        <span className="fs-5 fw-bold text-primary">{convertToCurrency(TotalPriceAfterDiscount)}</span>
+                        <i className="fa-solid fa-arrow-right"></i>
                       </div>
                     </div>
 
-                    {/* Proceed to Payment Button */}
-                    <button
-                      type="button"
-                      className={`btn ${activeAddressId === null ? "disabled" : ""} fs-5 text-white fw-medium py-3 w-100`}
-                      style={{ backgroundColor: "#20248A" }}
-                      onClick={handlePayment}
-                    >
-                      Proceed to Payment
-                    </button>
+                    {/* Divider */}
+                    <hr className="my-3" />
+
+                    {/* Order Total */}
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                      <span className="fs-5 fw-bold text-uppercase">
+                        Order Total
+                      </span>
+                      <span className="fs-5 fw-bold text-primary">
+                        {convertToCurrency(TotalPriceAfterDiscount)}
+                      </span>
+                    </div>
                   </div>
 
+                  {/* Proceed to Payment Button */}
+                  <button
+                    type="button"
+                    className={`btn ${
+                      activeAddressId === null ? "disabled" : ""
+                    } fs-5 text-white fw-medium py-3 w-100`}
+                    style={{ backgroundColor: "#20248A" }}
+                    onClick={handlePayment}
+                  >
+                    Proceed to Payment
+                  </button>
+                </div>
 
-
-
-                  {/* Coupon Modal */}
-                  {showModal && (
-                    <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
-                      <div className="modal-dialog modal-md" role="document">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h5 className="modal-title" id="couponModalLabel">Select a Coupon</h5>
-                            <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Close"></button>
-                          </div>
-                          <div className="modal-body">
-                            {couponloading ? (
-                              <div className="d-flex justify-content-center my-4">
-                                <div className="spinner-border text-primary" role="status">
-                                  <span className="visually-hidden">Loading...</span>
-                                </div>
+                {/* Coupon Modal */}
+                {showModal && (
+                  <div
+                    className="modal fade show d-block"
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-labelledby="couponModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog modal-md" role="document">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="couponModalLabel">
+                            Select a Coupon
+                          </h5>
+                          <button
+                            type="button"
+                            className="btn-close"
+                            onClick={() => setShowModal(false)}
+                            aria-label="Close"
+                          ></button>
+                        </div>
+                        <div className="modal-body">
+                          {couponloading ? (
+                            <div className="d-flex justify-content-center my-4">
+                              <div
+                                className="spinner-border text-primary"
+                                role="status"
+                              >
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
                               </div>
-                            ) : coupons.length > 0 ? (
-                              coupons.map((coupon, index) => (
-                                <div key={index} className="card my-2 border-0">
-                                  <div className={`card-body p-3 ${appliedCoupon && appliedCoupon.couponCode === coupon.couponCode ? "border border-success rounded" : ""}`}>
-                                    <div className="form-check">
-                                      <input
-                                        className="form-check-input"
-                                        type="radio"
-                                        name="couponOption"
-                                        value={coupon.couponCode}
-                                        checked={selectedCoupon && selectedCoupon.couponCode === coupon.couponCode}
-                                        onChange={() => setSelectedCoupon(coupon)}
-                                      />
-                                      <label className="form-check-label ms-2">
-                                        <strong>{coupon.couponCode}</strong> - {coupon.discountPercentage}% off
-                                        <br />
-                                        <small className="text-muted">Expires on: {new Date(coupon.expiryDate).toLocaleDateString()}</small>
-                                      </label>
-                                    </div>
+                            </div>
+                          ) : coupons.length > 0 ? (
+                            coupons.map((coupon, index) => (
+                              <div key={index} className="card my-2 border-0">
+                                <div
+                                  className={`card-body p-3 ${
+                                    appliedCoupon &&
+                                    appliedCoupon.couponCode ===
+                                      coupon.couponCode
+                                      ? "border border-success rounded"
+                                      : ""
+                                  }`}
+                                >
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="radio"
+                                      name="couponOption"
+                                      value={coupon.couponCode}
+                                      checked={
+                                        selectedCoupon &&
+                                        selectedCoupon.couponCode ===
+                                          coupon.couponCode
+                                      }
+                                      onChange={() => setSelectedCoupon(coupon)}
+                                    />
+                                    <label className="form-check-label ms-2">
+                                      <strong>{coupon.couponCode}</strong> -{" "}
+                                      {coupon.discountPercentage}% off
+                                      <br />
+                                      <small className="text-muted">
+                                        Expires on:{" "}
+                                        {new Date(
+                                          coupon.expiryDate
+                                        ).toLocaleDateString()}
+                                      </small>
+                                    </label>
                                   </div>
                                 </div>
-                              ))
-                            ) : (
-                              <p className="text-center text-muted">No coupons available.</p>
-                            )}
-                          </div>
-                          <div className="modal-footer">
-                            <button type="button" className="btn btn-outline-secondary" onClick={() => setShowModal(false)}>
-                              Close
-                            </button>
-                            <button type="button" className="btn btn-primary" onClick={handleApplyCoupon} disabled={!selectedCoupon}>
-                              Apply Selected Coupon
-                            </button>
-                          </div>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-center text-muted">
+                              No coupons available.
+                            </p>
+                          )}
+                        </div>
+                        <div className="modal-footer">
+                          <button
+                            type="button"
+                            className="btn btn-outline-secondary"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Close
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={handleApplyCoupon}
+                            disabled={!selectedCoupon}
+                          >
+                            Apply Selected Coupon
+                          </button>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
-
-
-
-
-
+                  </div>
+                )}
               </div>
-              <div className="row mt-5">
-                <h5 className="fs-3 fw-medium">Your order</h5>
-                {/* <p className="fs-4 fw-medium">
+            </div>
+            <div className="row mt-5">
+              <h5 className="fs-3 fw-medium">Your order</h5>
+              {/* <p className="fs-4 fw-medium">
                   Estimated delivery dates for your order
                 </p> */}
 
-                {/* --------------order items------------ */}
+              {/* --------------order items------------ */}
 
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "16px",
-                  }}
-                >
-                  {showBuyNowProduct(product)}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "16px",
+                }}
+              >
+                {showBuyNowProduct(product)}
 
-                  {showCartItems(orderedItems)}
-                </div>
+                {showCartItems(orderedItems)}
               </div>
             </div>
-            <div className=""></div>
-          </section>
-        )
-      }
+          </div>
+          <div className=""></div>
+        </section>
+      )}
 
       <AddressModal
         FormOnSubmit={handleSubmit}
@@ -1108,7 +1191,6 @@ const Billing = () => {
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
       ></AddressModal>
-
     </>
   );
 };
