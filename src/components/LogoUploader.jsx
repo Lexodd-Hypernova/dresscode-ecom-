@@ -214,60 +214,72 @@ const LogoUploader = ({
 
   const handleSave = () => {
     // e.preventDefault();
-    if (imageUrl) {
-      if (selectType === "cartType") {
-        const updatedItem = {
-          ...cartItemToAdd, // Spread the current itemToAdd state
-          logoUrl: imageUrl, // Add or update the logoUrl with the current imageUrl
-          logoPosition: logoPlacement, // Add or update the logoPosition with the selected placement
-          name: logoName,
-        };
-        setCartItemToAdd(updatedItem); // Update the state with the new object
-        addToCart(updatedItem); // Pass the updated item directly to addToCart
-      } else if (selectType === "buyNowType") {
-        const updatedBuyItem = {
-          ...buyItemToAdd,
-          logoUrl: imageUrl,
-          logoPosition: logoPlacement,
-          name: logoName,
-        };
 
-        setBuyItemToAdd(updatedBuyItem);
-        setProduct((prevItem) => [...prevItem, updatedBuyItem]);
-
-        // Delay navigation until state is set
-        setTimeout(() => {
-          navigate("/billing", {
-            state: {
-              product: [...product, updatedBuyItem],
-              totalCartAmountWithoutDiscount: buyItem.totalPriceWithoutDiscount,
-              totalDiscount: buyItem.discountAmount,
-              type: "buyNow",
-            },
-          });
-        }, 100);
-      } else if (selectType === "quoteType") {
-        const updatedQuoteItem = {
-          ...quoteItemToAdd,
-          logoUrl: imageUrl,
-          logoPosition: logoPlacement,
-          name: logoName,
-        };
-
-        setQuoteItemToAdd(updatedQuoteItem);
-        setProduct((prevItem) => [...prevItem, updatedQuoteItem]);
-
-        // Delay navigation until state is set
-        setTimeout(() => {
-          navigate("/raise-quote", {
-            state: {
-              product: [...product, updatedQuoteItem],
-              totalAmount: quoteItem.totalPrice,
-            },
-          });
-        }, 100);
-      }
+    if (!logoPlacement) {
+      alert("Please select a logo position.");
+      return;
     }
+
+    // Ensure either logoUrl or logoName is present
+    if (!imageUrl && !logoName) {
+      alert("Please provide either a logo URL or a logo name.");
+      return;
+    }
+
+
+    if (selectType === "cartType") {
+      const updatedItem = {
+        ...cartItemToAdd, // Spread the current itemToAdd state
+        logoUrl: imageUrl, // Add or update the logoUrl with the current imageUrl
+        logoPosition: logoPlacement, // Add or update the logoPosition with the selected placement
+        name: logoName,
+      };
+      setCartItemToAdd(updatedItem); // Update the state with the new object
+      addToCart(updatedItem); // Pass the updated item directly to addToCart
+    } else if (selectType === "buyNowType") {
+      const updatedBuyItem = {
+        ...buyItemToAdd,
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement,
+        name: logoName,
+      };
+
+      setBuyItemToAdd(updatedBuyItem);
+      setProduct((prevItem) => [...prevItem, updatedBuyItem]);
+
+      // Delay navigation until state is set
+      setTimeout(() => {
+        navigate("/billing", {
+          state: {
+            product: [...product, updatedBuyItem],
+            totalCartAmountWithoutDiscount: buyItem.totalPriceWithoutDiscount,
+            totalDiscount: buyItem.discountAmount,
+            type: "buyNow",
+          },
+        });
+      }, 100);
+    } else if (selectType === "quoteType") {
+      const updatedQuoteItem = {
+        ...quoteItemToAdd,
+        logoUrl: imageUrl,
+        logoPosition: logoPlacement,
+        name: logoName,
+      };
+
+      setQuoteItemToAdd(updatedQuoteItem);
+      setProduct((prevItem) => [...prevItem, updatedQuoteItem]);
+
+      // Delay navigation until state is set
+      setTimeout(() => {
+        navigate("/raise-quote", {
+          state: {
+            product: [...product, updatedQuoteItem],
+            totalAmount: quoteItem.totalPrice,
+          },
+        });
+      }, 100);
+    }
+
   };
 
   return (
@@ -373,14 +385,26 @@ const LogoUploader = ({
                 >
                   Skip
                 </button>
+
                 <button
                   type="button"
                   className="btn btn-primary"
-                  data-bs-dismiss={`${imageUrl ? "modal" : ""}`}
+                  data-bs-dismiss="modal"
                   onClick={handleSave}
+                  disabled={!logoPlacement || (!imageUrl && !logoName)}
                 >
                   Save
                 </button>
+
+
+                {/* <button
+                  type="button"
+                  className="btn btn-primary"
+                  data-bs-dismiss={`${logoPlacement ? "modal" : ""}`}
+                  onClick={handleSave}
+                >
+                  Save
+                </button> */}
               </div>
             </div>
           </div>

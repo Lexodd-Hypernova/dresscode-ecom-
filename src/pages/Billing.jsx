@@ -104,7 +104,10 @@ const Billing = () => {
             withCredentials: true,
           }
         );
-        setCoupons(response.data.couponsApplicableToAllProducts);
+
+        console.log("coupons", response)
+
+        setCoupons(response.data.coupons);
         // console.log("active coupons", response.data.coupons)
       } catch (error) {
         console.error("Failed to fetch coupons:", error);
@@ -233,8 +236,7 @@ const Billing = () => {
       whatsappFormData.append("messaging_product", "whatsapp");
 
       const fbResponse = await fetch(
-        `https://graph.facebook.com/v13.0/${
-          import.meta.env.VITE_WHATSAPP_ID
+        `https://graph.facebook.com/v13.0/${import.meta.env.VITE_WHATSAPP_ID
         }/media`,
         {
           method: "POST",
@@ -284,8 +286,7 @@ const Billing = () => {
       };
 
       const whatsappResponse = await fetch(
-        `https://graph.facebook.com/v18.0/${
-          import.meta.env.VITE_WHATSAPP_ID
+        `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID
         }/messages`,
         {
           method: "POST",
@@ -348,7 +349,14 @@ const Billing = () => {
           couponCode:
             appliedCoupon && appliedCoupon.couponCode
               ? appliedCoupon.couponCode
-              : null, // Safeguard against null or undefined
+              : null,
+
+          couponType:
+            appliedCoupon && appliedCoupon.couponType
+              ? appliedCoupon.couponType
+              : null,
+
+          // Safeguard against null or undefined
         });
       } else if (type === "buyNow") {
         raw = JSON.stringify({
@@ -367,6 +375,10 @@ const Billing = () => {
             appliedCoupon && appliedCoupon.couponCode
               ? appliedCoupon.couponCode
               : null, // Safeguard against null or undefined
+          couponType:
+            appliedCoupon && appliedCoupon.couponType
+              ? appliedCoupon.couponType
+              : null,
         });
       }
 
@@ -396,9 +408,9 @@ const Billing = () => {
 
       // Step 2: Initialize Razorpay
       const options = {
-        // key: "rzp_test_0PMwuUiWHNgJdU",
+        key: "rzp_test_0PMwuUiWHNgJdU",
 
-        key: "rzp_live_YZAblE0DYussOv",
+        // key: "rzp_live_YZAblE0DYussOv",
 
         currency: "INR",
         name: "Dress Code ",
@@ -648,9 +660,8 @@ const Billing = () => {
                         addressData.map((address) => (
                           <div
                             key={address._id}
-                            className={`mb-4 d-flex align-items-center gap-5 ${
-                              address._id === activeAddressId ? "active" : ""
-                            }`}
+                            className={`mb-4 d-flex align-items-center gap-5 ${address._id === activeAddressId ? "active" : ""
+                              }`}
                             onClick={() => handleAddressClick(address._id)}
                             style={{ cursor: "pointer" }}
                           >
@@ -1047,9 +1058,8 @@ const Billing = () => {
                   {/* Proceed to Payment Button */}
                   <button
                     type="button"
-                    className={`btn ${
-                      activeAddressId === null ? "disabled" : ""
-                    } fs-5 text-white fw-medium py-3 w-100`}
+                    className={`btn ${activeAddressId === null ? "disabled" : ""
+                      } fs-5 text-white fw-medium py-3 w-100`}
                     style={{ backgroundColor: "#20248A" }}
                     onClick={handlePayment}
                   >
@@ -1095,13 +1105,12 @@ const Billing = () => {
                             coupons.map((coupon, index) => (
                               <div key={index} className="card my-2 border-0">
                                 <div
-                                  className={`card-body p-3 ${
-                                    appliedCoupon &&
+                                  className={`card-body p-3 ${appliedCoupon &&
                                     appliedCoupon.couponCode ===
-                                      coupon.couponCode
-                                      ? "border border-success rounded"
-                                      : ""
-                                  }`}
+                                    coupon.couponCode
+                                    ? "border border-success rounded"
+                                    : ""
+                                    }`}
                                 >
                                   <div className="form-check">
                                     <input
@@ -1112,7 +1121,7 @@ const Billing = () => {
                                       checked={
                                         selectedCoupon &&
                                         selectedCoupon.couponCode ===
-                                          coupon.couponCode
+                                        coupon.couponCode
                                       }
                                       onChange={() => setSelectedCoupon(coupon)}
                                     />

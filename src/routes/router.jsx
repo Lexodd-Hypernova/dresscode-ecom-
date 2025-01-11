@@ -52,10 +52,10 @@ const router = createBrowserRouter([
         element: <ComingSoon />,
       },
 
-      {
-        path: "/all-schools",
-        element: <Schools />,
-      },
+      // {
+      //   path: "/all-schools",
+      //   element: <Schools />,
+      // },
 
       {
         path: "/third",
@@ -70,9 +70,14 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/school-products/:schoolName",
-        element: <ProductsBySchool />,
+        path: "/products/TOGS",
+        element: <ComingSoon />,
       },
+
+      // {
+      //   path: "/school-products/:schoolName",
+      //   element: <ProductsBySchool />,
+      // },
 
       {
         path: "/:productId/:color/:productType/:subCategory/:category/:groupName",

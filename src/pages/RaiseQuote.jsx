@@ -10,6 +10,16 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import axiosInstance from "../common/axiosInstance";
 import "./pages-styles/raiseQuote.style.css";
 
+import ReactDOMServer from "react-dom/server";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+
+// import InvoiceForOrder from "../components/Invoice/InvoiceForOrder";
+import InvoiceForQuote from "../components/Invoice/InvoiceForQuote";
+
+
+
+
 const QuoteSchema = Yup.object().shape({
   name: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
@@ -24,15 +34,15 @@ const RaiseQuote = () => {
 
   const { id } = useUserContext();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    contactPhone: "",
-    email: "",
-    organizationName: "",
-    street: "",
-    lane: "",
-    postalCode: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   contactPhone: "",
+  //   email: "",
+  //   organizationName: "",
+  //   street: "",
+  //   lane: "",
+  //   postalCode: "",
+  // });
 
   const location = useLocation();
   const { state } = location;
@@ -40,6 +50,252 @@ const RaiseQuote = () => {
   const { totalAmount, product } = state || {};
 
   const quoteItem = product[0];
+
+  console.log("quoteItem", quoteItem)
+
+
+  // Function to generate the PDF Blob
+  // const generateInvoicePDFBlob = async (quoteDetails) => {
+  //   const invoiceHTMLString = ReactDOMServer.renderToString(
+  //     <InvoiceForQuote data={quoteDetails} />
+  //   );
+
+  //   const tempContainer = document.createElement("div");
+  //   tempContainer.innerHTML = invoiceHTMLString;
+  //   document.body.appendChild(tempContainer);
+
+  //   try {
+  //     const canvas = await html2canvas(tempContainer, {
+  //       scale: 0.8,
+  //       useCORS: true,
+  //     });
+  //     document.body.removeChild(tempContainer);
+
+  //     const imgData = canvas.toDataURL("image/png");
+  //     const pdf = new jsPDF("p", "mm", "a4");
+  //     const pdfWidth = 210;
+  //     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  //     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+  //     return pdf.output("blob");
+  //   } catch (error) {
+  //     console.error("Error generating invoice PDF:", error);
+  //     throw error;
+  //   }
+  // };
+
+  // // Function to send invoice via WhatsApp
+  // const sendInvoiceViaWhatsApp = async (quoteDetails) => {
+  //   try {
+  //     const invoiceBlob = await generateInvoicePDFBlob(quoteDetails);
+
+  //     const whatsappFormData = new FormData();
+  //     whatsappFormData.append(
+  //       "file",
+  //       invoiceBlob,
+  //       `invoice-${quoteDetails.quoteId}.pdf`
+  //     );
+  //     whatsappFormData.append("messaging_product", "whatsapp");
+
+  //     const fbResponse = await fetch(
+  //       `https://graph.facebook.com/v13.0/${import.meta.env.VITE_WHATSAPP_ID
+  //       }/media`,
+  //       {
+  //         method: "POST",
+  //         body: whatsappFormData,
+  //         headers: {
+  //           Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (!fbResponse.ok) {
+  //       console.error(`Facebook Graph API error: ${fbResponse.status}`);
+  //       return;
+  //     }
+
+  //     const fbData = await fbResponse.json();
+
+  //     const phoneNumber = quoteDetails.address.contactPhone;
+
+  //     const whatsappData = {
+  //       messaging_product: "whatsapp",
+  //       to: `91${phoneNumber}`,
+  //       type: "template",
+  //       template: {
+  //         name: "invoice_template",
+  //         language: { code: "en" },
+  //         components: [
+  //           {
+  //             type: "header",
+  //             parameters: [
+  //               {
+  //                 type: "document",
+  //                 document: { id: fbData.id },
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //       },
+  //     };
+
+  //     const whatsappResponse = await fetch(
+  //       `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID
+  //       }/messages`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(whatsappData),
+  //       }
+  //     );
+
+  //     if (!whatsappResponse.ok) {
+  //       const errorData = await whatsappResponse.json();
+  //       console.error(
+  //         `Error sending WhatsApp message: ${whatsappResponse.status}`,
+  //         errorData
+  //       );
+  //       if (errorData.error?.message?.includes("incapable")) {
+  //         console.error(
+  //           `${phoneNumber} incapable of receiving WhatsApp message.`
+  //         );
+  //       }
+  //     } else {
+  //       console.log(`${phoneNumber} Invoice sent successfully via WhatsApp!`);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending invoice via WhatsApp:", error);
+  //   }
+  // };
+
+
+
+  const generateInvoicePDFBlob = async (quoteDetails) => {
+    const invoiceHTMLString = ReactDOMServer.renderToString(
+      <InvoiceForQuote data={quoteDetails} />
+    );
+  
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = invoiceHTMLString;
+    tempContainer.style.position = "absolute";
+    tempContainer.style.top = "-9999px"; // Hide the element
+    document.body.appendChild(tempContainer);
+  
+    try {
+      const canvas = await html2canvas(tempContainer, {
+        scale: 0.8,
+        useCORS: true,
+        allowTaint: true, // Allow cross-origin images
+      });
+      document.body.removeChild(tempContainer);
+  
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = 210;
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  
+      return pdf.output("blob");
+    } catch (error) {
+      console.error("Error generating invoice PDF:", error);
+      document.body.removeChild(tempContainer);
+      throw error;
+    }
+  };
+  
+  const sendInvoiceViaWhatsApp = async (quoteDetails) => {
+    try {
+      const invoiceBlob = await generateInvoicePDFBlob(quoteDetails);
+  
+      const whatsappFormData = new FormData();
+      whatsappFormData.append(
+        "file",
+        invoiceBlob,
+        `invoice-${quoteDetails.quoteId}.pdf`
+      );
+      whatsappFormData.append("messaging_product", "whatsapp");
+  
+      const mediaResponse = await fetch(
+        `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/media`,
+        {
+          method: "POST",
+          body: whatsappFormData,
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+          },
+        }
+      );
+  
+      if (!mediaResponse.ok) {
+        const errorResponse = await mediaResponse.json();
+        console.error(`Facebook Graph API error:`, errorResponse);
+        return;
+      }
+  
+      const mediaData = await mediaResponse.json();
+      const mediaId = mediaData.id;
+  
+      const phoneNumber = quoteDetails.address.contactPhone;
+  
+      const whatsappMessagePayload = {
+        messaging_product: "whatsapp",
+        to: `91${phoneNumber}`,
+        type: "template",
+        template: {
+          name: "invoice_template",
+          language: { code: "en" },
+          components: [
+            {
+              type: "header",
+              parameters: [
+                {
+                  type: "document",
+                  document: { id: mediaId },
+                },
+              ],
+            },
+          ],
+        },
+      };
+  
+      const messageResponse = await fetch(
+        `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/messages`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(whatsappMessagePayload),
+        }
+      );
+  
+      if (!messageResponse.ok) {
+        const errorData = await messageResponse.json();
+        console.error(
+          `Error sending WhatsApp message: ${messageResponse.status}`,
+          errorData
+        );
+        if (errorData.error?.message?.includes("incapable")) {
+          console.error(
+            `${phoneNumber} incapable of receiving WhatsApp message.`
+          );
+        }
+      } else {
+        console.log(`${phoneNumber} Invoice sent successfully via WhatsApp!`);
+      }
+    } catch (error) {
+      console.error("Error sending invoice via WhatsApp:", error);
+    }
+  };
+  
+
+
+
+
 
   // console.log(product, "product");
   // console.log(totalAmount, "totalAmount");
@@ -103,7 +359,9 @@ const RaiseQuote = () => {
                       withCredentials: true, // Ensure cookies are sent with the request
                     }
                   );
-                  // console.log(response.data);
+                  console.log("quote res", response.data.quote);
+
+                  let quoteDetails = response.data.quote;
 
                   if (response.status === 201) {
                     Swal.fire({
@@ -113,7 +371,13 @@ const RaiseQuote = () => {
                       showConfirmButton: false,
                       timer: 1500,
                     });
+
+                    sendInvoiceViaWhatsApp(quoteDetails)
+
                     navigate("/quote-success");
+
+
+
                     // console.log(response.data);
                   }
                 } catch (error) {

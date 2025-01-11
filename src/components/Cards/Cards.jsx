@@ -72,7 +72,8 @@ const Cards = () => {
     // console.log(name);
     navigate(`/products/${name}`)
     if (name === "TOGS") {
-      navigate("/all-schools")
+      // navigate("/all-schools")
+      navigate("/coming-soon")
     } else {
       navigate(`/products/${name}`)
     }

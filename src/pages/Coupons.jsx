@@ -16,6 +16,10 @@ const Coupons = () => {
             try {
                 const response = await axiosInstance.get(accountInfoApis.getCoupons(localStorage.getItem("id")), { withCredentials: true });
                 setCoupons(response.data.coupons);
+
+                console.log("coupons", response)
+
+
             } catch (error) {
                 console.log(error);
             }
@@ -97,7 +101,7 @@ const Coupons = () => {
                                         onClick={() => setActiveTab('pending')}
                                         style={{ cursor: 'pointer' }}
                                     >
-                                        Pending
+                                        Available
                                     </button>
                                 </li>
                                 <li className="nav-item">

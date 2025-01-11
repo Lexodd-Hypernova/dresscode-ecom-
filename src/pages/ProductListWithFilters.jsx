@@ -134,7 +134,7 @@ const ProductListWithFilters = () => {
         const newGroupName = e.target.value;
 
         if (newGroupName === "TOGS") {
-            navigate("/all-schools")
+            navigate("/coming-soon")
         } else {
             navigate(`/products/${newGroupName}`);
         }
