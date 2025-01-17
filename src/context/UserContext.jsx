@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import axiosInstance from "../common/axiosInstance";
 import { accountInfoApis } from "../common";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 const userContext = createContext();
 
@@ -45,10 +46,31 @@ export const UserContextProvider = ({ children }) => {
                 }
             );
 
+            if (response.status === 200) {
+                console.log(response.data.data);
+                setAddressData((prevData) => [...prevData, response.data.data]);
+
+                // Show success notification
+                Swal.fire({
+                    title: "Success!",
+                    text: "Address added successfully",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }
+
             // console.log(response.data.data);
-            setAddressData((prevData) => [...prevData, response.data.data])
+            // setAddressData((prevData) => [...prevData, response.data.data])
         } catch (err) {
             console.log(err);
+            Swal.fire({
+                title: "Address failed!",
+                text: "Something went wrong",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 3000,
+            });
         } finally {
             setaddressLoading(false)
         }

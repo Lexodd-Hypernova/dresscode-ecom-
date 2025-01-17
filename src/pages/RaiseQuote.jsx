@@ -177,13 +177,13 @@ const RaiseQuote = () => {
     const invoiceHTMLString = ReactDOMServer.renderToString(
       <InvoiceForQuote data={quoteDetails} />
     );
-  
+
     const tempContainer = document.createElement("div");
     tempContainer.innerHTML = invoiceHTMLString;
     tempContainer.style.position = "absolute";
     tempContainer.style.top = "-9999px"; // Hide the element
     document.body.appendChild(tempContainer);
-  
+
     try {
       const canvas = await html2canvas(tempContainer, {
         scale: 0.8,
@@ -191,13 +191,13 @@ const RaiseQuote = () => {
         allowTaint: true, // Allow cross-origin images
       });
       document.body.removeChild(tempContainer);
-  
+
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = 210;
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  
+
       return pdf.output("blob");
     } catch (error) {
       console.error("Error generating invoice PDF:", error);
@@ -205,11 +205,103 @@ const RaiseQuote = () => {
       throw error;
     }
   };
-  
+
+  // const sendInvoiceViaWhatsApp = async (quoteDetails) => {
+  //   try {
+  //     const invoiceBlob = await generateInvoicePDFBlob(quoteDetails);
+
+  //     const whatsappFormData = new FormData();
+  //     whatsappFormData.append(
+  //       "file",
+  //       invoiceBlob,
+  //       `invoice-${quoteDetails.quoteId}.pdf`
+  //     );
+  //     whatsappFormData.append("messaging_product", "whatsapp");
+
+  //     const mediaResponse = await fetch(
+  //       `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/media`,
+  //       {
+  //         method: "POST",
+  //         body: whatsappFormData,
+  //         headers: {
+  //           Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+  //         },
+  //       }
+  //     );
+
+  //     console.log("mediaResponse", mediaResponse.json())
+
+
+
+  //     if (!mediaResponse.ok) {
+  //       const errorResponse = await mediaResponse.json();
+  //       console.error(`Facebook Graph API error:`, errorResponse);
+  //       return;
+  //     }
+
+  //     const mediaData = await mediaResponse.json();
+  //     const mediaId = mediaData.id;
+
+  //     const phoneNumber = quoteDetails.address.contactPhone;
+
+  //     const whatsappMessagePayload = {
+  //       messaging_product: "whatsapp",
+  //       to: `91${phoneNumber}`,
+  //       type: "template",
+  //       template: {
+  //         name: "invoice_template",
+  //         language: { code: "en" },
+  //         components: [
+  //           {
+  //             type: "header",
+  //             parameters: [
+  //               {
+  //                 type: "document",
+  //                 document: { id: mediaId },
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //       },
+  //     };
+
+  //     const messageResponse = await fetch(
+  //       `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/messages`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${import.meta.env.VITE_WHATSAPP_TOKEN}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(whatsappMessagePayload),
+  //       }
+  //     );
+
+  //     console.log("messageResponse", messageResponse.json());
+
+  //     if (!messageResponse.ok) {
+  //       const errorData = await messageResponse.json();
+  //       console.error(
+  //         `Error sending WhatsApp message: ${messageResponse.status}`,
+  //         errorData
+  //       );
+  //       if (errorData.error?.message?.includes("incapable")) {
+  //         console.error(
+  //           `${phoneNumber} incapable of receiving WhatsApp message.`
+  //         );
+  //       }
+  //     } else {
+  //       console.log(`${phoneNumber} Invoice sent successfully via WhatsApp!`);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending invoice via WhatsApp:", error);
+  //   }
+  // };
+
   const sendInvoiceViaWhatsApp = async (quoteDetails) => {
     try {
       const invoiceBlob = await generateInvoicePDFBlob(quoteDetails);
-  
+
       const whatsappFormData = new FormData();
       whatsappFormData.append(
         "file",
@@ -217,7 +309,7 @@ const RaiseQuote = () => {
         `invoice-${quoteDetails.quoteId}.pdf`
       );
       whatsappFormData.append("messaging_product", "whatsapp");
-  
+
       const mediaResponse = await fetch(
         `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/media`,
         {
@@ -228,18 +320,19 @@ const RaiseQuote = () => {
           },
         }
       );
-  
+
+      // Parse the media response JSON once
+      const mediaData = await mediaResponse.json();
+      console.log("mediaResponse", mediaData);
+
       if (!mediaResponse.ok) {
-        const errorResponse = await mediaResponse.json();
-        console.error(`Facebook Graph API error:`, errorResponse);
+        console.error(`Facebook Graph API error:`, mediaData);
         return;
       }
-  
-      const mediaData = await mediaResponse.json();
+
       const mediaId = mediaData.id;
-  
       const phoneNumber = quoteDetails.address.contactPhone;
-  
+
       const whatsappMessagePayload = {
         messaging_product: "whatsapp",
         to: `91${phoneNumber}`,
@@ -260,7 +353,7 @@ const RaiseQuote = () => {
           ],
         },
       };
-  
+
       const messageResponse = await fetch(
         `https://graph.facebook.com/v18.0/${import.meta.env.VITE_WHATSAPP_ID}/messages`,
         {
@@ -272,14 +365,17 @@ const RaiseQuote = () => {
           body: JSON.stringify(whatsappMessagePayload),
         }
       );
-  
+
+      // Parse the message response JSON once
+      const messageData = await messageResponse.json();
+      console.log("messageResponse", messageData);
+
       if (!messageResponse.ok) {
-        const errorData = await messageResponse.json();
         console.error(
           `Error sending WhatsApp message: ${messageResponse.status}`,
-          errorData
+          messageData
         );
-        if (errorData.error?.message?.includes("incapable")) {
+        if (messageData.error?.message?.includes("incapable")) {
           console.error(
             `${phoneNumber} incapable of receiving WhatsApp message.`
           );
@@ -291,7 +387,6 @@ const RaiseQuote = () => {
       console.error("Error sending invoice via WhatsApp:", error);
     }
   };
-  
 
 
 

@@ -23,6 +23,7 @@ import { useUserContext } from "../context/UserContext";
 
 import AddressModal from "../components/addressModal/AddressModal";
 import LoadingComponent from "../common/components/LoadingComponent";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -98,8 +99,13 @@ const YourAddress = () => {
 
       if (response) {
         setAddressData(addressData.filter(address => address._id !== id));
-        // console.log("Address deleted successfully:", response.data);
-        // window.location.reload()
+        Swal.fire({
+          title: "Success!",
+          text: "Address deleted successfully",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 3000,
+        });
       } else {
         console.error("Failed to delete address:", response.statusText);
       }
@@ -169,43 +175,40 @@ const YourAddress = () => {
 
 
   const updateAddress = async (id, formData) => {
-    // const token = localStorage.getItem("token");
-
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
-    setaddressLoading(true)
+    setaddressLoading(true);
     try {
-
-      const response = await axiosInstance.patch(accountInfoApis.updateAddress(localStorage.getItem("id"), id),
+      const response = await axiosInstance.patch(
+        accountInfoApis.updateAddress(localStorage.getItem("id"), id),
         formData,
         {
-          withCredentials: true // Ensure cookies are sent with the request
+          withCredentials: true, // Ensure cookies are sent with the request
         }
       );
 
+      // Check if the status is 200 before updating and showing the notification
+      if (response.status === 200) {
+        const updatedAddresses = addressData.map((address) =>
+          address._id === formData._id ? formData : address
+        );
+        setAddressData(updatedAddresses);
+        handleCloseModal();
 
-      // const response = await axios.patch(
-      //   accountInfoApis.updateAddress(localStorage.getItem("id"), id),
-      //   formData, // Use formData from Formik
-      //   config
-      // );
-      // console.log(response.data);
-
-      const updatedAddresses = addressData.map(address =>
-        address._id === formData._id ? formData : address
-      );
-      setAddressData(updatedAddresses);
-      handleCloseModal();
-
+        // Show success notification
+        Swal.fire({
+          title: "Success!",
+          text: "Address updated successfully",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
-      setaddressLoading(false)
+      setaddressLoading(false);
     }
   };
+
 
 
   return (
