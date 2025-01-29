@@ -56,6 +56,7 @@ const CouponSection = () => {
             // Show error message
             console.error("Error generating third token:", error);
             alert("An error occurred while generating the coupon.");
+            nav(`/login`);
         }
     };
 
