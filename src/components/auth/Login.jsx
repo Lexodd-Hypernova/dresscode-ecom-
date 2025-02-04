@@ -10,7 +10,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { auth, googleProvider } from "../../firebase";
+import { auth1, googleProvider1 } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 
 // Refresh token function (called by Axios interceptor)
@@ -52,7 +52,7 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth1, googleProvider1);
       const user = result.user; // Firebase user object
 
       // Extract providerData

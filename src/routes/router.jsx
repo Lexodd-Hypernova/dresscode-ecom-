@@ -1,13 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/Home";
-import Categories from "../pages/Categories";
-import SubCategories from "../pages/SubCategories";
-import ProductTypes from "../pages/ProductTypes";
-import Products from "../pages/Products";
 import ProductDetails from "../pages/ProductDetails";
 import Billing from "../pages/Billing";
-import Auth from "../components/auth/Auth";
 import AuthMain from "../AuthMain";
 import YourAccount from "../pages/YourAccount";
 import EditPersonalinfo from "../pages/EditPersonalinfo";
@@ -26,12 +21,15 @@ import RaiseQuote from "../pages/RaiseQuote";
 import QuoteSuccess from "../pages/QuoteSuccess";
 import ProductListWithFilters from "../pages/ProductListWithFilters";
 import PageNotFound from "../pages/404";
-import Schools from "../pages/Schools";
-import ProductsBySchool from "../pages/ProductsBySchool";
+// import Schools from "../pages/Schools";
+// import ProductsBySchool from "../pages/ProductsBySchool";
 import ForgetPassword from "../components/auth/ForgetPassword";
 import ResetPassword from "../components/auth/ResetPassword";
 import TrumsyAuth from "../components/auth/TrumsyAuth";
 import Coupons from "../pages/Coupons";
+import About from "../pages/About";
+import BlogPage from "../pages/BlogPage";
+import BlogPost from "../pages/BlogPost";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +50,26 @@ const router = createBrowserRouter([
         element: <ComingSoon />,
       },
 
+      {
+        path: "/togs",
+        element: <ComingSoon />,
+      },
+
+      {
+        path: "/about",
+        element: <About />,
+      },
+
+      {
+        path: "/blogs",
+        element: <BlogPage />,
+      },
+
+      {
+        path: "/blog/:title",
+        element: <BlogPost />,
+      },
+
       // {
       //   path: "/all-schools",
       //   element: <Schools />,
@@ -65,24 +83,32 @@ const router = createBrowserRouter([
 
 
       {
-        path: "/products/:groupName",
+        path: "/:groupName",
         element: <ProductListWithFilters />,
       },
 
-      {
-        path: "/products/TOGS",
-        element: <ComingSoon />,
-      },
+      // {
+      //   path: "/products/TOGS",
+      //   element: <ComingSoon />,
+      // },
 
       // {
       //   path: "/school-products/:schoolName",
       //   element: <ProductsBySchool />,
       // },
 
+      // {
+      //   path: "/:productId/:color/:productType/:subCategory/:category/:groupName",
+      //   element: <ProductDetails />,
+      // },
+
+
       {
-        path: "/:productId/:color/:productType/:subCategory/:category/:groupName",
+        path: "/:groupName/:category/:subCategory/:color/:productId",
         element: <ProductDetails />,
       },
+
+
       {
         path: "/billing",
         element: (
@@ -190,16 +216,6 @@ const router = createBrowserRouter([
             <CustomerReviews />
           </ProtectedRoute>
         ),
-      },
-    ],
-  },
-  {
-    path: "/auth",
-    element: <AuthMain />,
-    children: [
-      {
-        path: "/auth",
-        element: <Auth />,
       },
     ],
   },

@@ -1,0 +1,396 @@
+.hero__Ttl {
+    display: flex;
+    flex-direction: column;
+}
+
+.hr_ttl-txt {
+    width: 100%;
+    height: 119px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hr_ttl-txt span {
+    position: absolute;
+    font-family: Satoshi;
+    font-size: 133px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0em;
+    text-transform: uppercase;
+    width: 100%;
+    display: inline-block;
+    transform: skewY(7);
+    transform: translateY(100%);
+}
+
+.hero__Para {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.hr_ttl-para {
+    width: 100%;
+    height: 22px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hr_ttl-para span {
+    position: absolute;
+    font-family: Satoshi;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-align: left;
+    text-transform: capitalize;
+    width: 100%;
+    display: inline-block;
+    transform: skewY(7);
+    transform: translateY(100%);
+}
+
+.shop_Now-txt span {
+    font-family: Satoshi;
+    font-size: 45px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.hr_arw {
+    width: 20px;
+    height: 20px;
+    animation: pulse 3s ease-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.hr_arw img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.hero__Wrap {
+    width: 100vw;
+    height: 100vh;
+    padding: 12rem 6rem 0 6rem;
+}
+
+.hero__Sec {
+    display: flex;
+    flex-direction: column;
+    gap: 10rem;
+    position: relative;
+}
+
+/* .hero__Sec::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 540px;
+    height: 540px;
+    background: url("../../../public/assets/images/orange.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+} */
+
+/* .hero__Sec::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 540px;
+    height: 540px;
+    background: url("../../../public/assets/images/blue.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+} */
+
+.sub_Hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero__Cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* flex: 1; */
+    justify-content: flex-end;
+}
+
+
+
+/* -------Background------- */
+
+:root {
+    /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color: black; */
+    /* background-color: #272927;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; */
+}
+
+/* body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+} */
+
+.bouncing-blob {
+    width: 300px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    will-change: transform;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    transform-origin: left top;
+}
+
+.bouncing-blob--blue {
+    background: #20248A;
+}
+
+.bouncing-blob--white {
+    background: #20248A;
+    z-index: 2;
+    width: 300px;
+}
+
+.bouncing-blob--purple {
+    background: #DF3701;
+}
+
+.bouncing-blob--pink {
+    background: #DF3701;
+}
+
+.bouncing-blobs-container {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.bouncing-blobs-glass {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100vh + 20vh);
+    backdrop-filter: blur(140px);
+    /*   -webkit-backdrop-filter: blur(140px); */
+    pointer-events: none;
+}
+
+.bouncing-blobs {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hero__Cta {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1680px) {
+    .hero__Wrap {
+        padding: 8rem 3rem 0 3rem;
+    }
+
+    .hero__Sec {
+        gap: 4rem;
+    }
+
+    .hr_ttl-txt {
+        height: 72px;
+    }
+
+    .hr_ttl-txt span {
+        font-size: 80px;
+    }
+
+    .hr_ttl-para {
+        height: 17px;
+    }
+
+    .hr_ttl-para span {
+        font-size: 15px;
+    }
+
+    .shop_Now-txt span {
+        font-size: 32px;
+    }
+
+    .hr_arw {
+        width: 16px;
+        height: 16px;
+    }
+
+    .bouncing-blob {
+        width: 300px;
+    }
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .bouncing-blobs-glass {
+        backdrop-filter: blur(120px);
+        -webkit-backdrop-filter: blur(120px);
+    }
+
+    .shop_Now-txt span {
+        font-size: 28px;
+    }
+
+    .hr_ttl-txt {
+        height: 60px;
+    }
+
+    .hr_ttl-txt span {
+        font-size: 65px;
+    }
+
+    .hero__Ttl h1 {
+        font-size: 65px;
+    }
+
+}
+
+@media only screen and (max-width: 991px) {
+    .bouncing-blobs-glass {
+        backdrop-filter: blur(90px);
+        /* height: calc(100vh + 10vh); */
+        height: 100vh;
+    }
+
+    .bouncing-blob {
+        width: 200px;
+    }
+
+    .hero__Wrap {
+        height: 100vh;
+        padding: 0;
+        position: relative;
+    }
+
+    .hero__Sec {
+        flex-direction: column;
+        gap: 15rem;
+        position: relative;
+        height: 100%;
+    }
+
+    .hero__Ttl {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+    }
+
+    .hr_ttl-txt {
+        height: 50px;
+    }
+
+
+    .hr_ttl-txt span {
+        text-align: center;
+        font-size: 53px;
+    }
+
+    .sub_Hero {
+        flex-direction: column;
+        gap: calc(13vh);
+        position: absolute;
+        bottom: 10vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+    }
+
+    .hr_ttl-para {
+        height: 16px;
+    }
+
+    .hr_ttl-para span {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .bouncing-blobs-container {
+        overflow: hidden;
+    }
+
+    .hero__Para {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+
+    .sub_Hero {
+        bottom: 5vh;
+    }
+
+    .hr_arw {
+        width: 10px;
+        height: 10px;
+    }
+
+    .hero__Cta {
+        gap: 9px;
+    }
+
+    .shop_Now-txt span {
+        font-size: 18px;
+    }
+
+    .hr_ttl-txt {
+        height: 35px;
+    }
+
+    .hr_ttl-txt span {
+        font-size: 37px;
+    }
+
+    .bouncing-blob {
+        width: 160px;
+    }
+}

@@ -6,35 +6,18 @@ import "./cards.css";
 import LazyImage from "../../common/components/LazyImage";
 
 const groups = [
-  //  {
-  //   name: "ELITE",
-  //   src: "https://i.imgur.com/E8sD0n1.png"
-  // },
-  // {
-  //   name: "ELITE",
-  //   src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
-  // },
-  // {
-  //   name: "HEAL",
-  //   src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
-  // },
-  // {
-  //   name: "TOGS",
-  //   src: "https://ik.imagekit.io/txmekgeyk/Dress%20Code/c1.png?updatedAt=1723106166949"
-  // },
   {
-    name: "ELITE",
+    name: "elite",
     src: "images/Elite.webp"
   },
   {
-    name: "HEAL",
+    name: "heal",
     src: "images/Heal.webp"
   },
   {
-    name: "TOGS",
+    name: "togs",
     src: "images/Togs.webp"
   },
-
 ]
 
 const Cards = () => {
@@ -70,12 +53,12 @@ const Cards = () => {
 
   const handleClick = (name) => {
     // console.log(name);
-    navigate(`/products/${name}`)
-    if (name === "TOGS") {
+    navigate(`/${name}`)
+    if (name === "togs") {
       // navigate("/all-schools")
       navigate("/coming-soon")
     } else {
-      navigate(`/products/${name}`)
+      navigate(`/${name}`)
     }
   }
 

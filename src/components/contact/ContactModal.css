@@ -1,0 +1,137 @@
+/* ContactModal.css */
+.react-responsive-modal-modal {
+    max-width: auto;
+    padding: 0rem;
+}
+
+.modal-content-contact {
+    display: flex;
+    justify-content: space-between;
+    background: radial-gradient(461.61% 209.05% at -41.85% -46.3%,
+            #5055e3 6.15%,
+            #fff 77.95%);
+}
+
+.form-container {
+    width: 60%;
+    /* Adjust as needed */
+    margin-left: 20px;
+    padding: 20px;
+}
+
+.form-container h2 {
+    color: #fff;
+    margin-top: 30px;
+    font-family: Satoshi;
+    font-size: 75px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 1.98px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.form-field {
+    flex: 0 0 48%;
+    /* Adjust as needed */
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    border: none;
+    width: 100%;
+    padding: 8px;
+    /* color: #e1e1e1; */
+    line-height: 2rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.7s;
+    padding-bottom: 1rem;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(255, 255, 255);
+    background: transparent;
+    outline: none;
+    color: #000;
+}
+
+.form-field textarea {
+    width: 80%;
+    border-radius: 10px;
+    border: 1px solid #fff;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.form-field label {
+    color: #000;
+
+    font-family: Satoshi;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.form-field button {
+    margin-top: 20px;
+    background: linear-gradient(90deg, #20248a -17.97%, #595ff4 99.8%);
+    color: #fff;
+    border: none;
+    border-radius: 131px;
+    padding: 10px 20px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.form-field button:hover {}
+
+.form-field input::placeholder,
+.form-field select::placeholder,
+.form-field textarea::placeholder {
+    color: #000;
+    /* Change placeholder color to gray */
+}
+
+.image-container {
+    width: 35%;
+    /* Adjust as needed */
+}
+
+.image-container img {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: none;
+    height: auto;
+}
+
+@media screen and (max-width: 500px) {
+    .form-container h2 {
+        color: #fff;
+
+        font-family: Satoshi;
+        font-size: 45px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 1.98px;
+    }
+
+    .image-container img {
+        width: 100%;
+        margin-top: 150px;
+        margin-right: 20px;
+        margin-bottom: none;
+        height: auto;
+    }
+}

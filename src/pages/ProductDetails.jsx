@@ -13,15 +13,36 @@ import "./pages-styles/productDetails.style.css";
 
 const normalizeName = (name) => {
   if (typeof name === "string") {
-    return name.trim().toLowerCase();
+    // return name.trim().toLowerCase();
+    return name.toLowerCase().replace(/\s+/g, "-");
+
   } else {
     console.warn("Unexpected value for name:", name);
     return "";
   }
 };
 
+const denormalizeName = (name) => {
+  if (typeof name === "string") {
+    return name.toUpperCase().replace(/-/g, " ").replace(/\s+/g, "%20");
+  } else {
+    console.warn("Unexpected value for name:", name);
+    return "";
+  }
+};
+
+const formatForBilling = (name) => {
+  if (typeof name === "string") {
+    return name.toUpperCase().replace(/-/g, " ").replace(/\s+/g, " ");
+  } else {
+    console.warn("Unexpected value for name:", name);
+    return "";
+  }
+};
+
+
 const ProductDetails = () => {
-  const { productId, color, productType, subCategory, category, groupName } =
+  const { productId, color, subCategory, category, groupName } =
     useParams();
   const [loading, setLoading] = useState(true);
   const [priceLoading, setPriceLoading] = useState(true);
@@ -65,9 +86,9 @@ const ProductDetails = () => {
   const handleAddToWishList = async () => {
     if (activeSize) {
       const item = {
-        group: groupName,
+        group: groupName.toUpperCase(),
         productId: productId,
-        color: activeColor,
+        color: formatForBilling(activeColor),
         size: activeSize,
         logoUrl: null,
         logoPosition: null,
@@ -85,9 +106,9 @@ const ProductDetails = () => {
     if (activeSize) {
       e.preventDefault();
       setCartItem({
-        group: groupName,
+        group: groupName.toUpperCase(),
         productId: productId,
-        color: activeColor,
+        color: formatForBilling(activeColor),
         size: activeSize,
         price: price,
         quantityRequired: count,
@@ -106,14 +127,6 @@ const ProductDetails = () => {
     if (count === "") {
       setCount(1);
     }
-  };
-
-  const handleMouseEnter = () => {
-    setShowDiscountSlab(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowDiscountSlab(false);
   };
 
   const reset = () => {
@@ -168,9 +181,12 @@ const ProductDetails = () => {
     setPriceLoading(true);
     const fetchData = async () => {
       try {
+
+        const denormalizedColor = denormalizeName(color);
+
         const response = await fetch(
           DressCodeApi.getProductDetailsWithSpecificVariant.url +
-            `?groupName=${groupName}&productId=${productId}&color=${color}`
+          `?groupName=${groupName}&productId=${productId}&color=${denormalizedColor}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -179,6 +195,9 @@ const ProductDetails = () => {
 
         setData(result);
         setActiveColor(color);
+
+        // console.log("color", color)
+
         setPrice(result.productDetails.price);
         setTotalPriceWithDiscount(result.productDetails.price);
         setTotalPriceWithoutDiscount(result.productDetails.price);
@@ -194,7 +213,7 @@ const ProductDetails = () => {
     };
 
     fetchData();
-  }, [productId, color, productType, subCategory, category, groupName]);
+  }, [productId, color, subCategory, category, groupName]);
 
   useEffect(() => {
     if (data.available && data.productDetails.variants) {
@@ -202,13 +221,6 @@ const ProductDetails = () => {
         data.available.map((item) => normalizeName(item.color.name))
       );
       setAvailableColors(availableColorsSet);
-      // console.log("availableColors Set:", availableColorsSet); // Log the Set of available colors
-
-      // const availableSizeSet = new Set(
-      //   data.productDetails.variants.flatMap((item) =>
-      //     item.variantSizes.map((size) => size.size)
-      //   )
-      // );
 
       // Modified code to include quantity check for sizes
       const availableSizeSet = new Set(
@@ -224,22 +236,24 @@ const ProductDetails = () => {
     }
   }, [data]);
 
-  const handleFilter = (fType, value) => {
-    let filterUrl =
-      DressCodeApi.getProductDetailsWithSpecificVariant.url +
-      `?groupName=${groupName}&productId=${productId}&${fType}=${value}`;
-    axios.get(filterUrl).then((res) => {
-      setData(res.data);
-      setActiveColor(value);
-      setActiveSize("");
-      setSizeError(true);
+  // const handleFilter = (fType, value) => {
+  //   let filterUrl =
+  //     DressCodeApi.getProductDetailsWithSpecificVariant.url +
+  //     `?groupName=${groupName}&productId=${productId}&${fType}=${value}`;
+  //   axios.get(filterUrl).then((res) => {
+  //     setData(res.data);
+  //     setActiveColor(value);
+  //     setActiveSize("");
+  //     setSizeError(true);
+  //   });
+  // };
 
-      // console.log(
-      //   "after filter variantId",
-      //   res.data.productDetails.variants[0].variantId
-      // );
-    });
-  };
+  const handleColor = (value) => {
+    nav(`/${groupName}/${category}/${subCategory}/${normalizeName(value)}/${productId}`)
+
+    // setActiveColor(value);
+
+  }
 
   const handleSize = (size) => {
     // console.log(size);
@@ -259,9 +273,9 @@ const ProductDetails = () => {
     if (activeSize) {
       e.preventDefault();
       setBuyItem({
-        group: groupName,
+        group: groupName.toUpperCase(),
         productId: productId,
-        color: activeColor,
+        color: formatForBilling(activeColor),
         size: activeSize,
         price: price,
         totalPriceWithDiscount: totalPriceWithDiscount,
@@ -375,9 +389,9 @@ const ProductDetails = () => {
     if (activeSize) {
       e.preventDefault();
       setQuoteItem({
-        group: groupName,
+        group: groupName.toUpperCase(),
         productId: productId,
-        color: activeColor,
+        color: formatForBilling(activeColor),
         size: activeSize,
         price: price,
         imgUrl: data?.productDetails?.variants[0]?.imageUrls[0] || "",
@@ -396,7 +410,7 @@ const ProductDetails = () => {
         <ProductSlider productData={data} />
 
         <div className="productContent">
-          <h2 className="pr_name">{data?.productDetails?.productType?.type}</h2>
+          <h2 className="pr_name">{data?.productDetails?.productType}</h2>
           <div className="pr_rating">
             <button type="button" className="btn btn-success text-white">
               4.5<i className="fa-solid fa-star"></i>
@@ -411,19 +425,6 @@ const ProductDetails = () => {
             </p>
           ) : (
             <>
-              {/* <div className="var_price my-2">
-                MRP {Number(totalPriceWithoutDiscount).toLocaleString("en-US", { style: "currency", currency: "INR" })}
-              </div>
-              {discountAmount > 0 && (
-                <div className="fs-5 fw-normal">
-                  Discount: {discountAmount.toLocaleString('en-US', { style: "currency", currency: "INR" })}
-                </div>
-              )}
-              {discountAmount > 0 && (
-                <div className="fs-5 fw-normal">
-                  Price after discount: {totalPriceWithDiscount.toLocaleString('en-US', { style: "currency", currency: "INR" })}
-                </div>
-              )} */}
 
               <div className="pricing-section my-3 p-3 border rounded shadow-sm">
                 {/* Original Price */}
@@ -462,13 +463,6 @@ const ProductDetails = () => {
 
           {/* Discount Slab Button */}
           <div className="price_discount">
-            {/* <button
-              className="discount-btn"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              View Discount Slabs
-            </button> */}
 
             {/* Discount Slab Table - Show on hover */}
             {showDiscountSlab && (
@@ -523,21 +517,22 @@ const ProductDetails = () => {
                   <div className="mt-2 d-flex flex-wrap list-group-horizontal gap-2 list-group">
                     {data.allColors.map((color, index) => {
                       const normalizedColorName = normalizeName(color.name);
+
+                      // console.log("normalizedColorName", normalizedColorName)
+
                       const isAvailable =
                         availableColors.has(normalizedColorName);
                       // console.log(`Checking color: "${color.name}" (normalized: "${normalizedColorName}") - Available: ${isAvailable}`);
                       return (
                         <li
                           onClick={() => {
-                            handleFilter("color", color.name);
+                            handleColor(color.name);
                           }}
-                          className={`list-group-item rounded-circle ${
-                            isAvailable ? "" : "disabled"
-                          } ${
-                            activeColor === color.name
+                          className={`list-group-item rounded-circle ${isAvailable ? "" : "disabled"
+                            } ${activeColor === normalizeName(color.name)
                               ? "border-primary shadow-lg border-2"
                               : ""
-                          }`}
+                            }`}
                           id={`color${color.name}`}
                           // value={color.name}
                           style={{
@@ -595,11 +590,9 @@ const ProductDetails = () => {
                       // console.log(`Checking size: "${size}" - Available: ${isAvailable}`);
                       return (
                         <li
-                          className={`size_item list-group-item rounded-circle fs-5 fw-normal ${
-                            isAvailable ? "" : "disabled"
-                          } ${
-                            activeSize === size ? "bg-primary shadow-lg" : ""
-                          }`}
+                          className={`size_item list-group-item rounded-circle fs-5 fw-normal ${isAvailable ? "" : "disabled"
+                            } ${activeSize === size ? "bg-primary shadow-lg" : ""
+                            }`}
                           id={`size${size}`}
                           key={index}
                           style={{ position: "relative", cursor: "pointer" }}
@@ -752,9 +745,8 @@ const ProductDetails = () => {
             <div className="d-grid col-lg-6">
               {isLoggedIn ? (
                 <button
-                  className={`btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100 ${
-                    stockError ? "disabled" : ""
-                  }`}
+                  className={`btn btn-outline-secondary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""
+                    }`}
                   type="button"
                   data-bs-toggle="modal"
                   data-bs-target="#logoModal"
@@ -774,11 +766,9 @@ const ProductDetails = () => {
             </div>
             <div className="d-grid col-lg-6">
               <button
-                className={`btn ${
-                  count > 35 ? "btn-warning" : "btn-primary"
-                } fs-5 fw-normal text-capitalize w-100 ${
-                  count <= 35 && stockError ? "disabled" : ""
-                }`}
+                className={`btn ${count > 35 ? "btn-warning" : "btn-primary"
+                  } fs-5 fw-normal text-capitalize w-100 ${count <= 35 && stockError ? "disabled" : ""
+                  }`}
                 type="button"
                 data-bs-toggle={isLoggedIn ? "modal" : ""}
                 data-bs-target="#logoModal"
@@ -797,9 +787,8 @@ const ProductDetails = () => {
               {isLoggedIn ? (
                 <button
                   onClick={handleAddToWishList}
-                  className={`btn btn-outline-primary fs-5 fw-normal text-capitalize w-100 ${
-                    stockError ? "disabled" : ""
-                  }`}
+                  className={`btn btn-outline-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""
+                    }`}
                   type="button"
                 >
                   Save to wishlist
@@ -814,13 +803,6 @@ const ProductDetails = () => {
                 </button>
               )}
 
-              {/* <button
-                onClick={handleAddToWishList}
-                className={`btn btn-outline-primary fs-5 fw-normal text-capitalize w-100 ${stockError ? "disabled" : ""}`}
-                type="button"
-              >
-                Save to wishlist
-              </button> */}
             </div>
           </div>
           <div className="pr__dt">

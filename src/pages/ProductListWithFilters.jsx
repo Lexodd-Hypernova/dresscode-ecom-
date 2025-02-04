@@ -30,6 +30,8 @@ const ProductListWithFilters = () => {
     const { groupName } = useParams(); // Get groupName from the URL
     const navigate = useNavigate(); // Initialize navigate from react-router-dom
 
+    // console.log("groupName", groupName)
+
 
 
     useEffect(() => {
@@ -133,13 +135,18 @@ const ProductListWithFilters = () => {
     const handleGroupChange = (e) => {
         const newGroupName = e.target.value;
 
-        if (newGroupName === "TOGS") {
+        if (newGroupName === "togs") {
             navigate("/coming-soon")
         } else {
-            navigate(`/products/${newGroupName}`);
+            navigate(`/${newGroupName}`);
         }
     };
 
+    const formatUrl = (text) =>
+        encodeURIComponent(text.toLowerCase().replace(/\s+/g, "-"));
+
+
+    const formatColor = (text) => encodeURIComponent(text.toLowerCase().replace(/\s+/g, "-"));
     return (
         <>
             <div className="product__Screen">
@@ -164,9 +171,9 @@ const ProductListWithFilters = () => {
                                 <div className="filter-group">
                                     <label>Group:</label>
                                     <select name="group" value={groupName} onChange={handleGroupChange}>
-                                        <option value="ELITE">ELITE</option>
-                                        <option value="HEAL">HEAL</option>
-                                        <option value="TOGS">TOGS</option>
+                                        <option value="elite">elite</option>
+                                        <option value="heal">heal</option>
+                                        <option value="togs">togs</option>
                                     </select>
                                 </div>
 
@@ -445,9 +452,9 @@ const ProductListWithFilters = () => {
                         <div className="filter-group">
                             <label>Group:</label>
                             <select name="group" value={groupName} onChange={handleGroupChange}>
-                                <option value="ELITE">ELITE</option>
-                                <option value="HEAL">HEAL</option>
-                                <option value="TOGS">TOGS</option>
+                                <option value="elite">ELITE</option>
+                                <option value="heal">HEAL</option>
+                                <option value="togs">TOGS</option>
                             </select>
                         </div>
 
@@ -749,7 +756,10 @@ const ProductListWithFilters = () => {
                                                 return item.variants.map((variant, index) => {
                                                     return (
                                                         <div className="col-lg-4 col-md-6 col-sm-6 mb-4 product_card-div" key={index}>
-                                                            <Link to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} className="product-card">
+
+                                                            {/* to={`/${item.productId}/${variant.color.name}/${item.productType}/${item.subCategory}/${item.category}/${item.group}`} */}
+
+                                                            <Link to={`/${formatUrl(item.group)}/${formatUrl(item.category)}/${formatUrl(item.subCategory)}/${formatColor(variant.color.name)}/${item.productId}`} className="product-card">
                                                                 <div className="product-image-wrapper">
                                                                     <LazyImage
                                                                         src={variant.imageUrls[0]}

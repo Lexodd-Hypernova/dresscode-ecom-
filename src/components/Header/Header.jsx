@@ -8,6 +8,7 @@ import { useWhishList } from "../../context/WishListContext";
 import { Tag } from "primereact/tag";
 
 import scrollTop from "../../helpers/scrollTop";
+import ContactModal from "../contact/ContactModal";
 
 const Header = () => {
   const { cart } = useCart();
@@ -15,6 +16,16 @@ const Header = () => {
   const itemCount = cart.length;
   const wishListCount = wishList.length;
   // const { wishListCount } = useWhishList();
+
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
+  const openContactModal = () => {
+    setIsContactModalOpen(true);
+  };
+
+  const closeContactModal = () => {
+    setIsContactModalOpen(false);
+  };
 
   const nav = useNavigate();
   const goToWishlist = () => {
@@ -39,21 +50,15 @@ const Header = () => {
               </Link>
             </div>
 
+            <div className="nv_center">
+              <Link to="/about">About</Link>
+              <Link to="/blogs">Blog</Link>
+              <a onClick={openContactModal} style={{ cursor: "pointer" }}>
+                Contact
+              </a>
+            </div>
+
             <div className="nv__Right">
-              {/* <div className="nv_Search">
-                <form className="d-flex" role="search">
-                  <input
-                    className="form-control me-2"
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                  />
-                  <button className="btn" type="submit">
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                  </button>
-                </form>
-              </div> */}
-              {/* onClick={goToWishlist} */}
               <div className="nav__Ht" onClick={goToWishlist}>
                 <i className="fa-regular fa-heart"><span className="m-2">{wishListCount}</span></i>
               </div>
@@ -71,6 +76,11 @@ const Header = () => {
           </div>
         </div>
       </nav>
+
+      {isContactModalOpen && (
+        <ContactModal onClose={closeContactModal} isOpen={openContactModal} />
+      )}
+
     </>
   );
 };

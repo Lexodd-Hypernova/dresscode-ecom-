@@ -2,6 +2,61 @@
   font-family: "Inter", sans-serif;
 }
 
+
+@font-face {
+  font-family: "Satoshi";
+  src: local("Satoshi-Regular"),
+    url("../public/assets/fonts/Satoshi/Satoshi-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: local("Satoshi-Medium"),
+    url("../public/assets/fonts/Satoshi/Satoshi-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: local("Satoshi-Bold"),
+    url("../public/assets/fonts/Satoshi/Satoshi-Bold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: local("Satoshi-Black"),
+    url("../public/assets/fonts/Satoshi/Satoshi-Black.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  background-color: #fff;
+  color: #20248A;
+  overflow-x: hidden;
+}
+
+.page__Wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+
+
 * {
   margin: 0;
   padding: 0;

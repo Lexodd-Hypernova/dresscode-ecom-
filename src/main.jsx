@@ -7,10 +7,16 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SharedState from './context/SharedState.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+
+    <SharedState>
+      <RouterProvider router={router} />
+    </SharedState>
+
+
     <ToastContainer
       position="bottom-left"
       autoClose={5000}
