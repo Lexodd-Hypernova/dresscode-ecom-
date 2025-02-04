@@ -408,9 +408,9 @@ const Billing = () => {
 
       // Step 2: Initialize Razorpay
       const options = {
-        key: "rzp_test_0PMwuUiWHNgJdU",
+        // key: "rzp_test_0PMwuUiWHNgJdU",
 
-        // key: "rzp_live_YZAblE0DYussOv",
+        key: "rzp_live_YZAblE0DYussOv",
 
         currency: "INR",
         name: "Dress Code ",
