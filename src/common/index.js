@@ -47,6 +47,9 @@ const DressCodeApi = {
   },
   generateThirdToken: {
     url: `${baseUrl}/coupon/generateThirdToken`,
+  },
+  saveInfo: {
+    url: `${baseUrl}/contact/save-info`,
   }
 
 };

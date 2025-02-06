@@ -37,12 +37,8 @@ const BlogPage = () => {
     return (
         <>
             <Helmet>
-                <title>Dresscode Blog Page</title>
-                <meta name="description" content="blog page of our website dresscode" />
-                <meta
-                    name="keywords"
-                    content="Uniform industry insights, Corporate uniform ideas, School uniform trends, Best office uniforms blog,Custom uniform ideas blog,Healthcare uniform guides,Uniform blog for professionals,Latest uniform fashion trends,Corporate workwear news,School uniforms blog,Work uniforms tips and advice,Business uniforms blog articles,Customized uniform solutions blog,Medical uniforms and scrubs blog,Corporate dress code tips blog,How to choose work uniforms,Uniform design inspiration blog,School uniform shopping tips,Blog about office uniforms,Corporate identity through uniforms blog"
-                />
+                <title>Uniform Trends & Workwear Insights | DressCode Blog</title>
+                <meta name="description" content="Stay updated with the latest trends in corporate workwear, school uniforms, and healthcare scrubs. Explore expert tips on choosing the right uniforms for offices, hospitals, and educational institutions." />
             </Helmet>
             {/* <Header /> */}
             <div className="blog-sec">

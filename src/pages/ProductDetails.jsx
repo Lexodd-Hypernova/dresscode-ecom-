@@ -10,6 +10,7 @@ import { useWhishList } from "../context/WishListContext";
 import { shoppingInfoApis } from "../common";
 
 import "./pages-styles/productDetails.style.css";
+import { Helmet } from "react-helmet-async";
 
 const normalizeName = (name) => {
   if (typeof name === "string") {
@@ -406,6 +407,13 @@ const ProductDetails = () => {
 
   return (
     <>
+
+      <Helmet>
+        <title>{data?.productDetails?.productType}</title>
+        <meta name="description" content={data?.productDetails?.productDescription} />
+      </Helmet>
+
+
       <section className="product__Details">
         <ProductSlider productData={data} />
 

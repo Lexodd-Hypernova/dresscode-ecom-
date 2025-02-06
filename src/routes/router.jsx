@@ -30,6 +30,7 @@ import Coupons from "../pages/Coupons";
 import About from "../pages/About";
 import BlogPage from "../pages/BlogPage";
 import BlogPost from "../pages/BlogPost";
+import Contact from "../pages/Contact";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,11 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+
+      {
+        path: "/contact",
+        element: <Contact />,
       },
 
       {

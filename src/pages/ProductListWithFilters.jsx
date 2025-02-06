@@ -5,6 +5,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { shoppingInfoApis } from "../common";
 // import LazyImage from "../common/components/LazyImage";
 import LazyImage from "../common/components/LazyImage";
+import { Helmet } from "react-helmet-async";
 
 const ProductListWithFilters = () => {
     const [allProducts, setAllProducts] = useState([]); // To store all fetched products
@@ -149,6 +150,12 @@ const ProductListWithFilters = () => {
     const formatColor = (text) => encodeURIComponent(text.toLowerCase().replace(/\s+/g, "-"));
     return (
         <>
+
+            <Helmet>
+                <title>Shop School, Medical & Office Uniforms Online | Dresscode Store</title>
+                <meta name="description" content="Browse a wide range of school uniforms, office workwear, medical scrubs, and corporate attire at Dresscode E-commerce Site. Available in custom fits, high-quality fabrics, and stylish designs. Order online now!" />
+            </Helmet>
+
             <div className="product__Screen">
 
                 <div className="filter_btn-mobile">

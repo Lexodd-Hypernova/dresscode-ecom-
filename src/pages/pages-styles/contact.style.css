@@ -10,6 +10,12 @@
     background: radial-gradient(461.61% 209.05% at -41.85% -46.3%,
             #5055e3 6.15%,
             #fff 77.95%);
+
+    width: 80%;
+    max-width: 1920px;
+    margin: 0 auto;
+    margin-top: 40px;
+    border-radius: 20px;
 }
 
 .form-container {
@@ -116,22 +122,48 @@
 }
 
 @media screen and (max-width: 500px) {
+
+    .modal-content-contact {
+        flex-direction: column;
+    }
+
+    .form-container {
+        width: 100%;
+        margin-left: 0;
+    }
+
+
     .form-container h2 {
         color: #fff;
-
         font-family: Satoshi;
         font-size: 45px;
         font-style: normal;
         font-weight: 500;
         line-height: normal;
         letter-spacing: 1.98px;
+        margin-top: 0;
+    }
+
+    .image-container {
+        width: 100%;
     }
 
     .image-container img {
         width: 100%;
-        margin-top: 150px;
-        margin-right: 20px;
-        margin-bottom: none;
-        height: auto;
+    }
+
+    .form-row {
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+
+    .form-field textarea {
+        width: 100%;
+    }
+
+    .form-container form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 }

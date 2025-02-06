@@ -63,7 +63,7 @@ async function generateSitemap() {
     const staticPages = [
         "/",
         "/about",
-        "/cart",
+        "/contact",
         "/blogs",
     ];
 

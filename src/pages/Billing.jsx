@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import ReactDOMServer from "react-dom/server";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { Helmet } from "react-helmet-async";
 
 import InvoiceForOrder from "../components/Invoice/InvoiceForOrder";
 
@@ -408,9 +409,9 @@ const Billing = () => {
 
       // Step 2: Initialize Razorpay
       const options = {
-        // key: "rzp_test_0PMwuUiWHNgJdU",
+        key: "rzp_test_0PMwuUiWHNgJdU",
 
-        key: "rzp_live_YZAblE0DYussOv",
+        // key: "rzp_live_YZAblE0DYussOv",
 
         currency: "INR",
         name: "Dress Code ",
@@ -623,6 +624,13 @@ const Billing = () => {
 
   return (
     <>
+
+      <Helmet>
+        <title>Secure Checkout | DressCode - Buy Uniforms Online with Confidence</title>
+        <meta name="description" content="Complete your purchase securely at Dresscode Online Store. Enjoy safe payments, fast shipping, and high-quality school, medical, and corporate uniforms. Order now with confidence!" />
+      </Helmet>
+
+
       {loading ? (
         <LoadingComponent />
       ) : (

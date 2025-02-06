@@ -13,6 +13,7 @@ import axios from "axios";
 import { jsPDF } from "jspdf";
 import InvoiceForOrder from "../components/Invoice/InvoiceForOrder";
 import html2canvas from "html2canvas";
+import { Helmet } from "react-helmet-async";
 
 const Orders = () => {
   const [selected, setSelected] = useState("orders");
@@ -311,9 +312,8 @@ const Orders = () => {
       // Step 3: Create a download link and trigger the download
       const downloadLink = document.createElement("a");
       downloadLink.href = blobURL;
-      downloadLink.download = `OrderInvoice-${
-        orderDetails.orderId || "Order"
-      }.pdf`;
+      downloadLink.download = `OrderInvoice-${orderDetails.orderId || "Order"
+        }.pdf`;
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -327,350 +327,120 @@ const Orders = () => {
   };
 
   return (
-    <div className="orders-container">
-      <div className="order_navbar">
-        <div
-          className={`ord_nav-item ${selected === "orders" ? "selected" : ""}`}
-          onClick={() => setSelected("orders")}
-        >
-          Your Orders
-        </div>
-        <div
-          className={`ord_nav-item ${selected === "quotes" ? "selected" : ""}`}
-          onClick={() => setSelected("quotes")}
-        >
-          Raised Quotes
-        </div>
-        <div
-          className={`ord_nav-item ${
-            selected === "canceled" ? "selected" : ""
-          }`}
-          onClick={() => setSelected("canceled")}
-        >
-          Canceled Orders
-        </div>
-      </div>
-      {/* <h2 className="order_head">Your Orders</h2> */}
-      <div className="order_content">
-        {loading ? (
-          <LoadingComponent></LoadingComponent>
-        ) : (
-          <>
-            {selected === "orders" ? (
-              data && data.length > 0 ? (
-                data.map((val) => (
-                  <div key={val.orderId} className="order_single">
-                    <div className="order_Ttl">
-                      <div className="ord_plcd">
-                        Order placed <br /> {convertDate(val.dateOfOrder)}
-                      </div>
-                      <div className="ord_id">Order Id #{val.orderId}</div>
-                    </div>
 
-                    <div className="order_outer">
-                      <div className="pr_track-outer">
-                        <div className="pr_track">
-                          {/* {val.shiprocket_order_id !== null && (
+    <>
+
+      <Helmet>
+        <title>My Orders | DressCode - Track Your Uniform Purchases Online</title>
+        <meta name="description" content="View your past and current Dresscode orders, track deliveries, and reorder your favorite school, medical, and corporate uniforms. Stay updated on your purchases effortlessly." />
+      </Helmet>
+
+      <div className="orders-container">
+        <div className="order_navbar">
+          <div
+            className={`ord_nav-item ${selected === "orders" ? "selected" : ""}`}
+            onClick={() => setSelected("orders")}
+          >
+            Your Orders
+          </div>
+          <div
+            className={`ord_nav-item ${selected === "quotes" ? "selected" : ""}`}
+            onClick={() => setSelected("quotes")}
+          >
+            Raised Quotes
+          </div>
+          <div
+            className={`ord_nav-item ${selected === "canceled" ? "selected" : ""
+              }`}
+            onClick={() => setSelected("canceled")}
+          >
+            Canceled Orders
+          </div>
+        </div>
+        {/* <h2 className="order_head">Your Orders</h2> */}
+        <div className="order_content">
+          {loading ? (
+            <LoadingComponent></LoadingComponent>
+          ) : (
+            <>
+              {selected === "orders" ? (
+                data && data.length > 0 ? (
+                  data.map((val) => (
+                    <div key={val.orderId} className="order_single">
+                      <div className="order_Ttl">
+                        <div className="ord_plcd">
+                          Order placed <br /> {convertDate(val.dateOfOrder)}
+                        </div>
+                        <div className="ord_id">Order Id #{val.orderId}</div>
+                      </div>
+
+                      <div className="order_outer">
+                        <div className="pr_track-outer">
+                          <div className="pr_track">
+                            {/* {val.shiprocket_order_id !== null && (
                                 <button className="btn btn-secondary" onClick={() => downloadInvoice(val.shiprocket_order_id)}>
                                   Download Invoice
                                 </button>
                               )} */}
 
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => handleInvoiceDownload(val)}
-                          >
-                            Download Invoice
-                          </button>
-                        </div>
-
-                        <div className="pr_track">
-                          <button
-                            className="btn btn-primary"
-                            onClick={() =>
-                              handleTrackPackage(
-                                val.shiprocket_awb_code,
-                                val.orderId
-                              )
-                            }
-                          >
-                            Track Package
-                          </button>
-
-                          {/* Show popup only for the specific order */}
-                          {showPopup[val.orderId] && (
-                            <div className="popup">
-                              Shipping is not assigned
-                            </div>
-                          )}
-                        </div>
-                        <div className="pr_track">
-                          {val.shiprocket_awb_code === null && (
                             <button
-                              className="btn btn-danger"
-                              onClick={() => cancelOrder(val.orderId)}
+                              className="btn btn-secondary"
+                              onClick={() => handleInvoiceDownload(val)}
                             >
-                              Cancel Order
+                              Download Invoice
                             </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {val.products.map((product, index) => {
-                        return (
-                          <div key={index} className="order_inner">
-                            <div className="order_item">
-                              <div className="ord_desc">
-                                <div className="ord_img">
-                                  <img
-                                    src={product.imgUrl}
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                </div>
-
-                                <div className="ord_item-des">
-                                  <div className="ord_desc-con">
-                                    <p className="prd_name">
-                                      {product.color.name}{" "}
-                                      {product.productDetails.neckline}
-                                    </p>
-                                    <p className="pr_size">
-                                      Size : {product.size}
-                                    </p>
-                                    <p className="pr_color">
-                                      Color : {product.color.name}
-                                    </p>
-                                    {product.logoPosition !== "" && (
-                                      <p className="pr_lg-place">
-                                        Logo Position : {product.logoPosition}
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="prd-price-det">
-                                    <p className="pr_price">
-                                      Unit Price: &#8377;{product.price}
-                                    </p>
-                                    <p className="pr_color">
-                                      Quantity : {product.quantityOrdered}
-                                    </p>
-                                    <p className="pr_color">
-                                      Slab discount percentage :{" "}
-                                      {product.slabDiscountPercentage}%
-                                    </p>
-                                    <p className="pr_color">
-                                      Slab discount amount : &#8377;
-                                      {product.slabDiscountAmount}
-                                    </p>
-                                    <p className="pr_color">
-                                      Price after slab discount : &#8377;
-                                      {product.priceAfterSlabDiscount}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="pr_action">
-                                <div className="pr_review">
-                                  <button
-                                    className="order-button"
-                                    onClick={() =>
-                                      goToReview(
-                                        product.group,
-                                        product.productId
-                                      )
-                                    }
-                                  >
-                                    Write A Product Review
-                                  </button>
-                                </div>
-                                {product.logoUrl !== null && (
-                                  <div className="pr-logo">
-                                    Logo :
-                                    <div className="pr_lg_det">
-                                      <img
-                                        src={product.logoUrl}
-                                        alt=""
-                                        className="w-100"
-                                      />
-                                    </div>
-                                  </div>
-                                )}
-
-                                {product?.name !== null && (
-                                  <div className="pr-logo">
-                                    Logo Name:
-                                    <div className="pr_lg_det">
-                                      {product.name}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
                           </div>
-                        );
-                      })}
 
-                      <div className="ord_bal">
-                        <div className="text-success fs-6">
-                          <span className="fw-semibold">
-                            Coupon discount: &#8377;{val.couponDiscountAmount}
-                          </span>
-                        </div>
-                        <div className="text-success fs-6">
-                          <span className="fw-semibold">
-                            Total discount: &#8377;{val.TotalDiscountAmount}
-                          </span>
-                        </div>
-                        <div className="text-success fs-6">
-                          <span className="fw-semibold">
-                            Total Price After Discount: &#8377;
-                            {val.TotalPriceAfterDiscount}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <h5 className="fs-3 text-center">You do not have any order</h5>
-              )
-            ) : selected === "quotes" ? (
-              quotes && quotes.length > 0 ? (
-                quotes.map((val) => (
-                  <div key={val.orderId} className="order_single">
-                    <div className="order_Ttl">
-                      <div className="ord_plcd">
-                        Quote placed <br />{" "}
-                        {convertDate(val.dateOfQuoteRecived)}
-                      </div>
-                      <div className="ord_id">Quote Id #{val.quoteId}</div>
-                    </div>
+                          <div className="pr_track">
+                            <button
+                              className="btn btn-primary"
+                              onClick={() =>
+                                handleTrackPackage(
+                                  val.shiprocket_awb_code,
+                                  val.orderId
+                                )
+                              }
+                            >
+                              Track Package
+                            </button>
 
-                    <div className="order_outer">
-                      <div className="order_inner">
-                        {/* <h5 className="dt_delivery">
-                                Estimated Delivery on{" "}
-                                {val.dateOfDelivery ? val.dateOfDelivery : "N/A"}
-                              </h5> */}
-                        <div className="order_item">
-                          <div className="ord_desc">
-                            <div className="ord_img">
-                              <img src={val.imgUrl} alt="" className="w-100" />
-                            </div>
-                            <div className="">
-                              <p className="prd_name">
-                                {val.productDetails.productType}{" "}
-                                {val.color.name}
-                              </p>
-                              <p className="pr_price">
-                                Unit price : &#8377;{val.productDetails.price}
-                              </p>
-                              <p className="pr_size">Size : {val.size}</p>
-                              <p className="pr_color">
-                                Color : {val.color.name}
-                              </p>
-                              <p className="pr_color">
-                                Quantity : {val.quantityRequired}
-                              </p>
-
-                              {/* <p className="pr_lg-place">Logo Position : {val.logoPosition}</p> */}
-                              {val.logoPosition !== "" && (
-                                <p className="pr_lg-place">
-                                  Logo Position : {val.logoPosition}
-                                </p>
-                              )}
-                            </div>
+                            {/* Show popup only for the specific order */}
+                            {showPopup[val.orderId] && (
+                              <div className="popup">
+                                Shipping is not assigned
+                              </div>
+                            )}
                           </div>
-                          <div className="pr_action">
-                            {/* <div className="pr_track">
-                                    <button className="order-button">Track Package</button>
-                                  </div> */}
-                            <div className="pr_review">
+                          <div className="pr_track">
+                            {val.shiprocket_awb_code === null && (
                               <button
-                                className="order-button"
-                                onClick={() =>
-                                  goToReview(val.group, val.productId)
-                                }
+                                className="btn btn-danger"
+                                onClick={() => cancelOrder(val.orderId)}
                               >
-                                Write A Product Review
+                                Cancel Order
                               </button>
-                            </div>
-                            {val.logoUrl !== null && (
-                              <div className="pr-logo">
-                                Logo:
-                                <div className="pr_lg_det">
-                                  <img
-                                    src={val.logoUrl}
-                                    alt="Logo"
-                                    className="w-100"
-                                  />
-                                </div>
-                              </div>
                             )}
-                            {val.name !== null && (
-                              <div className="pr-logo">
-                                Logo Name:
-                                <div className="pr_lg_det">{val.name}</div>
-                              </div>
-                            )}
-
-                            {/* <div className="pr-logo">
-                                    Logo :
-                                    <div className="pr_lg_det"><img src={val.logoUrl} alt="" className="w-100" /></div>
-                                  </div> */}
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <h5 className="fs-3 text-center">You do not have any quotes</h5>
-              )
-            ) : selected === "canceled" ? (
-              canceledOrder && canceledOrder.length > 0 ? (
-                canceledOrder.map((val) => (
-                  <div key={val.orderId} className="order_single">
-                    <div className="order_Ttl">
-                      <div className="ord_plcd">
-                        Date of Order
-                        <br /> {convertDate(val.dateOfOrder)}
-                      </div>
-                      <div className="ord_plcd">
-                        Date of Cancelled
-                        <br /> {convertDate(val.dateOfCanceled)}
-                      </div>
-                      <div className="ord_id">Order Id #{val.orderId}</div>
-                    </div>
 
-                    <div className="order_outer">
-                      <div className="pr_track-outer">
-                        <h5 className="fs-5">Refund payment status:</h5>
-                        <div className="badge bg-primary text-wrap">
-                          {val.refund_payment_status}
-                        </div>
-                      </div>
-                      {val.products.map((product, index) => {
-                        return (
-                          <div key={index} className="order_inner">
-                            <div className="order_item">
-                              <div className="ord_desc">
-                                <div className="ord_img">
-                                  <img
-                                    src={product.imgUrl}
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                </div>
-                                <div className="d-flex justify-content-between ">
-                                  <div className="d-flex justify-content-around align-items-center">
+                        {val.products.map((product, index) => {
+                          return (
+                            <div key={index} className="order_inner">
+                              <div className="order_item">
+                                <div className="ord_desc">
+                                  <div className="ord_img">
+                                    <img
+                                      src={product.imgUrl}
+                                      alt=""
+                                      className="w-100"
+                                    />
+                                  </div>
+
+                                  <div className="ord_item-des">
                                     <div className="ord_desc-con">
                                       <p className="prd_name">
                                         {product.color.name}{" "}
                                         {product.productDetails.neckline}
-                                      </p>
-                                      <p className="pr_price">
-                                        MRP : &#8377;{product.price}
                                       </p>
                                       <p className="pr_size">
                                         Size : {product.size}
@@ -684,48 +454,287 @@ const Orders = () => {
                                         </p>
                                       )}
                                     </div>
-                                    <div>
-                                      {product.logoUrl !== null && (
-                                        <div className="pr-logo">
-                                          Logo:
-                                          <div className="pr_lg_det">
-                                            <img
-                                              src={product.logoUrl}
-                                              alt="Logo"
-                                              className="w-100"
-                                            />
+                                    <div className="prd-price-det">
+                                      <p className="pr_price">
+                                        Unit Price: &#8377;{product.price}
+                                      </p>
+                                      <p className="pr_color">
+                                        Quantity : {product.quantityOrdered}
+                                      </p>
+                                      <p className="pr_color">
+                                        Slab discount percentage :{" "}
+                                        {product.slabDiscountPercentage}%
+                                      </p>
+                                      <p className="pr_color">
+                                        Slab discount amount : &#8377;
+                                        {product.slabDiscountAmount}
+                                      </p>
+                                      <p className="pr_color">
+                                        Price after slab discount : &#8377;
+                                        {product.priceAfterSlabDiscount}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="pr_action">
+                                  <div className="pr_review">
+                                    <button
+                                      className="order-button"
+                                      onClick={() =>
+                                        goToReview(
+                                          product.group,
+                                          product.productId
+                                        )
+                                      }
+                                    >
+                                      Write A Product Review
+                                    </button>
+                                  </div>
+                                  {product.logoUrl !== null && (
+                                    <div className="pr-logo">
+                                      Logo :
+                                      <div className="pr_lg_det">
+                                        <img
+                                          src={product.logoUrl}
+                                          alt=""
+                                          className="w-100"
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {product?.name !== null && (
+                                    <div className="pr-logo">
+                                      Logo Name:
+                                      <div className="pr_lg_det">
+                                        {product.name}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        <div className="ord_bal">
+                          <div className="text-success fs-6">
+                            <span className="fw-semibold">
+                              Coupon discount: &#8377;{val.couponDiscountAmount}
+                            </span>
+                          </div>
+                          <div className="text-success fs-6">
+                            <span className="fw-semibold">
+                              Total discount: &#8377;{val.TotalDiscountAmount}
+                            </span>
+                          </div>
+                          <div className="text-success fs-6">
+                            <span className="fw-semibold">
+                              Total Price After Discount: &#8377;
+                              {val.TotalPriceAfterDiscount}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <h5 className="fs-3 text-center">You do not have any order</h5>
+                )
+              ) : selected === "quotes" ? (
+                quotes && quotes.length > 0 ? (
+                  quotes.map((val) => (
+                    <div key={val.orderId} className="order_single">
+                      <div className="order_Ttl">
+                        <div className="ord_plcd">
+                          Quote placed <br />{" "}
+                          {convertDate(val.dateOfQuoteRecived)}
+                        </div>
+                        <div className="ord_id">Quote Id #{val.quoteId}</div>
+                      </div>
+
+                      <div className="order_outer">
+                        <div className="order_inner">
+                          {/* <h5 className="dt_delivery">
+                                Estimated Delivery on{" "}
+                                {val.dateOfDelivery ? val.dateOfDelivery : "N/A"}
+                              </h5> */}
+                          <div className="order_item">
+                            <div className="ord_desc">
+                              <div className="ord_img">
+                                <img src={val.imgUrl} alt="" className="w-100" />
+                              </div>
+                              <div className="">
+                                <p className="prd_name">
+                                  {val.productDetails.productType}{" "}
+                                  {val.color.name}
+                                </p>
+                                <p className="pr_price">
+                                  Unit price : &#8377;{val.productDetails.price}
+                                </p>
+                                <p className="pr_size">Size : {val.size}</p>
+                                <p className="pr_color">
+                                  Color : {val.color.name}
+                                </p>
+                                <p className="pr_color">
+                                  Quantity : {val.quantityRequired}
+                                </p>
+
+                                {/* <p className="pr_lg-place">Logo Position : {val.logoPosition}</p> */}
+                                {val.logoPosition !== "" && (
+                                  <p className="pr_lg-place">
+                                    Logo Position : {val.logoPosition}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="pr_action">
+                              {/* <div className="pr_track">
+                                    <button className="order-button">Track Package</button>
+                                  </div> */}
+                              <div className="pr_review">
+                                <button
+                                  className="order-button"
+                                  onClick={() =>
+                                    goToReview(val.group, val.productId)
+                                  }
+                                >
+                                  Write A Product Review
+                                </button>
+                              </div>
+                              {val.logoUrl !== null && (
+                                <div className="pr-logo">
+                                  Logo:
+                                  <div className="pr_lg_det">
+                                    <img
+                                      src={val.logoUrl}
+                                      alt="Logo"
+                                      className="w-100"
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                              {val.name !== null && (
+                                <div className="pr-logo">
+                                  Logo Name:
+                                  <div className="pr_lg_det">{val.name}</div>
+                                </div>
+                              )}
+
+                              {/* <div className="pr-logo">
+                                    Logo :
+                                    <div className="pr_lg_det"><img src={val.logoUrl} alt="" className="w-100" /></div>
+                                  </div> */}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <h5 className="fs-3 text-center">You do not have any quotes</h5>
+                )
+              ) : selected === "canceled" ? (
+                canceledOrder && canceledOrder.length > 0 ? (
+                  canceledOrder.map((val) => (
+                    <div key={val.orderId} className="order_single">
+                      <div className="order_Ttl">
+                        <div className="ord_plcd">
+                          Date of Order
+                          <br /> {convertDate(val.dateOfOrder)}
+                        </div>
+                        <div className="ord_plcd">
+                          Date of Cancelled
+                          <br /> {convertDate(val.dateOfCanceled)}
+                        </div>
+                        <div className="ord_id">Order Id #{val.orderId}</div>
+                      </div>
+
+                      <div className="order_outer">
+                        <div className="pr_track-outer">
+                          <h5 className="fs-5">Refund payment status:</h5>
+                          <div className="badge bg-primary text-wrap">
+                            {val.refund_payment_status}
+                          </div>
+                        </div>
+                        {val.products.map((product, index) => {
+                          return (
+                            <div key={index} className="order_inner">
+                              <div className="order_item">
+                                <div className="ord_desc">
+                                  <div className="ord_img">
+                                    <img
+                                      src={product.imgUrl}
+                                      alt=""
+                                      className="w-100"
+                                    />
+                                  </div>
+                                  <div className="d-flex justify-content-between ">
+                                    <div className="d-flex justify-content-around align-items-center">
+                                      <div className="ord_desc-con">
+                                        <p className="prd_name">
+                                          {product.color.name}{" "}
+                                          {product.productDetails.neckline}
+                                        </p>
+                                        <p className="pr_price">
+                                          MRP : &#8377;{product.price}
+                                        </p>
+                                        <p className="pr_size">
+                                          Size : {product.size}
+                                        </p>
+                                        <p className="pr_color">
+                                          Color : {product.color.name}
+                                        </p>
+                                        {product.logoPosition !== "" && (
+                                          <p className="pr_lg-place">
+                                            Logo Position : {product.logoPosition}
+                                          </p>
+                                        )}
+                                      </div>
+                                      <div>
+                                        {product.logoUrl !== null && (
+                                          <div className="pr-logo">
+                                            Logo:
+                                            <div className="pr_lg_det">
+                                              <img
+                                                src={product.logoUrl}
+                                                alt="Logo"
+                                                className="w-100"
+                                              />
+                                            </div>
                                           </div>
-                                        </div>
-                                      )}
-                                      {product?.name !== null && (
-                                        <div className="pr-logo">
-                                          Logo Name:
-                                          <div className="pr_lg_det">
-                                            {product.name}
+                                        )}
+                                        {product?.name !== null && (
+                                          <div className="pr-logo">
+                                            Logo Name:
+                                            <div className="pr_lg_det">
+                                              {product.name}
+                                            </div>
                                           </div>
-                                        </div>
-                                      )}
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))
-              ) : (
-                <h5 className="fs-3 text-center">
-                  You do not have any cancel order
-                </h5>
-              )
-            ) : null}
-          </>
-        )}
+                  ))
+                ) : (
+                  <h5 className="fs-3 text-center">
+                    You do not have any cancel order
+                  </h5>
+                )
+              ) : null}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+
+    </>
   );
 };
 

@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /cart
+Disallow: /billing
+Disallow: /your-orders
+Disallow: /account-info
+Disallow: /wishlist
+Disallow: /third
+Disallow: /coupons
+Disallow: /raise-quote
+Disallow: /your-address
+Allow: /
+
+Sitemap: https://www.dress-code.in/sitemap.xml

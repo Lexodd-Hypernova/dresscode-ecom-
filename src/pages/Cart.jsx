@@ -5,6 +5,7 @@ import "./pages-styles/cart.styles.css";
 import { useNavigate } from "react-router-dom";
 import { useWhishList } from "../context/WishListContext";
 import LoadingComponent from "../common/components/LoadingComponent";
+import { Helmet } from "react-helmet-async";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -221,190 +222,197 @@ const Cart = () => {
   };
 
   return (
-    <div className="cart_screen">
-      <div className="cart-back" onClick={handleGoBack}>
-        <img src="/images/auth/back-arrow.svg" alt="" />
-      </div>
-      <h2 className="bag_title">My Bag</h2>
 
-      {loading ? (
-        <LoadingComponent />
-      ) : (
-        <div className="container-fluid">
-          <div className="row">
-            {cart.map((item, index) => (
-              <div
-                key={index}
-                className="d-flex justify-content-between p_cart"
-              >
-                {/* img */}
-                <div className="p_outer">
-                  <div className="p_img">
-                    <img src={item.imgUrl} alt={item.group} className="w-100" />
-                  </div>
-                  <div className="p_desc">
-                    <div className="p_name">
-                      <h5 className="text-truncate">
-                        {item.color.name} {item.productDetails.productType}
-                      </h5>
-                      {/* {item.color.name} {item.productDetails.productType} */}
+    <>
+
+      <Helmet>
+        <title>Your Shopping Cart | Dresscode - Uniforms for Schools, Hospitals & Offices</title>
+        <meta name="description" content="Review your selected school uniforms, medical scrubs, and corporate workwear at Dresscode E-commerce. Ensure you have the right size, color, and quantity before checkout. Secure shopping made easy!" />
+      </Helmet>
+
+      <div className="cart_screen">
+        <div className="cart-back" onClick={handleGoBack}>
+          <img src="/images/auth/back-arrow.svg" alt="" />
+        </div>
+        <h2 className="bag_title">My Bag</h2>
+
+        {loading ? (
+          <LoadingComponent />
+        ) : (
+          <div className="container-fluid">
+            <div className="row">
+              {cart.map((item, index) => (
+                <div
+                  key={index}
+                  className="d-flex justify-content-between p_cart"
+                >
+                  {/* img */}
+                  <div className="p_outer">
+                    <div className="p_img">
+                      <img src={item.imgUrl} alt={item.group} className="w-100" />
                     </div>
-                    {/* p_act */}
-                    <div className=" d-flex justify-content-start align-items-center gap-3">
-                      <button
-                        onClick={() => removeFromCart(item._id)}
-                        className="btn btn-sm btn-danger d-flex align-items-center gap-2"
-                        style={{ cursor: "pointer" }}
-                      >
-                        <i className="fa fa-trash"></i> Delete
-                      </button>
+                    <div className="p_desc">
+                      <div className="p_name">
+                        <h5 className="text-truncate">
+                          {item.color.name} {item.productDetails.productType}
+                        </h5>
+                        {/* {item.color.name} {item.productDetails.productType} */}
+                      </div>
+                      {/* p_act */}
+                      <div className=" d-flex justify-content-start align-items-center gap-3">
+                        <button
+                          onClick={() => removeFromCart(item._id)}
+                          className="btn btn-sm btn-danger d-flex align-items-center gap-2"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i className="fa fa-trash"></i> Delete
+                        </button>
 
-                      <button
-                        onClick={() => handleWishList(item)}
-                        className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2"
-                        style={{ cursor: "pointer" }}
-                      >
-                        <i className="fa-regular fa-heart"></i> Move to Wishlist
-                      </button>
+                        <button
+                          onClick={() => handleWishList(item)}
+                          className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i className="fa-regular fa-heart"></i> Move to Wishlist
+                        </button>
 
-                      {/* <span style={{ cursor: "pointer" }} onClick={() => removeFromCart(item._id)}>Delete</span>{" "} */}
-                      {/* <span style={{ cursor: "pointer" }} onClick={() => handleWishList(item)}>
+                        {/* <span style={{ cursor: "pointer" }} onClick={() => removeFromCart(item._id)}>Delete</span>{" "} */}
+                        {/* <span style={{ cursor: "pointer" }} onClick={() => handleWishList(item)}>
                         <i className="fa-regular fa-heart"></i> Move to wishlist
                       </span> */}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* <div className="p_size">Size: {item.size}</div> */}
-                <div className="p_size mt-2">
-                  <span className="badge bg-secondary">{`Size: ${item.size}`}</span>
-                </div>
+                  {/* <div className="p_size">Size: {item.size}</div> */}
+                  <div className="p_size mt-2">
+                    <span className="badge bg-secondary">{`Size: ${item.size}`}</span>
+                  </div>
 
-                {/* middle */}
-                <div className="p_counter">
-                  <Counter
-                    initialCount={item.quantityRequired}
-                    cartItemId={item._id}
-                    price={item.productDetails.price}
-                    onUpdateQuantity={updateItemQuantity}
-                  />
-                  <div className="p_price">
-                    {/* <div className="text-muted fs-6">
+                  {/* middle */}
+                  <div className="p_counter">
+                    <Counter
+                      initialCount={item.quantityRequired}
+                      cartItemId={item._id}
+                      price={item.productDetails.price}
+                      onUpdateQuantity={updateItemQuantity}
+                    />
+                    <div className="p_price">
+                      {/* <div className="text-muted fs-6">
                       Price per unit ₹{item.productDetails.price}
                     </div> */}
 
-                    <span className="text-muted fs-6">
-                      MRP ₹{productTotal[item._id]?.totalBeforeDiscount}
-                    </span>
+                      <span className="text-muted fs-6">
+                        MRP ₹{productTotal[item._id]?.totalBeforeDiscount}
+                      </span>
 
-                    {productTotal[item._id]?.discountAmount > 0 && (
-                      <div className="p_discount text-success fw-semibold">
-                        You save: ₹{productTotal[item._id]?.discountAmount}
+                      {productTotal[item._id]?.discountAmount > 0 && (
+                        <div className="p_discount text-success fw-semibold">
+                          You save: ₹{productTotal[item._id]?.discountAmount}
+                        </div>
+                      )}
+                      {productTotal[item._id]?.discountAmount > 0 && (
+                        <div className="p_discount fs-6 text-primary">
+                          Price after discount: ₹
+                          {productTotal[item._id]?.totalAfterDiscount}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="logo_detail">
+                    <div className="p_logo">
+                      <div className="fw-bold">Logo</div>
+                      <div className="logo_f">
+                        {item.logoUrl ? (
+                          <img
+                            src={item.logoUrl}
+                            className="img-fluid rounded-3"
+                            alt="Logo"
+                            style={{ maxHeight: "100px", objectFit: "contain" }}
+                          />
+                        ) : (
+                          <span className="text-muted">Not Provided</span>
+                        )}
                       </div>
-                    )}
-                    {productTotal[item._id]?.discountAmount > 0 && (
-                      <div className="p_discount fs-6 text-primary">
-                        Price after discount: ₹
-                        {productTotal[item._id]?.totalAfterDiscount}
+                    </div>
+                    <div className="p_logo">
+                      <div className="fw-bold">Name</div>
+                      <div className="lg_ttl">
+                        {item.name ? (
+                          item.name
+                        ) : (
+                          <span className="text-muted">Not Provided</span>
+                        )}
                       </div>
-                    )}
+                    </div>
+                    <div className="p_logo-pos">
+                      <div className="fw-bold">Logo Placement</div>
+                      <div className="lg_ttl">
+                        {item.logoPosition ? (
+                          item.logoPosition
+                        ) : (
+                          <span className="text-muted">Not Provided</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="logo_detail">
-                  <div className="p_logo">
-                    <div className="fw-bold">Logo</div>
-                    <div className="logo_f">
-                      {item.logoUrl ? (
-                        <img
-                          src={item.logoUrl}
-                          className="img-fluid rounded-3"
-                          alt="Logo"
-                          style={{ maxHeight: "100px", objectFit: "contain" }}
-                        />
-                      ) : (
-                        <span className="text-muted">Not Provided</span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p_logo">
-                    <div className="fw-bold">Name</div>
-                    <div className="lg_ttl">
-                      {item.name ? (
-                        item.name
-                      ) : (
-                        <span className="text-muted">Not Provided</span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p_logo-pos">
-                    <div className="fw-bold">Logo Placement</div>
-                    <div className="lg_ttl">
-                      {item.logoPosition ? (
-                        item.logoPosition
-                      ) : (
-                        <span className="text-muted">Not Provided</span>
-                      )}
+                  <div className="p_remark">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id={`flexSwitchCheckDefault-${index}`}
+                        checked={item.checked}
+                        onChange={() => handleChange(item._id)}
+                      />
                     </div>
                   </div>
                 </div>
+              ))}
 
-                <div className="p_remark">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id={`flexSwitchCheckDefault-${index}`}
-                      checked={item.checked}
-                      onChange={() => handleChange(item._id)}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <div
-              className="cart_total p-4 rounded shadow-sm mt-3"
-              style={{
-                border: "1px solid #ddd",
-                maxWidth: "400px",
-                margin: "0 auto",
-                backgroundColor: "#fdfdfd",
-              }}
-            >
-              {/* <h5 className="text-primary mb-3">Order Summary</h5> */}
-
-              <div className="cart_discount d-flex justify-content-between align-items-center mb-2">
-                <span className="text-muted">Total Discount:</span>
-                <span className="fs-5 fw-semibold text-success">{`₹${totalDiscount}`}</span>
-              </div>
-
-              <div className="cart_amt d-flex justify-content-between align-items-center mb-4">
-                <span className="text-muted">Bag Total (after discount):</span>
-                <span className="fs-5 fw-semibold text-dark">{`₹${bagTotal}`}</span>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleProceedToShipping}
-                className={`btn btn-primary w-100 ${
-                  bagTotal === 0 ? "disabled" : ""
-                }`}
+              <div
+                className="cart_total p-4 rounded shadow-sm mt-3"
                 style={{
-                  padding: "12px",
-                  fontSize: "1rem",
-                  fontWeight: "600",
-                  borderRadius: "8px",
-                  transition: "background-color 0.3s ease",
+                  border: "1px solid #ddd",
+                  maxWidth: "400px",
+                  margin: "0 auto",
+                  backgroundColor: "#fdfdfd",
                 }}
-                disabled={bagTotal === 0} // Adds native button disable functionality
               >
-                PROCEED TO SHIPPING
-              </button>
-            </div>
+                {/* <h5 className="text-primary mb-3">Order Summary</h5> */}
 
-            {/* <div className="cart_total">
+                <div className="cart_discount d-flex justify-content-between align-items-center mb-2">
+                  <span className="text-muted">Total Discount:</span>
+                  <span className="fs-5 fw-semibold text-success">{`₹${totalDiscount}`}</span>
+                </div>
+
+                <div className="cart_amt d-flex justify-content-between align-items-center mb-4">
+                  <span className="text-muted">Bag Total (after discount):</span>
+                  <span className="fs-5 fw-semibold text-dark">{`₹${bagTotal}`}</span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleProceedToShipping}
+                  className={`btn btn-primary w-100 ${bagTotal === 0 ? "disabled" : ""
+                    }`}
+                  style={{
+                    padding: "12px",
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                    borderRadius: "8px",
+                    transition: "background-color 0.3s ease",
+                  }}
+                  disabled={bagTotal === 0} // Adds native button disable functionality
+                >
+                  PROCEED TO SHIPPING
+                </button>
+              </div>
+
+              {/* <div className="cart_total">
               <div className="cart_discount">
                 {`Total Discount: ₹${totalDiscount}`} 
               </div>
@@ -419,10 +427,12 @@ const Cart = () => {
                 PROCEED TO SHIPPING
               </button>
             </div> */}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+
+    </>
   );
 };
 

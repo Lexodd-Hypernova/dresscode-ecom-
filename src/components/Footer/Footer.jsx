@@ -75,12 +75,12 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/products/ELITE">
+                                        <Link to="/elite">
                                             Corporate Uniforms
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="/products/HEAL">
+                                        <Link to="/heal">
                                             Doctor Aprons
                                         </Link>
                                     </li>
@@ -95,7 +95,7 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <a href="https://dress-code.in/">
+                                        <a href="/about">
                                             About us
                                         </a>
                                     </li>
